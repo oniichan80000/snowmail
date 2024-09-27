@@ -1,6 +1,6 @@
-# Team-101-11
+## Team-101-11
 
-**Team members:**
+#### Team members:
 
 Cherry Wang: c39wang@uwaterloo.ca 
 
@@ -12,13 +12,14 @@ Sourish Das: s4das@uwaterloo.ca
 
 Yu Xiao: y243xiao@uwaterloo.ca
 
-Team number: Team-101-11
+#### Team Contract: 
+https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Contract
 
-Team Contract: https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Contract
+#### Project Proposal:
+https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Project-Proposal
 
-Project Proposal: https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Project-Proposal
-
-Design Proposal: https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-Proposal
+#### Design Proposal: 
+https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-Proposal
 
 
 
