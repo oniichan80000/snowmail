@@ -1,5 +1,14 @@
 package ca.uwaterloo
 
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import ca.uwaterloo.view.LoginPage
+
+
 fun main() {
-    println("Hello World!")
+    application {
+        Window(onCloseRequest = ::exitApplication) {
+            LoginPage()
+        }
+    }
 }
