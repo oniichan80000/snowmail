@@ -1,34 +1,23 @@
 package ca.uwaterloo.view
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
-import androidx.compose.ui.window.application
-
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.DragData
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.input.key.*
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.*
 import java.io.File
-import kotlin.math.sin
-
 import javax.imageio.ImageIO
-import androidx.compose.ui.graphics.toComposeImageBitmap
-
 
 
 @Composable
@@ -93,9 +82,9 @@ fun loginWithGmail() {
     Column(
        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Or log in with")
-        val iconpath = File("gmail_icon.png")
+        val iconfile = File("gmail_icon.png")
 
-        val iconimage = ImageIO.read(iconpath)
+        val iconimage = ImageIO.read(iconfile)
         val iconbitmap = iconimage.toComposeImageBitmap()
         Button(onClick = { onClick() }) {
             Row (horizontalArrangement = Arrangement.Center){

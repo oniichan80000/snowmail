@@ -1,5 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-
 plugins {
     kotlin("jvm") version "2.0.10"
     alias(libs.plugins.jetbrains.compose)
@@ -19,6 +17,9 @@ repositories {
 dependencies {
     implementation(libs.datetime)
     implementation(compose.desktop.currentOs)
+
+    // implementation("androidx.navigation:navigation-compose:2.8.2")
+
     testImplementation(kotlin("test"))
 }
 
