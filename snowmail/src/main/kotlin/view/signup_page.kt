@@ -26,16 +26,22 @@ fun main() {
     }
 }
 
-
+val fullPageColor = 0xFFbad4db
+val formColor = 0xFFFFFFFF
+val sizeofInput = 0.1f
 
 @Composable
 fun SignUpPage() {
-    Box(Modifier.fillMaxSize().background(Color(0xb3bcc9))) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+    Box(Modifier.fillMaxSize().background(Color(fullPageColor)), contentAlignment = Alignment.Center) {
+        Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.fillMaxHeight(0.05f))
-            Text(text = "Join Snowmail!", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            Box(modifier = Modifier.fillMaxHeight(0.15f).background(Color(fullPageColor))) {
+                Text(text = "Join Snowmail!", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black,)
+            }
+
+            Spacer(modifier = Modifier.fillMaxHeight(0.01f))
             RegisterForm()
-            Spacer(modifier = Modifier.fillMaxHeight(0.05f))
+            Box(modifier = Modifier.fillMaxHeight(0.05f).background(Color(fullPageColor)))
         }
 
     }
@@ -44,68 +50,100 @@ fun SignUpPage() {
 }
 
 
+
+
+
 @Composable
 fun RegisterForm() {
-    Box (Modifier.fillMaxWidth(0.7f).background(Color(0xf9fafc))) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(Modifier.fillMaxWidth()) {
+    Box (Modifier.fillMaxWidth(0.7f).fillMaxHeight(0.8f).background(Color(formColor))) {
+        Row {
+            Column(Modifier.fillMaxWidth(0.1f)) { Box {} }
+            Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth(0.8f).fillMaxWidth()) {
+
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                Row(modifier = Modifier.fillMaxWidth(0.95f).fillMaxHeight(0.06f)) {
+                    Column(Modifier.fillMaxWidth(0.53f)) { Text("First Name", textAlign = TextAlign.Start) }
+                    Column { Text(text = "Last Name", textAlign = TextAlign.End) }
+                }
+
+                var firstName by remember { mutableStateOf("") }
+                var lastName by remember { mutableStateOf("") }
+                var email by remember { mutableStateOf("") }
+                var password by remember { mutableStateOf("") }
+
+                Row(Modifier.fillMaxWidth()) {
+                    // first name input
+                    Column(Modifier.fillMaxWidth(0.48f)) {
+                        OutlinedTextField(
+                            value = firstName,
+                            onValueChange = { firstName = it },
+                            singleLine = true
+                        )
+                    }
+                    Column(Modifier.fillMaxWidth(0.04f)) { Box{} }
+                    // Spacer(modifier = Modifier.fillMaxWidth(0.04f))
+                    // last name input
+                    Column(Modifier.fillMaxWidth()) {
+                        OutlinedTextField(
+                            value = lastName,
+                            onValueChange = { lastName = it },
+                            singleLine = true
+                        )
+                    }
+                }
+
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                Row { Text("Email Address") }
+                // email address input
+                Row (Modifier.fillMaxWidth()){ OutlinedTextField(value = email, onValueChange = { email = it }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
+
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                // password input
+                Row { Text("Password") }
+                Row { OutlinedTextField(value = password, onValueChange = { password = it }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
+
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
                 Row {
-                    Text("First Name", textAlign = TextAlign.Start)
-                    Text(text = "Last Name", textAlign = TextAlign.End)
+                    // register button
+                    Button(onClick = { Register() }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Register")
+                    }
                 }
-            }
 
-            var firstName by remember { mutableStateOf("") }
-            var lastName by remember { mutableStateOf("") }
-            var email by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
-
-            Row {
-                // first name input
-                OutlinedTextField(value = firstName, onValueChange = { firstName = it }, singleLine = true)
-
-                // last name input
-                OutlinedTextField(value = lastName, onValueChange = { lastName = it }, singleLine = true)
-            }
-
-            Text("Email Address")
-            // email address input
-            OutlinedTextField(value = email, onValueChange = { email = it }, singleLine = true)
-
-            // password input
-            Text("Password")
-            OutlinedTextField(value = password, onValueChange = { password = it }, singleLine = true)
-
-            // register button
-            Button(onClick = { Register() }) {
-                Text("Register")
-            }
-
-            Row {
-                Text("Already have an account?")
-                // navigate to login page
-                TextButton(onClick = { navigateLoginPage() }) {
-                    Text("Sign in")
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Already have an account?")
+                    // navigate to login page
+                    TextButton(onClick = { navigateLoginPage() }) {
+                        Text("Sign in")
+                    }
                 }
-            }
 
-            Divider()
-            Text(text = "Or register with")
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                Row { Divider() }
+
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){ Text(text = "Or register with") }
 
 
-            // gmail register
-            val iconfile = File("gmail_icon.png")
-            val iconimage = ImageIO.read(iconfile)
-            val iconbitmap = iconimage.toComposeImageBitmap()
+                // gmail register
+                val iconfile = File("gmail_icon.png")
+                val iconimage = ImageIO.read(iconfile)
+                val iconbitmap = iconimage.toComposeImageBitmap()
 
-            Button(onClick = { GmailRegister() }) {
-                Row {
-                    Image(iconbitmap, "gmail")
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
+                    Button(onClick = { GmailRegister() }) {
+                        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                            Image(iconbitmap, "gmail")
 
-                    Text("Register")
+                            Text("Register")
+                        }
+                    }
                 }
-            }
 
+            }
+            Column(Modifier.fillMaxWidth(0.3f)) { Box {} }
         }
     }
 }
