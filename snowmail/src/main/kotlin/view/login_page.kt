@@ -16,9 +16,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 import java.io.File
 import javax.imageio.ImageIO
 
+
+fun main() {
+    application {
+        Window(onCloseRequest = ::exitApplication) {
+            loginPage()
+        }
+    }
+}
 
 @Composable
 fun loginPage() {
