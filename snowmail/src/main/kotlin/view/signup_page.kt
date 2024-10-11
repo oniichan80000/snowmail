@@ -1,6 +1,5 @@
 package ca.uwaterloo.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -16,41 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import java.io.File
-import javax.imageio.ImageIO
-
-
-@Composable
-fun WebsitePage() {
-    var currentPage by remember { mutableStateOf("signup") }
-
-    when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
-        "homepage" -> homePage()
-    }
-}
-
-// to be implement
-@Composable
-fun homePage() {
-    Text("This is homepage, in progress...")
-}
-
-
-fun main() {
-    application {
-        Window(onCloseRequest = ::exitApplication) {
-            WebsitePage()
-        }
-    }
-}
-
 
 
 val fullPageColor = 0xFFebecf0
-val formColor = 0xFFFFFFFF
-val sizeofInput = 0.1f
+// val formColor = 0xFFFFFFFF
+val formColor = fullPageColor
 val buttonColor = 0xFF487896
 
 
@@ -58,17 +26,31 @@ val buttonColor = 0xFF487896
 fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
     Box(Modifier.fillMaxSize().background(Color(fullPageColor)), contentAlignment = Alignment.Center) {
         Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.fillMaxHeight(0.05f))
-            Box(modifier = Modifier.fillMaxHeight(0.15f).background(Color(fullPageColor))) {
-                Row {
-                    Text(text = "Join ", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = FontFamily.Default)
-                    Text(text = "Snowmail!", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color(0xff2b5dc7), fontFamily = FontFamily.Default)
+            Row { Spacer(modifier = Modifier.fillMaxHeight(0.05f)) }
+            Row {
+                Box(modifier = Modifier.fillMaxHeight(0.15f).background(Color(fullPageColor))) {
+                    Row {
+                        Text(
+                            text = "Join ",
+                            fontSize = 50.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            fontFamily = FontFamily.Default
+                        )
+                        Text(
+                            text = "Snowmail!",
+                            fontSize = 50.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xff2b5dc7),
+                            fontFamily = FontFamily.Default
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.fillMaxHeight(0.01f))
-            RegisterForm(NavigateToLogin, NavigateToHome)
-            Box(modifier = Modifier.fillMaxHeight(0.05f).background(Color(fullPageColor)))
+            Row { Spacer(modifier = Modifier.fillMaxHeight(0.01f)) }
+            Row(Modifier.fillMaxHeight(0.93f)) { RegisterForm(NavigateToLogin, NavigateToHome) }
+            Row { Spacer(modifier = Modifier.fillMaxHeight(0.01f)) }
         }
 
     }
@@ -82,7 +64,7 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
 @Composable
 fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
-    Box (Modifier.fillMaxWidth(0.7f).fillMaxHeight(0.8f).background(Color(formColor))) {
+    Box (Modifier.fillMaxWidth(0.7f).fillMaxHeight().background(Color(formColor))) {
         Row {
             Column(Modifier.fillMaxWidth(0.1f)) { Box {} }
             Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth(0.8f).fillMaxWidth()) {
@@ -191,17 +173,17 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
 
                 // gmail register
-                val iconfile = File("gmail_icon.png")
-                val iconimage = ImageIO.read(iconfile)
-                val iconbitmap = iconimage.toComposeImageBitmap()
+                // val iconfile = File("gmail_icon.png")
+                // val iconimage = ImageIO.read(iconfile)
+                // val iconbitmap = iconimage.toComposeImageBitmap()
 
-                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
+                Row(modifier = Modifier.fillMaxHeight(0.03f)) { Box{} }
                 Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
                     Button(onClick = { GmailRegister() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
                         Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                            Image(iconbitmap, "gmail")
+                            // Image(iconbitmap, "gmail")
 
-                            Text("Register", color = Color.White)
+                            Text("Register by Gmail", color = Color.White)
                         }
                     }
                 }
@@ -223,3 +205,34 @@ fun navigateLoginPage(NavigateToLogin: () -> Unit) {
 }
 
 fun GmailRegister() { }
+
+
+
+
+
+// ---- ONLY FOR TESTING THIS SINGLE PAGE, TO BE DELETED LATER --------
+@Composable
+fun WebsitePage() {
+    var currentPage by remember { mutableStateOf("signup") }
+
+    when (currentPage) {
+        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
+        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
+        "homepage" -> homePage()
+    }
+}
+
+// to be implement
+@Composable
+fun homePage() {
+    Text("This is homepage, in progress...")
+}
+
+
+fun main() {
+    application {
+        Window(onCloseRequest = ::exitApplication) {
+            WebsitePage()
+        }
+    }
+}

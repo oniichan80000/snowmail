@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "2.0.10"
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
+    id("application")
 }
 
 group = "ca.uwaterloo"
@@ -27,5 +28,9 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+application {
+    mainClass.set("ca.uwaterloo.MainKt")
 }
 
