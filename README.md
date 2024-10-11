@@ -25,7 +25,7 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-Proposal
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Meeting-Record
 
 #### Releases:
-Version 0.10 Release https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.0.0-Release
+Version 0.10 Release https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-0.10-Release
 
 
 
