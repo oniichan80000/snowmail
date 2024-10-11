@@ -22,11 +22,13 @@ import androidx.compose.ui.window.application
 import java.io.File
 import javax.imageio.ImageIO
 import androidx.compose.ui.draw.alpha
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 
 @Composable
-fun WebsitePageWelcome() {
+fun WebsitePageWelcome4() {
     var currentPage by remember { mutableStateOf("welcome") }
 
     when (currentPage) {
@@ -46,7 +48,7 @@ fun main() {
 }
 
 @Composable
-fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, NavigateToWelcomePage1: () -> Unit) {
+fun WelcomePage4(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit,) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -81,76 +83,73 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
         }
 
 
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(176 / 255f, 212 / 255f, 213 / 255f, 0.2f))
+                //.background(Color(176 / 255f, 212 / 255f, 213 / 255f, 0.2f))
                 .height(maxHeight * 0.7f)
                 .align(Alignment.Center),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column (
+            Text(
+                text = "Why Choose Snowmail?",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h4,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            Box(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .padding(end = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxWidth() // Makes the box take the full width
+                    .padding(16.dp) // Adds padding around the box
+                    .background(
+                        color = Color(0xFFfaf4eb), // Background color
+                        shape = RoundedCornerShape(16.dp) // Rounded corners
+                    ),
+                //.padding(16.dp), // Padding inside the box
+                contentAlignment = Alignment.Center // Centers the text inside the box
             ) {
-                Text(
-                    text = "Snowmail helps you get hired!",
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.h4,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(40.dp))
-
-                Row (
-
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    //.weight(1f)
+                    //.padding(end = 16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(
-                        onClick = NavigateToWelcomePage1,
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFF487896),
-                            contentColor = Color.White
-                        )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(0.3f)
                     ) {
-                        Text("Get started")
+                        Text(text = "Send Cold Emails Directly",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.h4,
+                            textAlign = TextAlign.Center)
+                        Text("No need for external tools––manage your emails in one place")
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    Button(
-                        onClick = { },
+                    Box(
                         modifier = Modifier
-                            .alpha(0.5f),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFF487896),
-                            contentColor = Color.White
-                        )
+                            //.fillMaxWidth() // Makes the box take the full width
+                            .padding(16.dp) // Adds padding around the box
+                            .background(
+                                color = Color.LightGray, // Background color
+                                shape = RoundedCornerShape(16.dp) // Rounded corners
+                            )
+                            .padding(16.dp), // Padding inside the box
+                        contentAlignment = Alignment.Center // Centers the text inside the box
                     ) {
-                        Text("Learn more")
+                        Text("screenshot of ui")
                     }
+
                 }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .padding(end = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                val imagefile = File("gmail_icon.png")
-                val image = ImageIO.read(imagefile)
-                val imagebitmap = image.toComposeImageBitmap()
-                Image(
-                    bitmap = imagebitmap,
-                    contentDescription = "Welcome Image",
-                    modifier = Modifier.size(150.dp) // Set the size of the image
-                )
-            }
+
         }
     }
 }
