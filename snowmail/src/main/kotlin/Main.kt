@@ -1,25 +1,16 @@
 package ca.uwaterloo
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
-import ca.uwaterloo.view.SignUpPage
-import ca.uwaterloo.view.homePage
-import ca.uwaterloo.view.loginPage
-import ca.uwaterloo.view.WelcomePage
-import ca.uwaterloo.view.WelcomePage1
-import ca.uwaterloo.view.WelcomePage2
-import ca.uwaterloo.view.WelcomePage3
-import ca.uwaterloo.view.WelcomePage4
+import ca.uwaterloo.view.*
 
 fun main() {
     application {
-        Window(onCloseRequest = ::exitApplication) {
+        Window(onCloseRequest = ::exitApplication, state = WindowState(size = DpSize(1200.dp, 800.dp))) {
             WebsitePage()
         }
     }
