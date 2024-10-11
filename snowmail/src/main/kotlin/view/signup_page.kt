@@ -9,8 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -18,29 +20,54 @@ import java.io.File
 import javax.imageio.ImageIO
 
 
+@Composable
+fun WebsitePage() {
+    var currentPage by remember { mutableStateOf("signup") }
+
+    when (currentPage) {
+        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
+        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
+        "homepage" -> homePage()
+    }
+}
+
+// to be implement
+@Composable
+fun homePage() {
+    Text("This is homepage, in progress...")
+}
+
+
 fun main() {
     application {
         Window(onCloseRequest = ::exitApplication) {
-            SignUpPage()
+            WebsitePage()
         }
     }
 }
 
-val fullPageColor = 0xFFbad4db
+
+
+val fullPageColor = 0xFFebecf0
 val formColor = 0xFFFFFFFF
 val sizeofInput = 0.1f
+val buttonColor = 0xFF487896
+
 
 @Composable
-fun SignUpPage() {
+fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
     Box(Modifier.fillMaxSize().background(Color(fullPageColor)), contentAlignment = Alignment.Center) {
         Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.fillMaxHeight(0.05f))
             Box(modifier = Modifier.fillMaxHeight(0.15f).background(Color(fullPageColor))) {
-                Text(text = "Join Snowmail!", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black,)
+                Row {
+                    Text(text = "Join ", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = FontFamily.Default)
+                    Text(text = "Snowmail!", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color(0xff2b5dc7), fontFamily = FontFamily.Default)
+                }
             }
 
             Spacer(modifier = Modifier.fillMaxHeight(0.01f))
-            RegisterForm()
+            RegisterForm(NavigateToLogin, NavigateToHome)
             Box(modifier = Modifier.fillMaxHeight(0.05f).background(Color(fullPageColor)))
         }
 
@@ -54,7 +81,7 @@ fun SignUpPage() {
 
 
 @Composable
-fun RegisterForm() {
+fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
     Box (Modifier.fillMaxWidth(0.7f).fillMaxHeight(0.8f).background(Color(formColor))) {
         Row {
             Column(Modifier.fillMaxWidth(0.1f)) { Box {} }
@@ -102,20 +129,57 @@ fun RegisterForm() {
                 Row { Text("Password") }
                 Row { OutlinedTextField(value = password, onValueChange = { password = it }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
 
+                val errorInformation = true
+                var errorMessage by remember { mutableStateOf("") }
+
                 Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
                 Row {
                     // register button
-                    Button(onClick = { Register() }, modifier = Modifier.fillMaxWidth()) {
-                        Text("Register")
+                    Button(onClick = {
+                        // if first name is missing
+                        if (firstName.isEmpty())  errorMessage = "please fill in first name"
+
+                        // if last name is missing
+                        else if (lastName.isEmpty())  errorMessage = "please fill in last name"
+
+                        // if email is missing
+                        else if (email.isEmpty())  errorMessage = "please fill in email"
+
+                        // if password is missing
+                        else if (password.isEmpty())  errorMessage = "please fill in password"
+
+                        // if email does not end with .com
+                        else if (!email.endsWith(".com")) errorMessage = "Please enter a valid email"
+
+                        // if password is too short
+                        else if (password.length < 6) errorMessage = "Password is too short"
+
+                        else {
+                            // do backend work, save information
+                            NavigateToHome()
+                        }
+
+
+                    },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
+                        Text("Register", color = Color.White)
                     }
+                }
+
+
+                // potential error message shown
+
+                if (errorMessage.isNotEmpty()) {
+                    Text(text = errorMessage, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(10.dp))
                 }
 
                 Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Already have an account?")
                     // navigate to login page
-                    TextButton(onClick = { navigateLoginPage() }) {
-                        Text("Sign in")
+                    TextButton(onClick = { navigateLoginPage(NavigateToLogin) }) {
+                        Text("Sign in", color = Color(buttonColor))
                     }
                 }
 
@@ -133,11 +197,11 @@ fun RegisterForm() {
 
                 Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
                 Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
-                    Button(onClick = { GmailRegister() }) {
+                    Button(onClick = { GmailRegister() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
                         Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                             Image(iconbitmap, "gmail")
 
-                            Text("Register")
+                            Text("Register", color = Color.White)
                         }
                     }
                 }
@@ -152,8 +216,10 @@ fun RegisterForm() {
 
 
 
-fun Register() {}
 
-fun navigateLoginPage() {}
+
+fun navigateLoginPage(NavigateToLogin: () -> Unit) {
+    NavigateToLogin()
+}
 
 fun GmailRegister() { }

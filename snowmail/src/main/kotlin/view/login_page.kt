@@ -3,13 +3,11 @@ package ca.uwaterloo.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -22,36 +20,103 @@ import java.io.File
 import javax.imageio.ImageIO
 
 
+@Composable
+fun WebsitePage2() {
+    var currentPage by remember { mutableStateOf("login") }
+
+    when (currentPage) {
+        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
+        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
+        "homepage" -> homePage()
+    }
+}
+
+
 fun main() {
     application {
         Window(onCloseRequest = ::exitApplication) {
-            loginPage()
+            WebsitePage2()
         }
     }
 }
 
+
+
 @Composable
-fun loginPage() {
+fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
     Column (
         modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,) {
+        Row {
             Text(
-                "Job Hunting: Tough, \n But you Do Not Have \nto Do It Alone!",
+                "Job Hunting: ",
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 24.dp))
-            loginForm()
+                modifier = Modifier.padding(bottom = 24.dp),
+                color = Color.Black
+            )
+            Text(
+                "Tough",
+                textAlign = TextAlign.Center,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 24.dp),
+                color = Color(0xff2b5dc7)
+            )
+        }
+        Row {
+            Text(
+                "But you Do Not ",
+                textAlign = TextAlign.Center,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 24.dp),
+                color = Color.Black
+            )
+            Text(
+                "Have",
+                textAlign = TextAlign.Center,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 24.dp),
+                color = Color(0xff2b5dc7)
+            )
+        }
+        Row {
+            Text(
+                "to Do It ",
+                textAlign = TextAlign.Center,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 24.dp),
+                color = Color.Black
+            )
+            Text(
+                "Alone!",
+                textAlign = TextAlign.Center,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 24.dp),
+                color = Color(0xff2b5dc7)
+            )
+        }
+
+
+        loginForm(NavigateToSignup, NavigateToHome)
+        }
+
+
     }
-}
+
 
 @Composable
-fun loginForm() {
+fun loginForm(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        loginWithAccount()
+        loginWithAccount(NavigateToSignup, NavigateToHome)
         Divider()
         // HorizontalDivider(thickness = 2.dp)
         loginWithGmail()
@@ -60,7 +125,7 @@ fun loginForm() {
 
 
 @Composable
-fun loginWithAccount() {
+fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
     Column (
         modifier = Modifier.fillMaxWidth().padding(50.dp),
         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
@@ -75,13 +140,52 @@ fun loginWithAccount() {
         var password by remember { mutableStateOf("") }
         OutlinedTextField(value = password, onValueChange =  {password = it}, modifier = Modifier.fillMaxWidth().align(Alignment.Start), singleLine = true)
 
+
+
         // forgot your password?
         ClickableText(AnnotatedString("Forgot Your Password?"), onClick = {})
 
-        Button(onClick = { onClick() }) {
-            Text("Sign In")
+        // potential error message shown
+        var errorMessage by remember { mutableStateOf("") }
+        if (errorMessage.isNotEmpty()) {
+            Text(text = errorMessage, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(10.dp))
         }
-        Text("Didn't have an account? Register")
+
+        // sign in button
+
+        val SUCCESS = false
+        val EMAILDOESNOTEXIST = false
+        Button(onClick = {
+            // if successful, navigate to home page
+            if (SUCCESS) {
+                NavigateToHome()
+            }
+            // if email doesn't exist, show and clear
+            else if (EMAILDOESNOTEXIST) {
+                errorMessage = "Email does not exist, please register first"
+                email = ""
+                password = ""
+            }
+            // if password and email does not match
+            else {
+                errorMessage = "Email and password do not match, please try again"
+                email = ""
+                password = ""
+            }
+        },
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
+            Text("Sign In", color = Color.White)
+        }
+
+
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Don't have an account?")
+            // navigate to login page
+            TextButton(onClick = { navigateLoginPage(NavigateToSignup) }) {
+                Text("Sign up", color = Color(buttonColor))
+            }
+        }
     }
 }
 
@@ -96,17 +200,21 @@ fun loginWithGmail() {
 
         val iconimage = ImageIO.read(iconfile)
         val iconbitmap = iconimage.toComposeImageBitmap()
-        Button(onClick = { onClick() }) {
+        Button(onClick = { LoginWithGmail() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(formColor))) {
             Row (horizontalArrangement = Arrangement.Center){
                 Image(iconbitmap, "gmail")
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Gmail")
+                Text("Gmail", color = Color.Black)
             }
 
         }
     }
 }
 
-fun onClick() {
+
+
+fun LoginWithGmail() {
 
 }
+
+

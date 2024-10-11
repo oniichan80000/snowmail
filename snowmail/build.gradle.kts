@@ -18,7 +18,6 @@ dependencies {
     implementation(libs.datetime)
     implementation(compose.desktop.currentOs)
 
-    // implementation("androidx.navigation:navigation-compose:2.8.2")
 
     testImplementation(kotlin("test"))
 }
