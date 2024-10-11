@@ -142,7 +142,6 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Load and display an image (replace "your_image_file.png" with the actual image path)
                 val imagefile = File("gmail_icon.png")
                 val image = ImageIO.read(imagefile)
                 val imagebitmap = image.toComposeImageBitmap()
