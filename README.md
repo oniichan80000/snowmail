@@ -27,5 +27,7 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Meeting-Record
 #### Releases:
 Version 0.10 Release https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-0.10-Release
 
+Installer image [Snowmail](https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release0.10/ca.uwaterloo-1.0.0.dmg?ref_type=heads)
+
 
 
