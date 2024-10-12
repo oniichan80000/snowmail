@@ -1,8 +1,9 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 plugins {
     kotlin("jvm") version "2.0.10"
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
-    id("application")
 }
 
 group = "ca.uwaterloo"
@@ -14,11 +15,9 @@ repositories {
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }  // JetBrains Compose repository
 }
 
-
 dependencies {
     implementation(libs.datetime)
     implementation(compose.desktop.currentOs)
-
 
     testImplementation(kotlin("test"))
 }
@@ -30,7 +29,16 @@ kotlin {
     jvmToolchain(21)
 }
 
-application {
-    mainClass.set("ca.uwaterloo.MainKt")
+compose.desktop {
+    application {
+        mainClass = "ca.uwaterloo.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "ca.uwaterloo"
+            packageVersion = "1.0.0"
+        }
+    }
 }
+
 
