@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version "2.0.10"
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "ca.uwaterloo"
@@ -18,8 +19,14 @@ repositories {
 dependencies {
     implementation(libs.datetime)
     implementation(compose.desktop.currentOs)
-
+    implementation(libs.json)
+    implementation(libs.ktor.client)
     testImplementation(kotlin("test"))
+
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.postgres)
+    implementation(libs.supabase.realtime)
+    implementation(libs.supabase.auth)
 }
 
 tasks.test {
