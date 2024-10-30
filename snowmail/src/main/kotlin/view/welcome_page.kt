@@ -142,14 +142,14 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                val imagefile = File("gmail_icon.png")
-                val image = ImageIO.read(imagefile)
-                val imagebitmap = image.toComposeImageBitmap()
-                Image(
-                    bitmap = imagebitmap,
-                    contentDescription = "Welcome Image",
-                    modifier = Modifier.size(150.dp) // Set the size of the image
-                )
+//                val imagefile = File("gmail_icon.png")
+//                val image = ImageIO.read(imagefile)
+//                val imagebitmap = image.toComposeImageBitmap()
+//                Image(
+//                    bitmap = imagebitmap,
+//                    contentDescription = "Welcome Image",
+//                    modifier = Modifier.size(150.dp) // Set the size of the image
+//                )
             }
         }
     }
