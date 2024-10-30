@@ -7,18 +7,27 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import ca.uwaterloo.view.*
+import controller.configureRouting
+import integration.OpenAIClient
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import kotlin.concurrent.thread
+import service.EmailGenerationService
 
 fun main() {
+
     application {
         Window(onCloseRequest = ::exitApplication, state = WindowState(size = DpSize(1200.dp, 800.dp))) {
-            WebsitePage()
+            websitePage()
         }
     }
 }
 
 
 @Composable
-fun WebsitePage() {
+fun websitePage() {
 
     var currentPage by remember { mutableStateOf("welcome") }
 
