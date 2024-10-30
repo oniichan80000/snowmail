@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: io.github.jan-tennert.supabase:realtime-kt-jvm:3.0.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="io.github.jan-tennert.supabase" artifactId="realtime-kt-jvm" version="3.0.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.jan-tennert.supabase/realtime-kt-jvm/3.0.0/14e899f59feea831fbf5554c475905474ce113f3/realtime-kt-jvm-3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.jan-tennert.supabase/realtime-kt-jvm/3.0.0/b0d9c557a90b9b2cfe4fbbb6987354c55484eba4/realtime-kt-jvm-3.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.jan-tennert.supabase/realtime-kt-jvm/3.0.0/9c5fb00735cc6174d96cd0925b6aee126f3758e0/realtime-kt-jvm-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
