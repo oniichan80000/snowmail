@@ -17,6 +17,9 @@ import androidx.compose.ui.window.application
 import ca.uwaterloo.controller.SignInController
 import ca.uwaterloo.persistence.DBStorage
 import kotlinx.coroutines.runBlocking
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 @Composable
 fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
@@ -118,9 +121,11 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         Row { Text("Password") }
         Row(modifier = Modifier.fillMaxHeight(0.03f)) { Box{} }
         var password by remember { mutableStateOf("") }
-        Row { OutlinedTextField(value = password, onValueChange =  {password = it}, modifier = Modifier.fillMaxWidth(), singleLine = true) }
-
-
+        Row {
+            OutlinedTextField(
+                value = password,
+                onValueChange =  {password = it}, modifier = Modifier.fillMaxWidth(), singleLine = true,
+                visualTransformation = PasswordVisualTransformation()) }
 
 
         Row(modifier = Modifier.fillMaxHeight(0.07f)) { Box{} }
@@ -225,9 +230,9 @@ fun WebsitePage2() {
     var currentPage by remember { mutableStateOf("login") }
 
     when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
+        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
         "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
-        "homepage" -> homePage()
+        "profilePage" -> ProfilePage()
     }
 }
 
