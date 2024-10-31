@@ -8,6 +8,7 @@ import io.github.jan.supabase.postgrest.from
 import ca.uwaterloo.model.UserProfile
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.*
+import kotlinx.datetime.LocalDate
 
 
 class DBStorage {
@@ -18,102 +19,92 @@ class DBStorage {
         install(Postgrest)
         install(Auth)
     }
-
-    //register a new user with email and password and return user id
-    //password needs to be at least 6 chars
-    //if the email has already used, log in
-    //have to check data is inserted successfully in user_profile (need to implemented later)
-    suspend fun signUpUser(
-        email: String,
-        password: String,
-        firstname: String,
-        lastname: String
-    ): Result<String> {
-        return try {
-            // Register user with built-in email provider
-            supabase.auth.signUpWith(Email) {
-                this.email = email
-                this.password = password
-            }
-
-            // Get the user info from current session
-            val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
-
-            // Insert firstname and lastname into the user_profile table
-            val userProfile = UserProfile(
-                user_id = user.id,
-                first_name = firstname,
-                last_name = lastname
-            )
-            supabase.from("user_profile").insert(userProfile)
-
-            // Return user ID if successful
-            Result.success(user.id)
-        } catch (e: Exception) {
-            // Return specific error message as failure
-            val errorMessage = if (e.message?.contains("User already registered") == true) {
-                "User already registered. Please sign in."
-            } else {
-                "Error during sign-up: ${e.message}"
-            }
-            Result.failure(Exception(errorMessage))
-        }
-    }
-
-    //sign in the user with email and password
-    suspend fun signInUser(email: String, password: String): Result<String> {
-        return try {
-            val result = supabase.auth.signInWith(Email) {
-                this.email = email
-                this.password = password
-            }
-
-            val user = supabase.auth.currentUserOrNull()
-            if (user != null) {
-                Result.success(user.id) // Sign-in successful, return user ID
-            } else {
-                Result.failure(Exception("Invalid credentials or session not created."))
-            }
-        } catch (e: Exception) {
-            val errorMessage = when {
-                e.message?.contains("Invalid login credentials") == true -> "Sign in in failed. Please use the correct email and password."
-                else -> "Sign-in failed: ${e.message}"
-            }
-            Result.failure(Exception(errorMessage))
-        }
-    }
-
-
-    //sign out the user in the current session
-    suspend fun signOutUser(): String {
-        return try {
-            // Sign out the current user
-            supabase.auth.signOut()
-            "User signed out successfully."
-        } catch (e: Exception) {
-            "Error during sign-out: ${e.message}"
-        }
-    }
-
+    val authRepository = AuthRepository(supabase)
+    val userProfileRepository = UserProfileRepository(supabase)
 }
 
 //
-// just for testing
+// just for testing,
+// uncomment any of them when you want to test a single func
 //
 fun main() = runBlocking<Unit> {
     val dbStorage = DBStorage()
 
-    val email = "wrw040613@gmail.com"
-    val password = "scsssss"
-    val firstname = "Cherry"
-    val lastname = "Wang"
+//    val email = "wrw040613@gmail.com"
+//    val password = "Wrw54321"
+//    val firstname = "Cherry"
+//    val lastname = "Wang"
+//
+//    //test sign up
+//    println (dbStorage.authRepository.signUpUser(email, password, firstname, lastname))
+//
+//    //test sign in
+//    println (dbStorage.authRepository.signInUser(email, password))
+//
+//    //test sign out
+//    println(dbStorage.authRepository.signOutUser())
+//
+//    val signInResult = dbStorage.authRepository.signInUser(email, password)
+//    signInResult.onSuccess { userId ->
+//        println("Sign-in successful. User ID: $userId")
+//
+//        //get user's name
+//        val profileResult = dbStorage.userProfileRepository.getUserName(userId)
+//        profileResult.onSuccess { fullName ->
+//            println("User Profile Name: $fullName")
+//        }.onFailure { error ->
+//            println("Error fetching user profile: ${error.message}")
+//        }
+//    }.onFailure { error ->
+//        println("Sign-in failed: ${error.message}")
+//    }
 
-    //test sign up
-//    println (dbStorage.signUpUser(email, password, firstname, lastname))
+    //test adding work exp
+//    val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"
+//    val companyName = "Example Company"
+//    val currentlyWorking = true
+//    val title = "Software Engineer"
+//    val startDate = LocalDate(2020, 1, 1)
+//    val endDate = LocalDate(2022, 1, 1)
+//    val description = "Worked on backend systems."
+//    val result = dbStorage.userProfileRepository.addWorkExperience(
+//        userId = userId,
+//        companyName = companyName,
+//        currentlyWorking = currentlyWorking,
+//        title = title,
+//        startDate = startDate,
+//        endDate = endDate,
+//        description = description
+//    )
+//
+//    result.onSuccess {
+//        println("Working experience added successfully.")
+//    }.onFailure { error ->
+//        println("Error adding working experience: ${error.message}")
+//    }
 
-    //test sign in
-//    println (dbStorage.signInUser(email, password))
-
-    //test sign out
-//    println(dbStorage.signOutUser())
+    //test adding edu exp
+//    val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"
+//    val degreeId = "3"
+//    val major = "Computer Science"
+//    val gpa = 3.8f
+//    val startDate = LocalDate(2019, 9, 1)
+//    val endDate = LocalDate(2023, 6, 1)
+//    val institutionName = "University of Waterloo"
+//
+//    val result = dbStorage.userProfileRepository.addEducation(
+//        userId = userId,
+//        degreeId = degreeId,
+//        major = major,
+//        gpa = gpa,
+//        startDate = startDate,
+//        endDate = endDate,
+//        institutionName = institutionName
+//    )
+//
+//    result.onSuccess {
+//        println("Education record added successfully.")
+//    }.onFailure { error ->
+//        println("Error adding education record: ${error.message}")
+//    }
 }

@@ -7,7 +7,7 @@ class SignInController(private val dbStorage: DBStorage) {
 
     //Sign in the user and return either the user id or error message
     suspend fun signInUser(email: String, password: String): Result<String> {
-        return dbStorage.signInUser(email, password)
+        return dbStorage.authRepository.signInUser(email, password)
     }
 
 //    suspend fun logoutUser(): String {
