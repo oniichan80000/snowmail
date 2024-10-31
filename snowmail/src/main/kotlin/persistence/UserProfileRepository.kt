@@ -4,14 +4,9 @@ import ca.uwaterloo.model.Education
 import ca.uwaterloo.model.WorkExperience
 import ca.uwaterloo.model.UserProfile
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
-
 import kotlinx.datetime.LocalDate
-import kotlinx.serialization.Contextual
-import java.util.*
 
 class UserProfileRepository(private val supabase: SupabaseClient) {
 
@@ -32,9 +27,28 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
         }
     }
 
+    //
+    //education experience
+    //
+    suspend fun getEducation(userId: String): Result<List<Education>> {
+        return try {
+            val educationList = supabase.from("education")
+                .select(columns = Columns.list("id", "user_id", "degree_id", "institution_name", "major", "gpa", "start_date", "end_date")) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeList<Education>()
+
+            Result.success(educationList)
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to fetch education records: ${e.message}"))
+        }
+    }
+
     suspend fun addEducation(
         userId: String,
-        degreeId: String,
+        degreeId: Int,
         major: String,
         gpa: Float?,
         startDate: LocalDate,
@@ -55,6 +69,26 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
             Result.success(true)
         } catch (e: Exception) {
             Result.failure(Exception("Failed to add education: ${e.message}"))
+        }
+    }
+
+
+    //
+    //working experience
+    //
+    suspend fun getWorkExperience(userId: String): Result<List<WorkExperience>> {
+        return try {
+            val workExperienceList = supabase.from("work_experience")
+                .select(columns = Columns.list("id", "user_id", "company_name", "currently_working", "title", "start_date", "end_date", "description")) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeList<WorkExperience>()
+
+            Result.success(workExperienceList)
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to fetch work experience records: ${e.message}"))
         }
     }
 
