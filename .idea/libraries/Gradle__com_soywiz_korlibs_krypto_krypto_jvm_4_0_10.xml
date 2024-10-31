@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.soywiz.korlibs.krypto:krypto-jvm:4.0.10" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.soywiz.korlibs.krypto" artifactId="krypto-jvm" version="4.0.10" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.soywiz.korlibs.krypto/krypto-jvm/4.0.10/d470228ccaad24bdce42185a3a6b4b0712721e78/krypto-jvm-4.0.10.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.soywiz.korlibs.krypto/krypto-jvm/4.0.10/ad9d7477405d0e52322c069dcca79bc58500ac59/krypto-jvm-4.0.10-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.soywiz.korlibs.krypto/krypto-jvm/4.0.10/ec8efb211adaa94fede024ec43eb2f1cdd432c0a/krypto-jvm-4.0.10-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
