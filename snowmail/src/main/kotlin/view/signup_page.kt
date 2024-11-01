@@ -228,7 +228,7 @@ fun WebsitePage() {
 
     when (currentPage) {
         "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "login"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
+        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
         "profilePage" -> ProfilePage()
     }
 }
