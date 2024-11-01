@@ -79,7 +79,7 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
         fileURLs = listOf("https://example.com/resume.pdf"),
     )
     val dbStorage = SupabaseClient()
-    val profileController = ProfileController(dbStorage)
+    val profileController = ProfileController(dbStorage.userProfileRepository)
     //val userProfile = profileController.getUserProfile(UserSession.userId ?: "DefaultUserId")
     //val firstName = userProfile.firstName
     //val lastName = userProfile.lastName

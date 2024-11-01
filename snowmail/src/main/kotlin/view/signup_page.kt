@@ -72,7 +72,7 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 @Composable
 fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
     val dbStorage = SupabaseClient()
-    val signInController = SignUpController(dbStorage)
+    val signInController = SignUpController(dbStorage.authRepository)
     Box (Modifier.fillMaxWidth(0.7f).fillMaxHeight().background(Color(formColor))) {
         Row {
             Column(Modifier.fillMaxWidth(0.1f)) { Box {} }
