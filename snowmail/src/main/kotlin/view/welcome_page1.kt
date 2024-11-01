@@ -32,9 +32,9 @@ fun WebsitePageWelcome1() {
     var currentPage by remember { mutableStateOf("welcome") }
 
     when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
+        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
         "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
-        "homepage" -> homePage()
+        "profilePage" -> ProfilePage()
     }
 }
 

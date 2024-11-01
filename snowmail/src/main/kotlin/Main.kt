@@ -7,30 +7,39 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import ca.uwaterloo.view.*
+import controller.configureRouting
+import integration.OpenAIClient
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import kotlin.concurrent.thread
+import service.EmailGenerationService
 
 fun main() {
+
     application {
         Window(onCloseRequest = ::exitApplication, state = WindowState(size = DpSize(1200.dp, 800.dp))) {
-            WebsitePage()
+            websitePage()
         }
     }
 }
 
 
 @Composable
-fun WebsitePage() {
+fun websitePage() {
 
     var currentPage by remember { mutableStateOf("welcome") }
 
     when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "homepage"})
+        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
+        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
         "welcome" -> WelcomePage ({ currentPage = "signup"}, {currentPage = "login"}, {currentPage = "welcome1"})
         "welcome1" -> WelcomePage1 ({ currentPage = "signup"}, {currentPage = "login"}, {currentPage = "welcome2"}, {currentPage = "welcome3"}, {currentPage = "welcome4"})
         "welcome2" -> WelcomePage2 ({ currentPage = "signup"}, {currentPage = "login"}, {currentPage = "welcome3"})
         "welcome3" -> WelcomePage3 ({ currentPage = "signup"}, {currentPage = "login"}, {currentPage = "welcome4"})
         "welcome4" -> WelcomePage4 ({ currentPage = "signup"}, {currentPage = "login"})
-        "homepage" -> homePage()
+        "profilePage" -> ProfilePage()
     }
 }
 

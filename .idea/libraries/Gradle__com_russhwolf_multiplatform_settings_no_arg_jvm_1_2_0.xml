@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.russhwolf:multiplatform-settings-no-arg-jvm:1.2.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.russhwolf" artifactId="multiplatform-settings-no-arg-jvm" version="1.2.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.russhwolf/multiplatform-settings-no-arg-jvm/1.2.0/a2914a2243bcbf7823fd3cf869623321db4cd12e/multiplatform-settings-no-arg-jvm-1.2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.russhwolf/multiplatform-settings-no-arg-jvm/1.2.0/9f8f30be75221c13df8588ebdfd176f6c0a34fa7/multiplatform-settings-no-arg-jvm-1.2.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.russhwolf/multiplatform-settings-no-arg-jvm/1.2.0/b216ca7bf347523e244dd9a8e2be94026c1d7f50/multiplatform-settings-no-arg-jvm-1.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
