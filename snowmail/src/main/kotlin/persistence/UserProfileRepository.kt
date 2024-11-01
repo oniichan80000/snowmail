@@ -4,9 +4,14 @@ import ca.uwaterloo.model.Education
 import ca.uwaterloo.model.WorkExperience
 import ca.uwaterloo.model.UserProfile
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
+
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.Contextual
+import java.util.*
 
 class UserProfileRepository(private val supabase: SupabaseClient) {
 
@@ -27,22 +32,18 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
         }
     }
 
-    //
-    //education experience
-    //
     suspend fun getEducation(userId: String): Result<List<Education>> {
         return try {
-            val educationList = supabase.from("education")
-                .select(columns = Columns.list("id", "user_id", "degree_id", "institution_name", "major", "gpa", "start_date", "end_date")) {
+            val education = supabase.from("education")
+                .select {
                     filter {
-                        eq("user_id", userId)
+                        eq("userId", userId)
                     }
                 }
                 .decodeList<Education>()
-
-            Result.success(educationList)
+            Result.success(education)
         } catch (e: Exception) {
-            Result.failure(Exception("Failed to fetch education records: ${e.message}"))
+            Result.failure(Exception("Failed to fetch education: ${e.message}"))
         }
     }
 
@@ -72,23 +73,18 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
         }
     }
 
-
-    //
-    //working experience
-    //
     suspend fun getWorkExperience(userId: String): Result<List<WorkExperience>> {
         return try {
-            val workExperienceList = supabase.from("work_experience")
-                .select(columns = Columns.list("id", "user_id", "company_name", "currently_working", "title", "start_date", "end_date", "description")) {
+            val workExperience = supabase.from("work_experience")
+                .select {
                     filter {
-                        eq("user_id", userId)
+                        eq("userId", userId)
                     }
                 }
                 .decodeList<WorkExperience>()
-
-            Result.success(workExperienceList)
+            Result.success(workExperience)
         } catch (e: Exception) {
-            Result.failure(Exception("Failed to fetch work experience records: ${e.message}"))
+            Result.failure(Exception("Failed to fetch work experience: ${e.message}"))
         }
     }
 

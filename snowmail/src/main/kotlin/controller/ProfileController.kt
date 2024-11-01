@@ -2,12 +2,14 @@ package ca.uwaterloo.controller
 
 import ca.uwaterloo.model.Education
 import ca.uwaterloo.model.UserProfile
+// import ca.uwaterloo.persistence.DBStorage
+
+import integration.SupabaseClient
 import ca.uwaterloo.model.WorkExperience
-import ca.uwaterloo.persistence.DBStorage
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 
-class ProfileController(private val dbStorage: DBStorage) {
+class ProfileController(private val dbStorage: SupabaseClient) {
 
     // get user's name and display it on profile page
     suspend fun getUserName(userId: String): Result<String> {
@@ -77,7 +79,7 @@ class ProfileController(private val dbStorage: DBStorage) {
 }
 
 fun main() = runBlocking<Unit> {
-    val dbStorage = DBStorage()
+    val dbStorage = SupabaseClient()
     val profileController = ProfileController(dbStorage)
 
     val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"

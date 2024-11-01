@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import ca.uwaterloo.controller.SignInController
-import ca.uwaterloo.persistence.DBStorage
+// import ca.uwaterloo.persistence.DBStorage
 import kotlinx.coroutines.runBlocking
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+
+import integration.SupabaseClient
 
 @Composable
 fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
@@ -105,7 +107,7 @@ fun loginForm(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
 
 @Composable
 fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
-    val dbStorage = DBStorage()
+    val dbStorage = SupabaseClient()
     val signInController = SignInController(dbStorage)
     Column (
         modifier = Modifier.fillMaxWidth().padding(horizontal = 160.dp).padding(vertical = 15.dp)){

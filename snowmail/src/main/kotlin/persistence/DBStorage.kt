@@ -1,33 +1,15 @@
-package ca.uwaterloo.persistence
-import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
-import kotlinx.coroutines.*
-
-
-class DBStorage {
-    private val supabase = createSupabaseClient(
-        supabaseUrl = "https://gwnlngyvkxdpodenpyyj.supabase.co",
-        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3bmxuZ3l2a3hkcG9kZW5weXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc5MTAxNTEsImV4cCI6MjA0MzQ4NjE1MX0.olncAUMxSOjcr0YjssWXThtXDXC3q4zasdNYdwavt8g"
-    ) {
-        install(Postgrest)
-        install(Auth)
-    }
-    val authRepository = AuthRepository(supabase)
-    val userProfileRepository = UserProfileRepository(supabase)
-}
-
+//package ca.uwaterloo.persistence
+//import io.github.jan.supabase.auth.Auth
+//import io.github.jan.supabase.auth.auth
+//import io.github.jan.supabase.auth.providers.builtin.Email
+//import io.github.jan.supabase.createSupabaseClient
+//import io.github.jan.supabase.postgrest.Postgrest
+//import io.github.jan.supabase.postgrest.from
+//import ca.uwaterloo.model.UserProfile
+//import io.github.jan.supabase.postgrest.query.Columns
+//import kotlinx.coroutines.*
+//import kotlinx.datetime.LocalDate
 //
-// just for testing,
-// uncomment any of them when you want to test a single func
-//
-fun main() = runBlocking<Unit> {
-    val dbStorage = DBStorage()
-
-//    val email = "wrw040613@gmail.com"
-//    val password = "Wrw54321"
-//    val firstname = "Cherry"
-//    val lastname = "Wang"
 //
 //    //test sign up
 //    println (dbStorage.authRepository.signUpUser(email, password, firstname, lastname))
@@ -78,7 +60,7 @@ fun main() = runBlocking<Unit> {
 //    }
 
     //test adding edu exp
-    val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"
+//    val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"
 //    val degreeId = "3"
 //    val major = "Computer Science"
 //    val gpa = 3.8f
@@ -102,25 +84,3 @@ fun main() = runBlocking<Unit> {
 //        println("Error adding education record: ${error.message}")
 //    }
 
-    // test getting edu exp
-//    val educationResult = dbStorage.userProfileRepository.getEducation(userId)
-//    educationResult.onSuccess { educationList ->
-//        println("Education records:")
-//        educationList.forEach { education ->
-//            println(education)
-//        }
-//    }.onFailure { error ->
-//        println("Error fetching education records: ${error.message}")
-//    }
-
-      // test getting work exp
-//    val workExperienceResult = dbStorage.userProfileRepository.getWorkExperience(userId)
-//    workExperienceResult.onSuccess { workExperienceList ->
-//        println("Work experience records:")
-//        workExperienceList.forEach { workExperience ->
-//            println(workExperience)
-//        }
-//    }.onFailure { error ->
-//        println("Error fetching work experience records: ${error.message}")
-//    }
-}
