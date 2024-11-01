@@ -1,8 +1,3 @@
-package ca.uwaterloo.model
-
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class UserProfile(
     var user_id: String,
     var first_name: String,
