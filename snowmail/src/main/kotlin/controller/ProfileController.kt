@@ -21,6 +21,10 @@ class ProfileController(private val dbStorage: SupabaseClient) {
         return dbStorage.userProfileRepository.getUserEmail(userId)
     }
 
+    suspend fun editUserProfile(userId: String, cityName: String?, phone: String?): Result<Boolean> {
+        return dbStorage.userProfileRepository.updateUserProfile(userId, cityName, phone)
+    }
+
     //
     //education exp
     //
@@ -97,12 +101,22 @@ fun main() = runBlocking<Unit> {
 //    }
 
     //test get user's email
-    val profileResult = profileController.getUserEmail(userId)
-    profileResult.onSuccess { email ->
-        println("email: $email")
-    }.onFailure { error ->
-        println("Error fetching user profile: ${error.message}")
-    }
+//    val profileResult = profileController.getUserEmail(userId)
+//    profileResult.onSuccess { email ->
+//        println("email: $email")
+//    }.onFailure { error ->
+//        println("Error fetching user profile: ${error.message}")
+//    }
+
+    //test editing city and phone
+//    val cityName = "New York"
+//    val phone = "+1234567890"
+//    val result = profileController.editUserProfile(userId, cityName, phone)
+//    result.onSuccess {
+//        println("User profile updated successfully.")
+//    }.onFailure { error ->
+//        println("Error updating user profile: ${error.message}")
+//    }
 
 
     //test add edu exp to db
