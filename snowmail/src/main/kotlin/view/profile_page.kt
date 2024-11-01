@@ -24,6 +24,8 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.foundation.text.ClickableText
 import kotlinx.datetime.LocalDate
 
 
@@ -36,7 +38,9 @@ import kotlinx.coroutines.runBlocking
 
 
 @Composable
-fun ProfilePage(userId: String) {
+fun ProfilePage(userId: String,
+                NavigateToDocuments: () -> Unit, NavigateToEmialGen: () -> Unit,
+                NavigateToProgress: () -> Unit) {
     val dbStorage = SupabaseClient()
     val profileController = ProfileController(dbStorage)
 
@@ -54,6 +58,11 @@ fun ProfilePage(userId: String) {
     var errorMessage by remember { mutableStateOf("") }
 
     var workExperienceList by remember { mutableStateOf<List<WorkExperience>>(emptyList()) }
+
+    var currentPage by remember { mutableStateOf("ProfilePage") }
+
+    var selectedTabIndex by remember { mutableStateOf(3) }
+
 
 
     fun refreshEducationList() {
@@ -113,6 +122,57 @@ fun ProfilePage(userId: String) {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        TopAppBar(
+            backgroundColor = Color.White,
+            elevation = 4.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Tabs on the left
+                TabRow(
+                    selectedTabIndex = selectedTabIndex,
+                    backgroundColor = Color.White, // Set background color to white
+                    contentColor = Color.Black,
+                    indicator = { },
+                    modifier = Modifier.weight(1f) // Take up remaining space
+                ) {
+                    Tab(
+                        selected = selectedTabIndex == 0,
+                        onClick = { navigateOtherPage(NavigateToEmialGen) },
+                        text = { Text("Cold Email Generation") }
+                    )
+                    Tab(
+                        selected = selectedTabIndex == 1,
+                        onClick = { navigateOtherPage(NavigateToProgress)},
+                        text = { Text("Job Application Progress") }
+                    )
+                    Tab(
+                        selected = selectedTabIndex == 2,
+                        onClick = {navigateOtherPage(NavigateToDocuments)},
+                        text = { Text("Documents") }
+                    )
+                    Tab(
+                        selected = selectedTabIndex == 3,
+                        onClick = {},
+                        text = { Text("Profile",
+                            fontWeight = FontWeight.Bold)}
+                    )
+                }
+
+                // Profile Image on the right
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFE2E2E2))
+                        .border(1.dp, Color.LightGray, CircleShape)
+                )
+            }
+        }
 
         Row(
             modifier = Modifier
@@ -817,6 +877,9 @@ fun EditSkillsDialog(onDismiss: () -> Unit) {
     }
 }
 
+fun navigateOtherPage(NavigateOtherPage: () -> Unit) {
+    NavigateOtherPage()
+}
 
 
 @Composable
@@ -852,6 +915,7 @@ fun ProfileDetail(label: String, value: String) {
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication, title = "Profile Page") {
-        ProfilePage(UserSession.userId ?: "DefaultUserId")
+        var currentPage by remember { mutableStateOf("profilePage") }
+        ProfilePage(UserSession.userId ?: "DefaultUserId", { currentPage = "profilePage"}, { currentPage = "profilePage"}, { currentPage = "profilePage"})
     }
 }

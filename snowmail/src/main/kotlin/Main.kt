@@ -49,8 +49,8 @@ fun websitePage() {
         "welcome2" -> WelcomePage2 ({ currentPage = "signup"}, {currentPage = "login"}, {currentPage = "welcome3"})
         "welcome3" -> WelcomePage3 ({ currentPage = "signup"}, {currentPage = "login"}, {currentPage = "welcome4"})
         "welcome4" -> WelcomePage4 ({ currentPage = "signup"}, {currentPage = "login"})
-        "profilePage" -> ProfilePage(UserSession.userId ?: "DefaultUserId")
-        "emailgeneration" -> EmailGenerationPage()
+        "profilePage" -> ProfilePage(UserSession.userId ?: "DefaultUserId", { currentPage = "profilePage"}, { currentPage = "emailgeneration"}, { currentPage = "profilePage"})
+        "emailgeneration" -> EmailGenerationPage({ currentPage = "profilePage"}, { currentPage = "profilePage"}, { currentPage = "profilePage"})
     }
 }
 
