@@ -1,7 +1,7 @@
 package ca.uwaterloo.controller
 
 import ca.uwaterloo.model.Education
-import ca.uwaterloo.model.UserProfile
+import model.UserProfile
 // import ca.uwaterloo.persistence.DBStorage
 
 import integration.SupabaseClient

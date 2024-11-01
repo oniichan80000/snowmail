@@ -2,7 +2,7 @@ package ca.uwaterloo.persistence
 
 import ca.uwaterloo.model.Education
 import ca.uwaterloo.model.WorkExperience
-import ca.uwaterloo.model.UserProfile
+import model.UserProfile
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
