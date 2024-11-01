@@ -32,11 +32,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.background
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.border
+import androidx.compose.ui.text.font.FontWeight
+
+
+
 
 
 @Composable
-fun EmailGenerationPage() {
+fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -> Unit,
+                        NavigateToProgress: () -> Unit
+) {
 //    val client = HttpClient(CIO) {
 //        install(ContentNegotiation) {
 //            json()
@@ -58,6 +67,11 @@ fun EmailGenerationPage() {
     var descriptionInput by remember { mutableStateOf("description") }
     var recruiterNameInput by remember { mutableStateOf("recruiter name") }
 
+    //var currentPage by remember { mutableStateOf("ProfilePage") }
+
+    var selectedTabIndex by remember { mutableStateOf(3) }
+
+
     var userInput = UserInput(
         jobDescription = descriptionInput,
         recruiterEmail = "recruiter@example.com",
@@ -73,21 +87,61 @@ fun EmailGenerationPage() {
         skills = listOf("Java", "Kotlin", "SQL")
     )
 
+    TopAppBar(
+        backgroundColor = Color.White,
+        elevation = 4.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Tabs on the left
+            TabRow(
+                selectedTabIndex = selectedTabIndex,
+                backgroundColor = Color.White, // Set background color to white
+                contentColor = Color.Black,
+                indicator = { },
+                modifier = Modifier.weight(1f) // Take up remaining space
+            ) {
+                Tab(
+                    selected = selectedTabIndex == 0,
+                    onClick = { },
+                    text = { Text("Cold Email Generation",
+                        fontWeight = FontWeight.Bold)}
+                )
+                Tab(
+                    selected = selectedTabIndex == 1,
+                    onClick = { navigateOtherPage(NavigateToProgress)},
+                    text = { Text("Job Application Progress") }
+                )
+                Tab(
+                    selected = selectedTabIndex == 2,
+                    onClick = {navigateOtherPage(NavigateToDocuments)},
+                    text = { Text("Documents") }
+                )
+                Tab(
+                    selected = selectedTabIndex == 3,
+                    onClick = {navigateOtherPage(NavigateToProfile)},
+                    text = { Text("Profile") }
+                )
+            }
+
+            // Profile Image on the right
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFFE2E2E2))
+                    .border(1.dp, Color.LightGray, CircleShape)
+            )
+        }
+    }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .background(Color.Gray), // Optional: Add background color for better visibility
-            //.height(50.dp), // Adjust height as needed
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text("this is the navigation bar", style = MaterialTheme.typography.h6)
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
+            .padding(top = 45.dp)
             .padding(16.dp)
     ) { // this is the row for user input forms and content
         Column(
@@ -157,10 +211,12 @@ fun EmailGenerationPage() {
     }
 }
 
+
 fun main() {
     application {
         Window(onCloseRequest = ::exitApplication) {
-            EmailGenerationPage()
+            var currentPage by remember { mutableStateOf("") }
+            EmailGenerationPage({ currentPage = "profilePage"}, { currentPage = "profilePage"}, { currentPage = "profilePage"})
         }
     }
 }
