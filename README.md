@@ -25,13 +25,17 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-Proposal
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Meeting-Record
 
 ### Releases:
-**Version 0.10 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-0.10-Release
+- **Version 1.1.0 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.1.0-Release
 
-**Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release0.10/ca.uwaterloo-1.0.0.dmg?ref_type=heads
+    **Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release0.10/ca.uwaterloo-1.0.0.dmg?ref_type=heads
 
 (Note: When opening the .dmg file after downloading, you might see a popup saying:
 _“ca.uwaterloo” can’t be opened because Apple cannot check it for malicious software._
 To proceed, you may need to adjust the privacy settings in System Preferences.This allows you to open the application despite the security warning from macOS.)
+
+- **Version 1.2.0 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.2.0-Release
+
+    **Installer Image:**
 
 
 
