@@ -31,13 +31,30 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
             Result.failure(Exception("Failed to fetch profile: ${e.message}"))
         }
     }
+    suspend fun getUserEmail(userId: String): Result<String> {
+        return try {
+            // fetch user's email from db based on userid
+            val emailResult = supabase.from("user_profile")
+                .select(columns = Columns.list("email")) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeSingle<Map<String, String>>()
+
+            val email = emailResult["email"] ?: throw Exception("Email not found")
+            Result.success(email)
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to fetch profile: ${e.message}"))
+        }
+    }
 
     suspend fun getEducation(userId: String): Result<List<Education>> {
         return try {
             val education = supabase.from("education")
                 .select {
                     filter {
-                        eq("userId", userId)
+                        eq("user_id", userId)
                     }
                 }
                 .decodeList<Education>()
@@ -78,7 +95,7 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
             val workExperience = supabase.from("work_experience")
                 .select {
                     filter {
-                        eq("userId", userId)
+                        eq("user_id", userId)
                     }
                 }
                 .decodeList<WorkExperience>()
@@ -117,4 +134,5 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
 
 
 }
+
 
