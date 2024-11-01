@@ -8,7 +8,7 @@ class SignUpController(private val dbStorage: DBStorage) {
     // Sign up a new user and return either userId or error message
     fun signUpUser(email: String, password: String, firstname: String, lastname: String): Result<String> {
         return runBlocking {
-            dbStorage.signUpUser(email, password, firstname, lastname)
+            dbStorage.authRepository.signUpUser(email, password, firstname, lastname)
         }
     }
 }
