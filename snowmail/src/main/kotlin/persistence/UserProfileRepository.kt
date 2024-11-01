@@ -26,7 +26,7 @@ class UserProfileRepository(private val supabase: SupabaseClient) {
                 }
                 .decodeSingle<UserProfile>()
 
-            Result.success("${userProfile.first_name} ${userProfile.last_name}")
+            Result.success("${userProfile.firstName} ${userProfile.lastName}")
         } catch (e: Exception) {
             Result.failure(Exception("Failed to fetch profile: ${e.message}"))
         }
