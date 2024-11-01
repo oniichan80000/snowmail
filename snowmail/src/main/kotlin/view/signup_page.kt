@@ -16,7 +16,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import ca.uwaterloo.controller.SignUpController
-import ca.uwaterloo.persistence.DBStorage
+
+
+// import ca.uwaterloo.persistence.DBStorage
+
+import integration.SupabaseClient
 
 
 val fullPageColor = 0xFFebecf0
@@ -67,7 +71,7 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
 @Composable
 fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
-    val dbStorage = DBStorage()
+    val dbStorage = SupabaseClient()
     val signInController = SignUpController(dbStorage)
     Box (Modifier.fillMaxWidth(0.7f).fillMaxHeight().background(Color(formColor))) {
         Row {
@@ -228,7 +232,7 @@ fun WebsitePage() {
 
     when (currentPage) {
         "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "login"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
+        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
         "profilePage" -> ProfilePage()
     }
 }
