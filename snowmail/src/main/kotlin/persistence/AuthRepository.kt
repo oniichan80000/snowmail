@@ -3,7 +3,7 @@ package ca.uwaterloo.persistence
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
-import ca.uwaterloo.model.UserProfile
+import model.UserProfile
 import io.github.jan.supabase.postgrest.from
 
 
@@ -31,9 +31,10 @@ class AuthRepository(private val supabase: SupabaseClient) {
 
             // Insert firstname and lastname into the user_profile table
             val userProfile = UserProfile(
-                user_id = user.id,
-                first_name = firstname,
-                last_name = lastname
+                userId = user.id,
+                firstName = firstname,
+                lastName = lastname,
+                email = email
             )
             supabase.from("user_profile").insert(userProfile)
 
