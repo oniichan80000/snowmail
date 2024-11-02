@@ -35,7 +35,7 @@ To proceed, you may need to adjust the privacy settings in System Preferences.Th
 
 - **Version 1.2.0 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.2.0-Release
 
-    **Installer Image:**
+    **Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release1.2.0/ca.uwaterloo-1.2.0.dmg
 
 
 
