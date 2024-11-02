@@ -1,4 +1,4 @@
-package persistence;
+package model;
 
 public class test {
 }

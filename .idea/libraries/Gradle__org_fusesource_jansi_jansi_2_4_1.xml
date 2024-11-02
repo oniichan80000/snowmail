@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: org.fusesource.jansi:jansi:2.4.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.fusesource.jansi" artifactId="jansi" version="2.4.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.fusesource.jansi/jansi/2.4.1/d5774f204d990c9f5da2809b88f928515577beb4/jansi-2.4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.fusesource.jansi/jansi/2.4.1/8c67b760d41635c3b385ab65669e7afe2045416c/jansi-2.4.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.fusesource.jansi/jansi/2.4.1/201dbdbf78b09144d5ea566a104a37dac8c3d437/jansi-2.4.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

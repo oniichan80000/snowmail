@@ -30,9 +30,8 @@ fun WebsitePageWelcome() {
     var currentPage by remember { mutableStateOf("welcome") }
 
     when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "homepage"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "home"})
-        "homepage" -> homePage()
+        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
+        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
     }
 }
 
@@ -78,6 +77,13 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
             ) {
                 Text("Sign Up")
             }
+
+//            Spacer(modifier = Modifier.width(8.dp))
+//
+//            Button(onClick = NavigateToEmailGenerationPage) {
+//                Text("Email Generation")
+//            }
+
         }
 
 
