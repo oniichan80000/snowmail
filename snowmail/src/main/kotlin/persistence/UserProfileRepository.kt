@@ -11,11 +11,31 @@ import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format
 import kotlinx.serialization.Contextual
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.*
 
 class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfileRepository{
+
+    override suspend fun getUserProfile(userId: String): Result<UserProfile> {
+        return try {
+            // fetch user's profile from db based on userid
+            val userProfile = supabase.from("user_profile")
+                .select {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeSingle<UserProfile>()
+            Result.success(userProfile)
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to fetch profile: ${e.message}"))
+        }
+    }
 
     override suspend fun getUserName(userId: String): Result<String> {
         return try {
@@ -104,46 +124,84 @@ class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfile
         }
     }
 
-//    override suspend fun getSkills(userId: String): Result<List<String>> {
-//        return try {
-//            // Fetch user's skills from db based on userid
-//            val skillsResult = supabase.from("user_profile")
-//                .select(columns = Columns.list("skills")) {
-//                    filter {
-//                        eq("user_id", userId)
-//                    }
-//                }
-//                .decodeSingleOrNull<Map<String, String>>()
-//
-//            // Parse the skills string into a list
-//            val skillsString = skillsResult?.get("skills")
-//            val skills = skillsString?.split(", ")?.map { it.trim() } ?: emptyList()
-//
-//            Result.success(skills)
-//        } catch (e: Exception) {
-//            Result.failure(Exception("Failed to fetch skills: ${e.message}"))
-//        }
-//    }
+    override suspend fun getSkills(userId: String): Result<List<String>> {
+        return try {
+            // get user's skills from db based on userid
+            val skillsResult = supabase.from("user_skills")
+                .select(columns = Columns.list("skill")) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeList<Map<String, String>>()
 
-//    override suspend fun updateSkills(userId: String, skills: List<String>): Result<Boolean> {
-//        return try {
-//            withContext(Dispatchers.IO) {
-//                // Convert the list of skills into a comma-separated string
-//                val skillsString = skills.joinToString(", ")
-//
-//                // Update the user's skills in the database
-//                supabase.from("user_profile")
-//                    .update(mapOf("skills" to skillsString)){
-//                        filter {
-//                            eq("user_id", userId)
-//                        }
-//                    }
-//                Result.success(true)
-//            }
-//        } catch (e: Exception) {
-//            Result.failure(Exception("Failed to update skills: ${e.message}"))
-//        }
-//    }
+            val skills = skillsResult.mapNotNull { it["skill"] }
+            Result.success(skills)
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to fetch skills: ${e.message}"))
+        }
+    }
+
+    override suspend fun addSkill(userId: String, skill: String): Result<Boolean> {
+        return try {
+            // check if the skill already exists
+            val existingSkill = supabase.from("user_skills")
+                .select(columns = Columns.list("skill")) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("skill", skill)
+                    }
+                }
+                .decodeList<Map<String, String>>()
+
+            // if the skill already exists, return success
+            if (existingSkill.isNotEmpty()) {
+                return Result.success(true)
+            }
+
+            // insert the skill into the database
+            supabase.from("user_skills")
+                .insert(mapOf("user_id" to userId, "skill" to skill))
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to add skill: ${e.message}"))
+        }
+    }
+
+    override suspend fun deleteSkill(userId: String, skill: String): Result<Boolean> {
+        return try {
+            // check if the skill exists
+            val existingSkill = supabase.from("user_skills")
+                .select(columns = Columns.list("skill")) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("skill", skill)
+                    }
+                }
+                .decodeList<Map<String, String>>()
+
+            // if the skill does not exist, return failure
+            if (existingSkill.isEmpty()) {
+                return Result.failure(Exception("Skill not found for user: $userId"))
+            }
+
+            // delete the skill from the database
+            supabase.from("user_skills")
+                .delete {
+                    filter {
+                        eq("user_id", userId)
+                        eq("skill", skill)
+                    }
+                }
+
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to delete skill: ${e.message}"))
+        }
+    }
+
+
+
 
     override suspend fun getEducation(userId: String): Result<List<Education>> {
         return try {
@@ -183,6 +241,53 @@ class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfile
             Result.success(true)
         } catch (e: Exception) {
             Result.failure(Exception("Failed to add education: ${e.message}"))
+        }
+    }
+
+    override suspend fun updateEducation(
+        userId: String,
+        educationID: String,
+        degreeId: Int,
+        major: String,
+        gpa: Float?,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        institutionName: String
+    ): Result<Boolean> {
+        return try {
+            // check if education exists
+            val existingEducation = supabase.from("education")
+                .select {
+                    filter {
+                        eq("id", educationID)
+                    }
+                }
+                .decodeSingleOrNull<Education>()
+
+            if (existingEducation != null) {
+                // if exists, update it
+
+                supabase.from("education")
+                    .update(mapOf(
+                        "degree_id" to degreeId.toString(),
+                        "major" to major,
+                        "gpa" to gpa.toString(),
+                        "start_date" to startDate.toString(),
+                        "end_date" to endDate.toString(),
+                        "institution_name" to institutionName
+                    )) {
+                        filter {
+                            eq("id", educationID)
+                        }
+                    }
+
+                Result.success(true)
+            } else {
+                // if not exists, return failure
+                Result.failure(Exception("Education record with ID $educationID not found"))
+            }
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to update education: ${e.message}"))
         }
     }
 
@@ -254,6 +359,51 @@ class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfile
             Result.success(true)
         } catch (e: Exception) {
             Result.failure(Exception("Failed to add working experience: ${e.message}"))
+        }
+    }
+
+    override suspend fun updateWorkExperience(
+        userId: String,
+        workExperienceID: String,
+        companyName: String,
+        currentlyWorking: Boolean,
+        title: String,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        description: String?
+    ): Result<Boolean> {
+        return try {
+            // check if work experience exists
+            val existingWorkExperience = supabase.from("work_experience")
+                .select {
+                    filter {
+                        eq("id", workExperienceID)
+                    }
+                }
+                .decodeSingleOrNull<WorkExperience>()
+
+            if (existingWorkExperience != null) {
+                // if exists, update it
+                supabase.from("work_experience")
+                    .update(mapOf(
+                        "company_name" to companyName,
+                        "currently_working" to currentlyWorking.toString(),
+                        "title" to title,
+                        "start_date" to startDate.toString(),
+                        "end_date" to endDate.toString(),
+                        "description" to description
+                    )) {
+                        filter {
+                            eq("id", workExperienceID)
+                        }
+                    }
+                Result.success(true)
+            } else {
+                // if not exists, return failure
+                Result.failure(Exception("Work experience with ID $workExperienceID not found"))
+            }
+        } catch (e: Exception) {
+            Result.failure(Exception("Failed to update work experience: ${e.message}"))
         }
     }
 

@@ -37,9 +37,19 @@ class ProfileController(private val userProfileRepository: IUserProfileRepositor
     }
 
     // get user's skills
-//    suspend fun getSkills(userId: String): Result<List<String>> {
-//        return userProfileRepository.getSkills(userId)
-//    }
+    suspend fun getSkills(userId: String): Result<List<String>> {
+        return userProfileRepository.getSkills(userId)
+    }
+
+    // add skill to db
+    suspend fun addSkill(userId: String, skill: String): Result<Boolean> {
+        return userProfileRepository.addSkill(userId, skill)
+    }
+
+    // delete skill from db
+    suspend fun deleteSkill(userId: String, skill: String): Result<Boolean> {
+        return userProfileRepository.deleteSkill(userId, skill)
+    }
 
     //
     //education exp
@@ -62,6 +72,29 @@ class ProfileController(private val userProfileRepository: IUserProfileRepositor
     ): Result<Boolean> {
         return userProfileRepository.addEducation(
             userId = userId,
+            degreeId = degreeId,
+            major = major,
+            gpa = gpa,
+            startDate = startDate,
+            endDate = endDate,
+            institutionName = institutionName
+        )
+    }
+
+    //update education record in db
+    suspend fun updateEducation(
+        userId: String,
+        educationId: String,
+        degreeId: Int,
+        major: String,
+        gpa: Float?,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        institutionName: String
+    ): Result<Boolean> {
+        return userProfileRepository.updateEducation(
+            userId = userId,
+            educationID = educationId,
             degreeId = degreeId,
             major = major,
             gpa = gpa,
@@ -169,6 +202,24 @@ fun main() = runBlocking<Unit> {
 //        println("Skills: $skills")
 //    }.onFailure { error ->
 //        println("Error fetching skills: ${error.message}")
+//    }
+
+    //test add skill
+//    val skill = "SQL"
+//    val result = profileController.addSkill(userId, skill)
+//    result.onSuccess {
+//        println("Skill added successfully.")
+//    }.onFailure { error ->
+//        println("Error adding skill: ${error.message}")
+//    }
+
+    //test delete skill
+//    val skill = "SQL"
+//    val result = profileController.deleteSkill(userId, skill)
+//    result.onSuccess {
+//        println("Skill deleted successfully.")
+//    }.onFailure { error ->
+//        println("Error deleting skill: ${error.message}")
 //    }
 
     //test add edu exp to db
