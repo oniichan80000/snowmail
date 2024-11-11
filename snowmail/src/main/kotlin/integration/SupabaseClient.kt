@@ -128,6 +128,80 @@ fun main() = runBlocking<Unit> {
 //        println("Error deleting work experience: ${error.message}")
 //    }
 
+    //test get user profile
+//    val profileResult = dbStorage.userProfileRepository.getUserProfile(userId)
+//    profileResult.onSuccess { profile ->
+//        println("User profile: $profile")
+//    }.onFailure { error ->
+//        println("Error fetching user profile: ${error.message}")
+//    }
+
+    //test add skill
+//    val skill = "C++"
+//    val result = dbStorage.userProfileRepository.addSkill(userId, skill)
+//    result.onSuccess {
+//        println("Skill added successfully.")
+//    }.onFailure { error ->
+//        println("Error adding skill: ${error.message}")
+//    }
+
+    //test delete skill
+//    val skill = "C++"
+//    val result = dbStorage.userProfileRepository.deleteSkill(userId, skill)
+//    result.onSuccess {
+//        println("Skill deleted successfully.")
+//    }.onFailure { error ->
+//        println("Error deleting skill: ${error.message}")
+//    }
+
+
+    //test update education
+//    val educationId = "1"
+//    val degreeId = 1
+//    val major = "Computer Science"
+//    val gpa = 3.9f
+//    val startDate = LocalDate(2019, 9, 1)
+//    val endDate = LocalDate(2023, 6, 1)
+//    val institutionName = "University of Waterloo"
+//    val result = dbStorage.userProfileRepository.updateEducation(
+//        userId,
+//        educationId,
+//        degreeId,
+//        major,
+//        gpa,
+//        startDate,
+//        endDate,
+//        institutionName
+//    )
+//    result.onSuccess {
+//        println("Education updated successfully.")
+//    }.onFailure { error ->
+//        println("Error updating education: ${error.message}")
+//    }
+
+    //test update work experience
+    val workExperienceId = "1"
+    val companyName = "Google"
+    val currentlyWorking = false
+    val title = "Software Engineer"
+    val startDate = LocalDate(2019, 9, 1)
+    val endDate = LocalDate(2023, 6, 1)
+    val description = "Worked on Android development."
+    val result = dbStorage.userProfileRepository.updateWorkExperience(
+        userId,
+        workExperienceId,
+        companyName,
+        currentlyWorking,
+        title,
+        startDate,
+        endDate,
+        description
+    )
+    result.onSuccess {
+        println("Work experience updated successfully.")
+    }.onFailure { error ->
+        println("Error updating work experience: ${error.message}")
+    }
 
 }
 

@@ -41,16 +41,16 @@ data class Message(
 
 class OpenAIClient(private val httpClient: HttpClient) {
 
-    suspend fun generateEmail(userInput: UserInput, userProfile: UserProfile, education: List<Education>, workExperience: List<WorkExperience>): GeneratedEmail {
-        val prompt = buildPrompt(userInput, userProfile, education, workExperience)
+    suspend fun generateEmail(userInput: UserInput, userProfile: UserProfile, education: List<Education>, workExperience: List<WorkExperience>, skills: List<String>): GeneratedEmail {
+        val prompt = buildPrompt(userInput, userProfile, education, workExperience, skills)
         val message = prepareMessage(prompt)
         val response = sendOpenAIRequest(message)
         val emailContent = getEmailContent(response)
         return parseGeneratedText(emailContent)
     }
 
-    private fun buildPrompt(userInput: UserInput, userProfile: UserProfile, education: List<Education>, workExperience: List<WorkExperience>): String {
-        val skills = userProfile.skills?.joinToString(", ") ?: "Not provided"
+    private fun buildPrompt(userInput: UserInput, userProfile: UserProfile, education: List<Education>, workExperience: List<WorkExperience>, skills: List<String>): String {
+        //val skills = userProfile.skills?.joinToString(", ") ?: "Not provided"
 
         val educationDetails = education.joinToString("\n") { e ->
             """
@@ -179,8 +179,10 @@ suspend fun main() {
         userId = "123",
         firstName = "John",
         lastName = "Doe",
-        skills = listOf("Java", "Kotlin", "SQL")
+        //skills = listOf("Java", "Kotlin", "SQL")
     )
+
+    val skills = listOf("Java", "Kotlin", "SQL")
 
     val education = Education(
         id = 12,
@@ -205,5 +207,5 @@ suspend fun main() {
         description = "Developed backend systems, deployed scalable solutions, and built efficient ETL pipelines for financial data processing."
     )
 
-    println(openAIClient.generateEmail(userInput, userProfile, listOf(education), listOf(workExperience)))
+    println(openAIClient.generateEmail(userInput, userProfile, listOf(education), listOf(workExperience), skills))
 }
