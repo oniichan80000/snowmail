@@ -1,45 +1,8 @@
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
-  - test
-  - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
+build-job:
   stage: build
   script:
     - echo "Compiling the Kotlin code..."
-    - ./gradlew build       # Build the project with Gradle
-  # artifacts:                       # Save build artifacts for use in later stages
-  #   paths:
-  #     - build/libs/
-  #   expire_in: 1 day               # Artifacts available for 1 day
-
-# unit-test-job:   # This job runs in the test stage after build-job.
-#   stage: test
-#   script:
-#     - echo "Running unit tests..."
-#     - ./gradlew test               # Run unit tests
-#   artifacts:
-#     reports:
-#       junit: build/test-results/test/  # Collect test reports for GitLab's Test summary
-
-lint-test-job:   # This job also runs in the test stage in parallel with unit-test-job.
-  stage: test
-  script:
-    - echo "Linting Kotlin code..."
-    - ./gradlew ktlintCheck        # Run Kotlin lint checks (assuming you use ktlint)
-  allow_failure: true              # Optionally, allow linting to fail without failing the pipeline
-
-# deploy-job:      # This job runs in the deploy stage after test jobs pass.
-#   stage: deploy
-#   environment: production
-#   script:
-#     - echo "Deploying application..."
-#     - ./deploy.sh                  # Replace with actual deployment commands
-#   only:
-#     - main                          # Only deploy on the main branch
-
+    - ./gradlew build
