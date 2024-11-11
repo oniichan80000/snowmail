@@ -134,56 +134,19 @@ fun ProfilePage(userId: String,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        TopAppBar(
-            backgroundColor = Color.White,
-            elevation = 4.dp,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Tabs on the left
-                TabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    backgroundColor = Color.White, // Set background color to white
-                    contentColor = Color.Black,
-                    indicator = { },
-                    modifier = Modifier.weight(1f) // Take up remaining space
-                ) {
-                    Tab(
-                        selected = selectedTabIndex == 0,
-                        onClick = { navigateOtherPage(NavigateToEmialGen) },
-                        text = { Text("Cold Email Generation") }
-                    )
-                    Tab(
-                        selected = selectedTabIndex == 1,
-                        onClick = { navigateOtherPage(NavigateToProgress)},
-                        text = { Text("Job Application Progress") }
-                    )
-                    Tab(
-                        selected = selectedTabIndex == 2,
-                        onClick = {navigateOtherPage(NavigateToDocuments)},
-                        text = { Text("Documents") }
-                    )
-                    Tab(
-                        selected = selectedTabIndex == 3,
-                        onClick = {},
-                        text = { Text("Profile",
-                            fontWeight = FontWeight.Bold)}
-                    )
+        TopNavigationBar(
+            selectedTabIndex = selectedTabIndex,
+            onTabSelected = { index ->
+                selectedTabIndex = index
+                when (index) {
+                    0 -> navigateOtherPage(NavigateToEmialGen)
+                    1 -> navigateOtherPage(NavigateToProgress)
+                    2 -> navigateOtherPage(NavigateToDocuments)
+                    3 -> {}
                 }
-
-                // Profile Image on the right
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFE2E2E2))
-                        .border(1.dp, Color.LightGray, CircleShape)
-                )
             }
-        }
+        )
+
 
         Row(
             modifier = Modifier
