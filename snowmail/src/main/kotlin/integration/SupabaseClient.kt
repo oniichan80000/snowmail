@@ -41,16 +41,24 @@ class SupabaseClient {
 fun main() = runBlocking<Unit> {
     val dbStorage = SupabaseClient()
 
-    val bucketResult = dbStorage.retrieveBuckets()
-    bucketResult.onSuccess { buckets ->
-        println("Buckets: $buckets")
-    }.onFailure { error ->
-        println("Error retrieving buckets: ${error.message}")
-    }
+    val email = "wrw040613@gmail.com"
+    val password = "Wrw54321"
+    val firstname = "Cherry"
+    val lastname = "Wang"
 
-    val bucket = "user_documents"
-    val path = "Q6-2.jpg"
-    val file = File(System.getProperty("user.home") + "/Desktop/Q6-2.jpg")
+
+    val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"
+
+//    val bucketResult = dbStorage.retrieveBuckets()
+//    bucketResult.onSuccess { buckets ->
+//        println("Buckets: $buckets")
+//    }.onFailure { error ->
+//        println("Error retrieving buckets: ${error.message}")
+//    }
+//
+//    val bucket = "user_documents"
+//    val path = "Q6-2.jpg"
+//    val file = File(System.getProperty("user.home") + "/Desktop/Q6-2.jpg")
 
     // Test uploading a document
     // val uploadResult = dbStorage.documentRepository.uploadDocument(bucket, path, file)
@@ -84,6 +92,43 @@ fun main() = runBlocking<Unit> {
 //    }.onFailure { error ->
 //        println("Error uploading document: ${error.message}")
 //    }
+
+    //test get user's skills
+//    val profileResult = dbStorage.userProfileRepository.getSkills(userId)
+//    profileResult.onSuccess { skills ->
+//        println("skills: $skills")
+//    }.onFailure { error ->
+//        println("Error fetching user profile: ${error.message}")
+//    }
+
+    //test update user's skills
+//    val skills = listOf("Java", "Kotlin", "Python")
+//    val result = dbStorage.userProfileRepository.updateSkills(userId, skills)
+//    result.onSuccess {
+//        println("User profile updated successfully.")
+//    }.onFailure { error ->
+//        println("Error updating user profile: ${error.message}")
+//    }
+
+    //test delete education
+//    val educationId = "10"
+//    val result = dbStorage.userProfileRepository.deleteEducation(educationId)
+//    result.onSuccess {
+//        println("Education deleted successfully.")
+//    }.onFailure { error ->
+//        println("Error deleting education: ${error.message}")
+//    }
+
+    //test delete work experience
+//    val workExperienceId = "100"
+//    val result = dbStorage.userProfileRepository.deleteWorkExperience(workExperienceId)
+//    result.onSuccess {
+//        println("Work experience deleted successfully.")
+//    }.onFailure { error ->
+//        println("Error deleting work experience: ${error.message}")
+//    }
+
+
 }
 
 
