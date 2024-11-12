@@ -36,6 +36,7 @@ import ca.uwaterloo.controller.ProfileController
 
 import integration.SupabaseClient
 import ca.uwaterloo.model.Education
+import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.WorkExperience
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.launch
@@ -56,7 +57,7 @@ fun ProfilePage(userId: String,
 
 
     var userName by remember { mutableStateOf("") }
-    var educationList by remember { mutableStateOf<List<Education>>(emptyList()) }
+    var educationList by remember { mutableStateOf<List<EducationWithDegreeName>>(emptyList()) }
     var errorMessage by remember { mutableStateOf("") }
     var userEmail by remember { mutableStateOf("") }
     var userLocation by remember { mutableStateOf("") }
