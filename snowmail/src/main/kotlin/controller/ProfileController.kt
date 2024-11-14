@@ -1,28 +1,80 @@
 package ca.uwaterloo.controller
 
 import ca.uwaterloo.model.Education
+import ca.uwaterloo.model.EducationWithDegreeName
 import model.UserProfile
 // import ca.uwaterloo.persistence.DBStorage
 
 import integration.SupabaseClient
 import ca.uwaterloo.model.WorkExperience
+import ca.uwaterloo.persistence.IUserProfileRepository
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 
-class ProfileController(private val dbStorage: SupabaseClient) {
+class ProfileController(private val userProfileRepository: IUserProfileRepository) {
 
     // get user's name and display it on profile page
     suspend fun getUserName(userId: String): Result<String> {
-        return dbStorage.userProfileRepository.getUserName(userId)
+        return userProfileRepository.getUserName(userId)
     }
 
     // get user's email and display it on profile page
     suspend fun getUserEmail(userId: String): Result<String> {
-        return dbStorage.userProfileRepository.getUserEmail(userId)
+        return userProfileRepository.getUserEmail(userId)
     }
 
-    suspend fun editUserProfile(userId: String, cityName: String?, phone: String?): Result<Boolean> {
-        return dbStorage.userProfileRepository.updateUserProfile(userId, cityName, phone)
+    // get user's city
+    suspend fun getUserCity(userId: String): Result<String> {
+        return userProfileRepository.getUserCity(userId)
+    }
+
+    // get user's phone
+    suspend fun getUserPhone(userId: String): Result<String> {
+        return userProfileRepository.getUserPhone(userId)
+    }
+
+    suspend fun updateCityPhone(userId: String, cityName: String?, phone: String?): Result<Boolean> {
+        return userProfileRepository.updateCityPhone(userId, cityName, phone)
+    }
+
+    // get user's skills
+    suspend fun getSkills(userId: String): Result<List<String>> {
+        return userProfileRepository.getSkills(userId)
+    }
+
+    // add skill to db
+    suspend fun addSkill(userId: String, skill: String): Result<Boolean> {
+        return userProfileRepository.addSkill(userId, skill)
+    }
+
+    // delete skill from db
+    suspend fun deleteSkill(userId: String, skill: String): Result<Boolean> {
+        return userProfileRepository.deleteSkill(userId, skill)
+    }
+
+    // get user's linkedin url
+    suspend fun getUserLinkedIn(userId: String): Result<String> {
+        return userProfileRepository.getUserLinkedIn(userId)
+    }
+
+    // get user's github url
+    suspend fun getUserGithub(userId: String): Result<String> {
+        return userProfileRepository.getUserGithub(userId)
+    }
+
+    // get user's personal website url
+    suspend fun getUserPersonalWebsite(userId: String): Result<String> {
+        return userProfileRepository.getUserPersonalWebsite(userId)
+    }
+
+    // update user's linkedin, github, and personal website urls
+    suspend fun updateUserLinks(
+        userId: String,
+        linkedinUrl: String?,
+        githubUrl: String?,
+        personalWebsiteUrl: String?
+    ): Result<Boolean> {
+        return userProfileRepository.updateUserLinks(userId, linkedinUrl, githubUrl, personalWebsiteUrl)
     }
 
     //
@@ -30,8 +82,8 @@ class ProfileController(private val dbStorage: SupabaseClient) {
     //
 
     // get education exp by user id
-    suspend fun getEducation(userId: String): Result<List<Education>> {
-        return dbStorage.userProfileRepository.getEducation(userId)
+    suspend fun getEducation(userId: String): Result<List<EducationWithDegreeName>> {
+        return userProfileRepository.getEducation(userId)
     }
 
     // add education record to db
@@ -44,7 +96,7 @@ class ProfileController(private val dbStorage: SupabaseClient) {
         endDate: LocalDate,
         institutionName: String
     ): Result<Boolean> {
-        return dbStorage.userProfileRepository.addEducation(
+        return userProfileRepository.addEducation(
             userId = userId,
             degreeId = degreeId,
             major = major,
@@ -55,12 +107,40 @@ class ProfileController(private val dbStorage: SupabaseClient) {
         )
     }
 
+    //update education record in db
+    suspend fun updateEducation(
+        userId: String,
+        educationId: String,
+        degreeId: Int,
+        major: String,
+        gpa: Float?,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        institutionName: String
+    ): Result<Boolean> {
+        return userProfileRepository.updateEducation(
+            userId = userId,
+            educationID = educationId,
+            degreeId = degreeId,
+            major = major,
+            gpa = gpa,
+            startDate = startDate,
+            endDate = endDate,
+            institutionName = institutionName
+        )
+    }
+
+    // delete education record from db
+    suspend fun deleteEducation(educationID: String): Result<Boolean> {
+        return userProfileRepository.deleteEducation(educationID)
+    }
+
     //
     //working exp
     //
     // get work exp by user id
     suspend fun getWorkExperience(userId: String): Result<List<WorkExperience>> {
-        return dbStorage.userProfileRepository.getWorkExperience(userId)
+        return userProfileRepository.getWorkExperience(userId)
     }
 
     // add work exp record to db
@@ -73,7 +153,7 @@ class ProfileController(private val dbStorage: SupabaseClient) {
         endDate: LocalDate,
         description: String?
     ): Result<Boolean> {
-        return dbStorage.userProfileRepository.addWorkExperience(
+        return userProfileRepository.addWorkExperience(
             userId = userId,
             companyName = companyName,
             currentlyWorking = currentlyWorking,
@@ -83,11 +163,49 @@ class ProfileController(private val dbStorage: SupabaseClient) {
             description = description
         )
     }
+
+    //update work exp record in db
+    suspend fun updateWorkExperience(
+        userId: String,
+        workExperienceID: String,
+        companyName: String,
+        currentlyWorking: Boolean,
+        title: String,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        description: String?
+    ): Result<Boolean> {
+        return userProfileRepository.updateWorkExperience(
+            userId = userId,
+            workExperienceID = workExperienceID,
+            companyName = companyName,
+            currentlyWorking = currentlyWorking,
+            title = title,
+            startDate = startDate,
+            endDate = endDate,
+            description = description
+        )
+    }
+
+    // delete work exp record from db
+    suspend fun deleteWorkExperience(workExperienceID: String): Result<Boolean> {
+        return userProfileRepository.deleteWorkExperience(workExperienceID)
+    }
+
+    // get degree name by id
+    suspend fun getDegreeNameById(degreeId: Int): Result<String> {
+        return userProfileRepository.getDegreeNameById(degreeId)
+    }
+
+    // get degree id by name
+    suspend fun getDegreeIdByName(degreeName: String): Result<Int> {
+        return userProfileRepository.getDegreeIdByName(degreeName)
+    }
 }
 
 fun main() = runBlocking<Unit> {
     val dbStorage = SupabaseClient()
-    val profileController = ProfileController(dbStorage)
+    val profileController = ProfileController(dbStorage.userProfileRepository)
 
     val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"
     //val userId = "a365a4c4-6427-4461-8cb4-2850fab8ac8c"
@@ -108,16 +226,60 @@ fun main() = runBlocking<Unit> {
 //        println("Error fetching user profile: ${error.message}")
 //    }
 
+//
+//    //test get user's city
+//    val profileResult = profileController.getUserCity(userId)
+//    profileResult.onSuccess { city ->
+//        println("city: $city")
+//    }.onFailure { error ->
+//        println("Error fetching user profile: ${error.message}")
+//    }
+
+    //test get user's phone
+//    val profileResult = profileController.getUserPhone(userId)
+//    profileResult.onSuccess { phone ->
+//        println("phone: $phone")
+//    }.onFailure { error ->
+//        println("Error fetching user profile: ${error.message}")
+//    }
+
+
     //test editing city and phone
-//    val cityName = "New York"
+//    val cityName = "NYC"
 //    val phone = "+1234567890"
-//    val result = profileController.editUserProfile(userId, cityName, phone)
+//    val result = profileController.updateCityPhone(userId, cityName, phone)
 //    result.onSuccess {
 //        println("User profile updated successfully.")
 //    }.onFailure { error ->
 //        println("Error updating user profile: ${error.message}")
 //    }
 
+
+    //test get skills
+//    val skillsResult = profileController.getSkills(userId)
+//    skillsResult.onSuccess { skills ->
+//        println("Skills: $skills")
+//    }.onFailure { error ->
+//        println("Error fetching skills: ${error.message}")
+//    }
+
+    //test add skill
+//    val skill = "SQL"
+//    val result = profileController.addSkill(userId, skill)
+//    result.onSuccess {
+//        println("Skill added successfully.")
+//    }.onFailure { error ->
+//        println("Error adding skill: ${error.message}")
+//    }
+
+    //test delete skill
+//    val skill = "SQL"
+//    val result = profileController.deleteSkill(userId, skill)
+//    result.onSuccess {
+//        println("Skill deleted successfully.")
+//    }.onFailure { error ->
+//        println("Error deleting skill: ${error.message}")
+//    }
 
     //test add edu exp to db
 //    val educationResult = profileController.addEducation(
@@ -154,6 +316,15 @@ fun main() = runBlocking<Unit> {
 //        println("Error adding work experience record: ${error.message}")
 //    }
 
+    // test deleting education record
+//    val educationId = "100"
+//    val result = profileController.deleteEducation(educationId)
+//    result.onSuccess {
+//        println("Education deleted successfully.")
+//    }.onFailure { error ->
+//        println("Error deleting education: ${error.message}")
+//    }
+
     // test getting edu exp
 //    val educationResult = profileController.getEducation(userId)
 //    educationResult.onSuccess { educationList ->
@@ -175,4 +346,67 @@ fun main() = runBlocking<Unit> {
 //    }.onFailure { error ->
 //        println("Error fetching work experience records: ${error.message}")
 //    }
+
+    // test deleting work exp record
+//    val workExperienceId = "11"
+//    val result = profileController.deleteWorkExperience(workExperienceId)
+//    result.onSuccess {
+//        println("Work experience deleted successfully.")
+//    }.onFailure { error ->
+//        println("Error deleting work experience: ${error.message}")
+//    }
+
+    // test getting linkedin url
+//    val linkedinResult = profileController.getUserLinkedIn(userId)
+//    linkedinResult.onSuccess { linkedinUrl ->
+//        println("Linkedin URL: $linkedinUrl")
+//    }.onFailure { error ->
+//        println("Error fetching linkedin URL: ${error.message}")
+//    }
+
+    // test getting github url
+//    val githubResult = profileController.getUserGithub(userId)
+//    githubResult.onSuccess { githubUrl ->
+//        println("Github URL: $githubUrl")
+//    }.onFailure { error ->
+//        println("Error fetching github URL: ${error.message}")
+//    }
+
+    // test getting personal website url
+//    val personalWebsiteResult = profileController.getUserPersonalWebsite(userId)
+//    personalWebsiteResult.onSuccess { personalWebsiteUrl ->
+//        println("Personal Website URL: $personalWebsiteUrl")
+//    }.onFailure { error ->
+//        println("Error fetching personal website URL: ${error.message}")
+//    }
+
+    // test updating linkedin, github, and personal website urls
+//    val linkedinUrl = "https://www.linkedin.com/in/johndoe"
+//    val githubUrl = "https://uwaterloo.ca/the-centre/quest"
+//    val personalWebsiteUrl = "https://cherry.com"
+//    val result = profileController.updateUserLinks(userId, linkedinUrl, githubUrl, personalWebsiteUrl)
+//    result.onSuccess {
+//        println("User links updated successfully.")
+//    }.onFailure { error ->
+//        println("Error updating user links: ${error.message}")
+//    }
+
+    // test getting degree name by id
+//    val degreeId = 4
+//    val result = profileController.getDegreeNameById(degreeId)
+//    result.onSuccess { degreeName ->
+//        println("Degree name: $degreeName")
+//    }.onFailure { error ->
+//        println("Error fetching degree name: ${error.message}")
+//    }
+
+    // test getting degree id by name
+//    val degreeName = "Master's Degree"
+//    val result = profileController.getDegreeIdByName(degreeName)
+//    result.onSuccess { degreeId ->
+//        println("Degree ID: $degreeId")
+//    }.onFailure { error ->
+//        println("Error fetching degree ID: ${error.message}")
+//    }
+
 }
