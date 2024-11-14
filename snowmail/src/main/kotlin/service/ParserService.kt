@@ -61,10 +61,5 @@ suspend fun main() {
         fileURLs = listOf("https://example.com/resume.pdf"),
     )
 
-    runBlocking {
-        val generatedEmail = openAIClient.generateEmail2(resumeText, userInput)
-
-        print(resumeParserController.parseEmailContent(generatedEmail))
-    }
 
 }
