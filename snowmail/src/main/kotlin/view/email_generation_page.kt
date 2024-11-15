@@ -6,6 +6,7 @@ package ca.uwaterloo.view
 //import kotlinx.serialization.Serializable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -17,10 +18,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import ca.uwaterloo.controller.DocumentController
 import ca.uwaterloo.controller.ProfileController
 import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.WorkExperience
 import ca.uwaterloo.service.ParserService
+import controller.EmailGenerationController
 import controller.send_email
 import integration.OpenAIClient
 import integration.SupabaseClient
@@ -29,9 +32,13 @@ import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import model.GeneratedEmail
 import model.UserInput
 import model.UserProfile
+import persistence.JobApplicationRepository
 import service.EmailGenerationService
+import java.io.File
+import kotlin.reflect.jvm.internal.impl.load.kotlin.AbstractBinaryClassAnnotationLoader.Companion
 
 
 @Composable
@@ -45,6 +52,8 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 //    }
     var emailContent by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
+    var showDocumentDialog by remember { mutableStateOf(false) }
+    var selectedDocument by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
 
 
@@ -54,11 +63,14 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
     // Create an instance of EmailGenerationService
     val parserService = ParserService(openAIClient)
     val emailGenerationService = EmailGenerationService(openAIClient, parserService)
+    val emailGenerationController = EmailGenerationController(emailGenerationService)
 
     // user input values
-    var companyInput by remember { mutableStateOf("company name") }
-    var descriptionInput by remember { mutableStateOf("description") }
-    var recruiterNameInput by remember { mutableStateOf("recruiter name") }
+    var companyInput by remember { mutableStateOf("") }
+    var descriptionInput by remember { mutableStateOf("") }
+    var recruiterNameInput by remember { mutableStateOf("") }
+    var recruiterEmailInput by remember { mutableStateOf("") }
+    var jobtitleInput by remember { mutableStateOf("") }
 
     //var currentPage by remember { mutableStateOf("ProfilePage") }
 
@@ -67,13 +79,13 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 
     var userInput = UserInput(
         jobDescription = descriptionInput,
-        recruiterEmail = "recruiter@example.com",
-        jobTitle = "Software Engineer",
-        //company = "Example Corp",
+        recruiterEmail = recruiterEmailInput,
+        jobTitle = jobtitleInput,
         company = companyInput,
         recruiterName = recruiterNameInput,
-        fileURLs = listOf("https://example.com/resume.pdf"),
+        fileURLs = listOf(selectedDocument?:""),
     )
+    val resumeFile = selectedDocument?.let { File(it) }
     val dbStorage = SupabaseClient()
     val profileController = ProfileController(dbStorage.userProfileRepository)
     //val userProfile = profileController.getUserProfile(UserSession.userId ?: "DefaultUserId")
@@ -198,20 +210,24 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
                             .background(Color.White) // White background
                             .padding(32.dp)
                     ) {
-                        TextField(
-                            value = companyInput,
-                            onValueChange = { companyInput = it },
-                            label = { Text("Company Name") },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                focusedLabelColor = Color.Transparent,
-                                unfocusedLabelColor = Color.Transparent,
-                                disabledTextColor = Color.Transparent,
-
-                                //disabledIndicatorColor = Color.Transparent
-                                focusedBorderColor = Color.Transparent,
-                                unfocusedBorderColor = Color.Transparent
-                            )
+//                        OutlinedButton(
+//                            onClick = { showDocumentDialog = true },
+//                            modifier = Modifier
+//                                .clip(RoundedCornerShape(32.dp))
+//                                .background(Color.White)
+//                                .padding(32.dp)
+//                                .fillMaxWidth(),
+//                            colors = ButtonDefaults.outlinedButtonColors(
+//                                backgroundColor = Color.Transparent
+//                            )
+//                        ) {
+//                            Text("Select Documents", color = Color.Black, textAlign = TextAlign.Left)
+//                        }
+                        DocumentSelectionDropdown(
+                            selectedDocument = selectedDocument,
+                            onDocumentSelected = { document ->
+                                selectedDocument = document
+                            }
                         )
                     }
 
@@ -222,20 +238,6 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
                             .padding(32.dp)
                     ) {
 
-                        OutlinedButton(
-                            onClick = { },
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(32.dp)) // Rounded corners
-                                .background(Color.White) // White background
-                                .padding(32.dp)
-                                .fillMaxWidth(),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                backgroundColor = Color.Transparent
-                            )
-                        ) {
-                            Text("Select Documents", color = Color.Black, textAlign = TextAlign.Left)
-                        }
-
                         TextField(
                             value = descriptionInput,
                             onValueChange = { descriptionInput = it },
@@ -245,7 +247,7 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
                                 .height(300.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedLabelColor = Color.Transparent,
-                                unfocusedLabelColor = Color.Transparent,
+                                //unfocusedLabelColor = Color.Transparent,
                                 focusedBorderColor = Color.Transparent,
                                 unfocusedBorderColor = Color.Transparent
                             )
@@ -271,35 +273,109 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         TextField(
-                            value = recruiterNameInput,
-                            onValueChange = { recruiterNameInput = it },
-                            label = { Text("Recruiter Name") },
-                            modifier = Modifier.fillMaxWidth(),
+                            value = companyInput,
+                            onValueChange = { companyInput = it },
+                            label = { Text("Company Name") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(32.dp)) // Rounded corners
+                                .background(Color(0x6B727F80)),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedLabelColor = Color.Transparent,
-                                unfocusedLabelColor = Color.Transparent,
+                                //unfocusedLabelColor = Color.Transparent,
+                                disabledTextColor = Color.Transparent,
+
+                                //disabledIndicatorColor = Color.Transparent
                                 focusedBorderColor = Color.Transparent,
                                 unfocusedBorderColor = Color.Transparent
                             )
                         )
+
+                        Spacer(modifier = Modifier.weight(0.1f))
+
+                        TextField(
+                            value = jobtitleInput,
+                            onValueChange = { jobtitleInput = it },
+                            label = { Text("Job Title") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(32.dp)) // Rounded corners
+                                .background(Color(0x6B727F80)),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedLabelColor = Color.Transparent,
+                                //unfocusedLabelColor = Color.Transparent,
+                                disabledTextColor = Color.Transparent,
+
+                                //disabledIndicatorColor = Color.Transparent
+                                focusedBorderColor = Color.Transparent,
+                                unfocusedBorderColor = Color.Transparent
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.weight(0.1f))
+
+                        TextField(
+                            value = recruiterNameInput,
+                            onValueChange = { recruiterNameInput = it },
+                            label = { Text("Recruiter Name") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(32.dp)) // Rounded corners
+                                .background(Color(0x6B727F80)),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedLabelColor = Color.Transparent,
+                                //unfocusedLabelColor = Color.Transparent,
+                                focusedBorderColor = Color.Transparent,
+                                unfocusedBorderColor = Color.Transparent
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.weight(0.1f))
+
+                        TextField(
+                            value = recruiterEmailInput,
+                            onValueChange = { recruiterEmailInput = it },
+                            label = { Text("Recruiter Email") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(32.dp)) // Rounded corners
+                                .background(Color(0x6B727F80)),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedLabelColor = Color.Transparent,
+                                //unfocusedLabelColor = Color.Transparent,
+                                disabledTextColor = Color.Transparent,
+
+                                //disabledIndicatorColor = Color.Transparent
+                                focusedBorderColor = Color.Transparent,
+                                unfocusedBorderColor = Color.Transparent
+                            )
+                        )
+
+
                     }
                         Spacer(modifier = Modifier.weight(0.1f))
 
                         Button(
-                            onClick = {},
-//                            onClick = {
-//                                coroutineScope.launch(Dispatchers.IO) {
-//                                    try {
-//                                        val generatedEmail =
-//                                            emailGenerationService.generateEmail(userInput, userProfile, gotEducation, gotWorkExperience, gotSkills)
-//                                        println("Generated Email: ${generatedEmail.body}")
-//                                        emailContent = generatedEmail.body ?: "Failed to generate email"
-//                                        showDialog = true
-//                                    } catch (e: Exception) {
-//                                        println("Error: ${e.message}")
-//                                    }
-//                                }
-//                            },
+                            onClick = {
+                                runBlocking {
+                                    try {
+                                        val generatedEmail: GeneratedEmail? = emailGenerationController.generateEmail(
+                                            informationSource = "profile",
+                                            userInput = userInput,
+                                            userProfile = userProfile,
+                                            education = gotEducation,
+                                            workExperience = gotWorkExperience,
+                                            skills = gotSkills,
+                                            resumeFile = resumeFile
+                                        )
+                                        println("Generated Email: ${generatedEmail?.body}")
+                                        emailContent = generatedEmail?.body ?: "Failed to generate email"
+                                        showDialog = true
+                                    } catch (e: Exception) {
+                                        println("Error: ${e.message}")
+                                    }
+                                }
+                            },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(0xFF487B96),
@@ -316,6 +392,9 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
                        // title = { Text("Generated Email") },
                         title = "Generated Email",
                         initialText = emailContent,
+                        reciepientAddress = recruiterEmailInput,
+                        jobTitle = jobtitleInput,
+                        companyName = companyInput,
                         onConfirm = { newText ->
                             emailContent = newText
                             showDialog = false
@@ -328,6 +407,16 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 //                        }
                     )
                 }
+
+//                if (showDocumentDialog) {
+//                    DocumentSelectionDialog(
+//                        onDismissRequest = { showDocumentDialog = false },
+//                        onDocumentSelected = { document ->
+//                            // Handle document selection
+//                            showDocumentDialog = false
+//                        }
+//                    )
+//                }
             }
         }
     }
@@ -337,15 +426,40 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 fun EditableAlertDialog(
     title: String,
     initialText: String,
+    reciepientAddress: String,
+    jobTitle: String,
+    companyName: String,
     onDismissRequest: () -> Unit,
     onConfirm: (String) -> Unit
 ) {
     var text by remember { mutableStateOf(initialText) }
-    var recipientEmailAddy by remember { mutableStateOf("") }
+    var recipientEmailAddy by remember { mutableStateOf(reciepientAddress) }
     var emailSubject by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+    val profileController = ProfileController(SupabaseClient().userProfileRepository)
+    var senderEmail by remember { mutableStateOf("") }
+    var senderPassword by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        val userId = UserSession.userId ?: "DefaultUserId"
+        val emailResult = profileController.getUserLinkedGmailAccount(userId)
+        emailResult.onSuccess { email ->
+            senderEmail = email
+        }.onFailure { error ->
+            println("Error fetching linked Gmail account: ${error.message}")
+        }
+
+        val passwordResult = profileController.getUserGmailAppPassword(userId)
+        passwordResult.onSuccess { password ->
+            senderPassword = password
+        }.onFailure { error ->
+            println("Error fetching Gmail app password: ${error.message}")
+        }
+    }
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(title) },
+        //title = { Text(title) },
         text = {
             Spacer(modifier = Modifier.height(8.dp))
             Column {
@@ -403,17 +517,39 @@ fun EditableAlertDialog(
 
         confirmButton = {
             Button(onClick = {
-                onConfirm(text)
+                //onConfirm(text)
                 /*
                 send_email(
                     senderEmail = "cs346test@gmail.com", //call getEmail to get user's email
+                    senderEmail =
                     password = "qirk dyef rvbv bkka",
                     recipient = recipientEmailAddy,
                     subject = emailSubject,
                     text = text,
                     fileURLs = listOf(),
                     fileNames = listOf()
-                )*/},
+                    jobApplicationRepository = JobApplicationRepository(supabase),
+                    userID = UserSession.userId ?: "DefaultUserId",
+                    jobTitle = jobTitle,
+                    companyName = companyName
+                )*/
+                coroutineScope.launch {
+                    send_email(
+                        senderEmail = senderEmail,
+                        password = senderPassword,
+                        recipient = recipientEmailAddy,
+                        subject = emailSubject,
+                        text = text,
+                        fileURLs = listOf(),
+                        fileNames = listOf(),
+                        jobApplicationRepository = SupabaseClient().jobApplicationRepository,
+                        userID = UserSession.userId ?: "DefaultUserId",
+                        jobTitle = jobTitle,
+                        companyName = companyName
+                    )
+                }
+                onConfirm(text)
+            },
                     colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color(0xFF487B96),
                 contentColor = MaterialTheme.colors.onPrimary
@@ -432,6 +568,82 @@ fun EditableAlertDialog(
         }
     )
 }
+
+@Composable
+fun DocumentSelectionDropdown(
+    selectedDocument: String?,
+    onDocumentSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val documentController = DocumentController(SupabaseClient().documentRepository)
+    //var documents by remember { mutableStateOf(listOf<String>()) }
+    var documentList by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+//        val documentResult = documentController.get()
+//        documentResult.onSuccess { docList ->
+//            documents = docList
+//        }.onFailure { error ->
+//            println("Error fetching documents: ${error.message}")
+//        }
+        val result = documentController.listDocuments("user_documents", UserSession.userId ?: "DefaultUserId", "Resume")
+        result.onSuccess { documents ->
+            documentList = documents
+        }.onFailure { error ->
+            println("Error listing documents: ${error.message}")
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFF487B96),
+                contentColor = MaterialTheme.colors.onPrimary
+            )
+        ) {
+            Text(selectedDocument ?: "Select Document")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            documentList.forEach { document ->
+                DropdownMenuItem(onClick = {
+                    onDocumentSelected(document)
+                    expanded = false
+                }) {
+                    Text(document)
+                }
+            }
+        }
+    }
+}
+
+//@Composable
+//fun DocumentSelectionDialog(
+//    onDismissRequest: () -> Unit,
+//    onDocumentSelected: (String) -> Unit
+//) {
+//    AlertDialog(
+//        onDismissRequest = onDismissRequest,
+//        title = { Text("Select Document") },
+//        text = {
+//            Column {
+//                Text("Document 1", modifier = Modifier.clickable { onDocumentSelected("Document 1") })
+//                Text("Document 2", modifier = Modifier.clickable { onDocumentSelected("Document 2") })
+//                Text("Document 3", modifier = Modifier.clickable { onDocumentSelected("Document 3") })
+//            }
+//        },
+//        confirmButton = {
+//            Button(onClick = onDismissRequest) {
+//                Text("Close")
+//            }
+//        }
+//    )
+//}
+
 
 fun main() {
     application {
