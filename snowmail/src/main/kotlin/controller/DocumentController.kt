@@ -30,6 +30,11 @@ class DocumentController(private val documentRepository: IDocumentRepository) {
         val path = "$userId/$documentType/$documentName"
         return documentRepository.createSignedUrl(bucket, path)
     }
+
+    suspend fun listDocuments(bucket: String, userId: String, documentType: String): Result<List<String>> {
+        val path = "$userId/$documentType"
+        return documentRepository.listDocuments(bucket, path)
+    }
 }
 
 fun main() = runBlocking<Unit> {
