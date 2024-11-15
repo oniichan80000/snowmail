@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextAlign
 import ca.uwaterloo.controller.DocumentController
 
 import ca.uwaterloo.controller.ProfileController
-import controller.send_email
 import integration.SupabaseClient
 import kotlinx.coroutines.runBlocking
 import androidx.compose.ui.window.AwtWindow

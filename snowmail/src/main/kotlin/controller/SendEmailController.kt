@@ -9,22 +9,22 @@ import model.email
 import persistence.JobApplicationRepository
 import service.sendEmail
 
-// functions to send email
-suspend fun send_email(
-    senderEmail: String,
-    password: String,
-    recipient: String,
-    subject: String,
-    text: String,
-    fileURLs: List<String>,
-    fileNames: List<String>,
-    // new parameters from Sprint 2:
-    jobApplicationRepository: IJobApplicationRepository,
-    userID: String,
-    jobTitle: String,
-    companyName: String
 
-) {
+class SendEmailController(private val jobApplicationRepository: IJobApplicationRepository) {
+    suspend fun send_email(
+        senderEmail: String,
+        password: String,
+        recipient: String,
+        subject: String,
+        text: String,
+        fileURLs: List<String>,
+        fileNames: List<String>,
+        // new parameters from Sprint 2:
+        userID: String,
+        jobTitle: String,
+        companyName: String
+
+    ) {
 
         val Email = email(senderEmail, password, recipient, subject, text, fileURLs, fileNames)
         sendEmail(Email)
@@ -40,7 +40,11 @@ suspend fun send_email(
             recipient
         )
 
+    }
 }
+
+// functions to send email
+
 
 
 suspend fun main() {
@@ -61,7 +65,8 @@ suspend fun main() {
         install(Storage)
     }
     val JobApplicationRepository = JobApplicationRepository(supabase)
-    send_email(senderEmail, password, recipient, subject, text, listOf(), listOf(), JobApplicationRepository, userID, jobTitle, companyName)
+    val c = SendEmailController(JobApplicationRepository)
+    c.send_email(senderEmail, password, recipient, subject, text, listOf(), listOf(), userID, jobTitle, companyName)
 }
 
 

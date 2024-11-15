@@ -6,7 +6,6 @@ package ca.uwaterloo.view
 //import kotlinx.serialization.Serializable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -14,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -24,21 +22,17 @@ import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.WorkExperience
 import ca.uwaterloo.service.ParserService
 import controller.EmailGenerationController
-import controller.send_email
+import controller.SendEmailController
 import integration.OpenAIClient
 import integration.SupabaseClient
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import model.GeneratedEmail
 import model.UserInput
 import model.UserProfile
-import persistence.JobApplicationRepository
 import service.EmailGenerationService
 import java.io.File
-import kotlin.reflect.jvm.internal.impl.load.kotlin.AbstractBinaryClassAnnotationLoader.Companion
 
 
 @Composable
@@ -533,21 +527,29 @@ fun EditableAlertDialog(
                     jobTitle = jobTitle,
                     companyName = companyName
                 )*/
-                coroutineScope.launch {
-                    send_email(
-                        senderEmail = senderEmail,
-                        password = senderPassword,
-                        recipient = recipientEmailAddy,
-                        subject = emailSubject,
-                        text = text,
-                        fileURLs = listOf(),
-                        fileNames = listOf(),
-                        jobApplicationRepository = SupabaseClient().jobApplicationRepository,
-                        userID = UserSession.userId ?: "DefaultUserId",
-                        jobTitle = jobTitle,
-                        companyName = companyName
-                    )
+
+                runBlocking {
+                    try {
+                        var emailsendingController = SendEmailController(SupabaseClient().jobApplicationRepository)
+                        emailsendingController.send_email(
+                            senderEmail = senderEmail,
+                            password = senderPassword,
+                            recipient = recipientEmailAddy,
+                            subject = emailSubject,
+                            text = text,
+                            fileURLs = listOf(),
+                            fileNames = listOf(),
+                            userID = UserSession.userId ?: "DefaultUserId",
+                            jobTitle = jobTitle,
+                            companyName = companyName
+                        )
+                    } catch (e: Exception) {
+                        println("Error sending email: ${e.message}")
+                    }
+
                 }
+
+
                 onConfirm(text)
             },
                     colors = ButtonDefaults.buttonColors(
