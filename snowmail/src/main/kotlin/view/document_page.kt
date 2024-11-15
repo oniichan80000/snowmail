@@ -96,7 +96,7 @@ fun DocumentPage(NavigateToEmialGen: () -> Unit, NavigateToProfile: () -> Unit,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                DocumentUploadRow("Résumé", documentController)
+                DocumentUploadRow("Resume", documentController)
                 Spacer(modifier = Modifier.height(16.dp))
                 DocumentUploadRow("Cover Letter", documentController)
                 Spacer(modifier = Modifier.height(16.dp))
