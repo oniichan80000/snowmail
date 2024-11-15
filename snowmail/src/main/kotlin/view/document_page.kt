@@ -96,7 +96,7 @@ fun DocumentPage(NavigateToEmialGen: () -> Unit, NavigateToProfile: () -> Unit,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                DocumentUploadRow("Résumé", documentController)
+                DocumentUploadRow("Resume", documentController)
                 Spacer(modifier = Modifier.height(16.dp))
                 DocumentUploadRow("Cover Letter", documentController)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -198,126 +198,6 @@ fun UploadButton(text: String, documentType: String, documentController: Documen
         }
     }
 }
-
-//@Composable
-//fun DocumentListDialog(
-//    documentType: String,
-//    documentController: DocumentController,
-//    onDismissRequest: () -> Unit
-//) {
-//    var documentList by remember { mutableStateOf<List<String>>(emptyList()) }
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    LaunchedEffect(Unit) {
-//        coroutineScope.launch {
-//            val result = documentController.listDocuments("user_documents", UserSession.userId ?: "DefaultUserId", documentType)
-//            result.onSuccess { documents ->
-//                documentList = documents
-//            }.onFailure { error ->
-//                println("Error listing documents: ${error.message}")
-//            }
-//        }
-//    }
-//
-//    Dialog(
-//        onDismissRequest = onDismissRequest,
-//        properties = DialogProperties()
-//    ) {
-//        Surface(
-//            shape = RoundedCornerShape(8.dp),
-//            color = Color.White,
-//            modifier = Modifier.padding(16.dp)
-//        ) {
-//            Column(
-//                modifier = Modifier.padding(16.dp)
-//            ) {
-//                Text(text = "Documents", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-//                Spacer(modifier = Modifier.height(8.dp))
-//                documentList.forEach { document ->
-//                    Text(text = document, modifier = Modifier.padding(vertical = 4.dp))
-//                }
-//                Spacer(modifier = Modifier.height(16.dp))
-//                Button(onClick = onDismissRequest,
-//                    colors = ButtonDefaults.buttonColors(
-//                        backgroundColor = Color(0xFF487896),
-//                        contentColor = Color.White
-//                    )) {
-//                    Text("Close")
-//                }
-//            }
-//        }
-//    }
-//}
-
-//@Composable
-//fun DocumentListDialog(
-//    documentType: String,
-//    documentController: DocumentController,
-//    onDismissRequest: () -> Unit
-//) {
-//    var documentList by remember { mutableStateOf<List<String>>(emptyList()) }
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    LaunchedEffect(Unit) {
-//        coroutineScope.launch {
-//            val result = documentController.listDocuments("user_documents", UserSession.userId ?: "DefaultUserId", documentType)
-//            result.onSuccess { documents ->
-//                documentList = documents
-//            }.onFailure { error ->
-//                println("Error listing documents: ${error.message}")
-//            }
-//        }
-//    }
-//
-//    Dialog(
-//        onDismissRequest = onDismissRequest,
-//        properties = DialogProperties()
-//    ) {
-//        Surface(
-//            shape = RoundedCornerShape(8.dp),
-//            color = Color.White,
-//            modifier = Modifier.padding(16.dp)
-//        ) {
-//            Column(
-//                modifier = Modifier.padding(16.dp)
-//            ) {
-//                Text(text = "Documents", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-//                Spacer(modifier = Modifier.height(8.dp))
-//                documentList.forEach { document ->
-//                    Text(
-//                        text = document,
-//                        modifier = Modifier
-//                            .padding(vertical = 4.dp)
-//                            .clickable {
-//                                coroutineScope.launch {
-//                                    val result = documentController.viewDocument("user_documents", UserSession.userId ?: "DefaultUserId", documentType, document)
-//                                    result.onSuccess { url ->
-//                                        if (Desktop.isDesktopSupported()) {
-//                                            Desktop.getDesktop().browse(URI(url))
-//                                        } else {
-//                                            println("Desktop is not supported. Please open the URL manually: $url")
-//                                        }
-//                                    }.onFailure { error ->
-//                                        println("Error creating signed URL: ${error.message}")
-//                                    }
-//                                }
-//                            },
-//                        color = Color.Blue,
-//                        textDecoration = TextDecoration.Underline
-//                    )
-//                }
-//                Spacer(modifier = Modifier.height(16.dp))
-//                Button(onClick = onDismissRequest,
-//                    colors = ButtonDefaults.buttonColors(
-//                        backgroundColor = Color(0xFF487896),
-//                        contentColor = Color.White
-//                    )) {
-//                    Text("Close")
-//                }
-//            }
-//        }
-//    }
-//}
 
 @Composable
 fun DocumentListDialog(
