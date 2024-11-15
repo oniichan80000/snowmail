@@ -52,7 +52,7 @@ class DocumentRepository(private val supabase: SupabaseClient) : IDocumentReposi
 
     override suspend fun listDocuments(bucket: String, path: String): Result<List<String>> {
         return try {
-            val files = storage.from(bucket).list()
+            val files = storage.from(bucket).list(path)
             val fileNames = files.map { it.name }
             Result.success(fileNames)
         } catch (e: Exception) {
