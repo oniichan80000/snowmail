@@ -34,7 +34,7 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Meeting-Record
 **Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release1.2.0/ca.uwaterloo-1.2.0.dmg
 
 
-**Version 1.3.0 Release:**  https://git.uwaterloo.ca/s22huang/team-101-11/-/releases/1.3.0
+**Version 1.3.0 Release:**  https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.3.0-Release
 
 **Installer Image:**  https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release1.3.0/Snowmail.app.zip?ref_type=heads
 
