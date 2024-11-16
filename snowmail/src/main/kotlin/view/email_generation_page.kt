@@ -36,7 +36,7 @@ import java.io.File
 
 
 @Composable
-fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -> Unit,
+fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, NavigateToProfile: () -> Unit,
                         NavigateToProgress: () -> Unit
 ) {
 //    val client = HttpClient(CIO) {
@@ -85,34 +85,54 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
     //val userProfile = profileController.getUserProfile(UserSession.userId ?: "DefaultUserId")
     //val firstName = userProfile.firstName
     //val lastName = userProfile.lastName
-    var gotName = ""
-    runBlocking {
-        val getName = profileController.getUserName(UserSession.userId ?: "DefaultUserId")
+    var gotName by remember { mutableStateOf("") }
+    var gotSkills by remember { mutableStateOf(listOf<String>()) }
+    var gotEducation by remember { mutableStateOf(listOf<EducationWithDegreeName>()) }
+    var gotWorkExperience by remember { mutableStateOf(listOf<WorkExperience>()) }
+
+
+    LaunchedEffect(Unit) {
+        val getName = profileController.getUserName(userId)
+        val getEducationResult = profileController.getEducation(userId)
+        val getSkills = profileController.getSkills(userId)
+        val getWorkExperienceResult = profileController.getWorkExperience(userId)
+
         getName.onSuccess { name ->
 
             gotName = name
         }.onFailure { error ->
             gotName = error.message ?: "Failed to retrieve user name"
         }
-    }
 
-    val userProfile = UserProfile(
-        userId = UserSession.userId ?: "DefaultUserId",
-        firstName = gotName,
-        lastName = "",
-        //skills = listOf("Java", "Kotlin", "SQL")
-    )
-
-    var gotSkills = listOf<String>()
-    runBlocking {
-        val getSkills = profileController.getSkills(UserSession.userId ?: "DefaultUserId")
         getSkills.onSuccess { skills ->
             gotSkills = skills
         }.onFailure { error ->
             println("Error retrieving user skills: ${error.message}")
             gotSkills = emptyList()
         }
+
+        getEducationResult.onSuccess { educationList ->
+            gotEducation = educationList
+        }.onFailure { error ->
+            println("Error retrieving user education: ${error.message}")
+            gotEducation = emptyList()
+        }
+
+        getWorkExperienceResult.onSuccess { workExperienceList ->
+            gotWorkExperience = workExperienceList
+        }.onFailure { error ->
+            println("Error retrieving user work experience: ${error.message}")
+            gotWorkExperience = emptyList() // 返回空列表或根据需要处理错误
+        }
     }
+
+
+    val userProfile = UserProfile(
+        userId = userId,
+        firstName = gotName,
+        lastName = "",
+        //skills = listOf("Java", "Kotlin", "SQL")
+    )
 
 
 //    val education = Education( //call getEducation
@@ -126,16 +146,7 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 //        endDate = LocalDate(2023, 6, 1)
 //    )
 
-    var gotEducation = listOf<EducationWithDegreeName>()
-    runBlocking {
-        val getEducationResult = profileController.getEducation(UserSession.userId ?: "DefaultUserId")
-        getEducationResult.onSuccess { educationList ->
-            gotEducation = educationList
-        }.onFailure { error ->
-            println("Error retrieving user education: ${error.message}")
-            gotEducation = emptyList()
-        }
-    }
+
 
 
 
@@ -149,16 +160,7 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 //        description = "Developed backend systems, deployed scalable solutions, and built efficient ETL pipelines for financial data processing."
 //    )
 
-    var gotWorkExperience = listOf<WorkExperience>()
-    runBlocking {
-        val getWorkExperienceResult = profileController.getWorkExperience(UserSession.userId ?: "DefaultUserId")
-        getWorkExperienceResult.onSuccess { workExperienceList ->
-            gotWorkExperience = workExperienceList
-        }.onFailure { error ->
-            println("Error retrieving user work experience: ${error.message}")
-            gotWorkExperience = emptyList() // 返回空列表或根据需要处理错误
-        }
-    }
+
 
 
     Surface(
@@ -218,6 +220,7 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 //                            Text("Select Documents", color = Color.Black, textAlign = TextAlign.Left)
 //                        }
                         DocumentSelectionDropdown(
+                            userId = userId,
                             selectedDocument = selectedDocument,
                             onDocumentSelected = { document ->
                                 selectedDocument = document
@@ -382,6 +385,7 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
                 }
                 if (showDialog) {
                     EditableAlertDialog(
+                        userId = userId,
                         onDismissRequest = { showDialog = false },
                        // title = { Text("Generated Email") },
                         title = "Generated Email",
@@ -418,6 +422,7 @@ fun EmailGenerationPage(NavigateToDocuments: () -> Unit, NavigateToProfile: () -
 
 @Composable
 fun EditableAlertDialog(
+    userId: String,
     title: String,
     initialText: String,
     reciepientAddress: String,
@@ -435,7 +440,6 @@ fun EditableAlertDialog(
     var senderPassword by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        val userId = UserSession.userId ?: "DefaultUserId"
         val emailResult = profileController.getUserLinkedGmailAccount(userId)
         emailResult.onSuccess { email ->
             senderEmail = email
@@ -539,7 +543,7 @@ fun EditableAlertDialog(
                             text = text,
                             fileURLs = listOf(),
                             fileNames = listOf(),
-                            userID = UserSession.userId ?: "DefaultUserId",
+                            userID = userId,
                             jobTitle = jobTitle,
                             companyName = companyName
                         )
@@ -573,6 +577,7 @@ fun EditableAlertDialog(
 
 @Composable
 fun DocumentSelectionDropdown(
+    userId: String,
     selectedDocument: String?,
     onDocumentSelected: (String) -> Unit
 ) {
@@ -588,7 +593,7 @@ fun DocumentSelectionDropdown(
 //        }.onFailure { error ->
 //            println("Error fetching documents: ${error.message}")
 //        }
-        val result = documentController.listDocuments("user_documents", UserSession.userId ?: "DefaultUserId", "Resume")
+        val result = documentController.listDocuments("user_documents", userId, "Resume")
         result.onSuccess { documents ->
             documentList = documents
         }.onFailure { error ->
@@ -651,7 +656,7 @@ fun main() {
     application {
         Window(onCloseRequest = ::exitApplication) {
             var currentPage by remember { mutableStateOf("") }
-            EmailGenerationPage({ currentPage = "profilePage"}, { currentPage = "profilePage"}, { currentPage = "profilePage"})
+            EmailGenerationPage("a365a4c4-6427-4461-8cb4-2850fab8ac8c",{ currentPage = "profilePage"}, { currentPage = "profilePage"}, { currentPage = "profilePage"})
         }
     }
 }
