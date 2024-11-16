@@ -25,14 +25,10 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-Proposal
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Meeting-Record
 
 ### Releases:
-- **Version 1.1.0 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.1.0-Release
+**Version 0.10 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-0.10-Release
 
-    **Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release0.10/ca.uwaterloo-1.0.0.dmg?ref_type=heads
+**Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release0.10/ca.uwaterloo-1.0.0.dmg?ref_type=heads
 
-
-- **Version 1.2.0 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.2.0-Release
-
-    **Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release1.2.0/ca.uwaterloo-1.2.0.dmg
 
 
 - **Version 1.3.0 Release:**  https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.3.0-Release
