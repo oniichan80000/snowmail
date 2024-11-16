@@ -228,19 +228,19 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
 fun loginWithGmail() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Or log in with")
+        //Text("Or log in with")
         // val iconfile = File("gmail_icon.png")
 
         // val iconimage = ImageIO.read(iconfile)
         // val iconbitmap = iconimage.toComposeImageBitmap()
-        Button(onClick = { LoginWithGmail() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(formColor))) {
-            Row (horizontalArrangement = Arrangement.Center){
-                // Image(iconbitmap, "gmail")
-                // Spacer(modifier = Modifier.width(8.dp))
-                Text("Gmail", color = Color.Black)
-            }
-
-        }
+//        Button(onClick = { LoginWithGmail() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(formColor))) {
+//            Row (horizontalArrangement = Arrangement.Center){
+//                // Image(iconbitmap, "gmail")
+//                // Spacer(modifier = Modifier.width(8.dp))
+//                Text("Gmail", color = Color.Black)
+//            }
+//
+//        }
     }
 }
 

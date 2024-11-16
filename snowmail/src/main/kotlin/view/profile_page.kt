@@ -379,18 +379,18 @@ fun ProfilePage(userId: String,
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Spacer(modifier = Modifier.width(8.dp))
 
-                                Text(
-                                    text = "Resume.pdf",
-                                    modifier = Modifier
-                                        .padding(end = 32.dp)
-                                        .clickable {
-                                            // Add the action to open the resume file
-                                        },
-                                    style = MaterialTheme.typography.body1.copy(
-                                        fontSize = 14.sp,
-                                        color = Color(0xFF2669A0)
-                                    )
-                                )
+//                                Text(
+//                                    text = "Resume.pdf",
+//                                    modifier = Modifier
+//                                        .padding(end = 32.dp)
+//                                        .clickable {
+//                                            // Add the action to open the resume file
+//                                        },
+//                                    style = MaterialTheme.typography.body1.copy(
+//                                        fontSize = 14.sp,
+//                                        color = Color(0xFF2669A0)
+//                                    )
+//                                )
                             }
                         }
                     }

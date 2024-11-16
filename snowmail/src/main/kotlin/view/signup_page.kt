@@ -229,7 +229,7 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                 Row { Divider() }
 
                 Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
-                Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){ Text(text = "Or register with") }
+                //Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){ Text(text = "Or register with") }
 
 
                 // gmail register
@@ -239,13 +239,13 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
                 Row(modifier = Modifier.fillMaxHeight(0.03f)) { Box{} }
                 Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
-                    Button(onClick = { GmailRegister() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
-                        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                            // Image(iconbitmap, "gmail")
-
-                            Text("Register by Gmail", color = Color.White)
-                        }
-                    }
+//                    Button(onClick = { GmailRegister() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
+//                        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+//                            // Image(iconbitmap, "gmail")
+//
+//                            Text("Register by Gmail", color = Color.White)
+//                        }
+//                    }
                 }
 
             }
