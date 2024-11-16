@@ -92,9 +92,15 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "ca.uwaterloo"
-            packageVersion = "1.2.0"
+            packageName = "Snowmail"
+            packageVersion = "1.3.0"
+
+            macOS {
+                iconFile.set(project.file("src/main/resources/Icon.icns"))
+            }
         }
+
+
     }
 }
 
