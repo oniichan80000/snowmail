@@ -34,6 +34,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 import ca.uwaterloo.controller.ProfileController
+import ca.uwaterloo.controller.SignInController
 
 import integration.SupabaseClient
 import ca.uwaterloo.model.Education
@@ -47,12 +48,14 @@ import androidx.compose.foundation.lazy.grid.items
 
 
 
+
 @Composable
 fun ProfilePage(userId: String,
                 NavigateToDocuments: () -> Unit, NavigateToEmialGen: () -> Unit,
-                NavigateToProgress: () -> Unit) {
+                NavigateToProgress: () -> Unit,  NavigateToLogin: () -> Unit) {
     val dbStorage = SupabaseClient()
     val profileController = ProfileController(dbStorage.userProfileRepository)
+    val signInController = SignInController(dbStorage.authRepository)
 
 
     var showEducationDialog by remember { mutableStateOf(false) }
@@ -267,6 +270,23 @@ fun ProfilePage(userId: String,
             }
         )
 
+        Button(
+            onClick = {
+                NavigateToLogin()
+                runBlocking {
+                    signInController.logoutUser()
+                }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.White, // White background
+                contentColor = Color(0xFF487896) // Text color
+            ),
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(top = 16.dp, end = 16.dp) // Add spacing from the edges
+        ) {
+            Text("Sign Out", fontWeight = FontWeight.Bold)
+        }
 
         Row(
             modifier = Modifier
@@ -283,6 +303,7 @@ fun ProfilePage(userId: String,
             )
 
             Spacer(modifier = Modifier.width(16.dp))
+
 
             // Name
             if (errorMessage.isNotEmpty()) {
@@ -2165,9 +2186,3 @@ fun GmailLinkingDialog(
     }
 }
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication, title = "Profile Page") {
-        var currentPage by remember { mutableStateOf("profilePage") }
-        ProfilePage(UserSession.userId ?: "DefaultUserId", { currentPage = "profilePage"}, { currentPage = "profilePage"}, { currentPage = "profilePage"})
-    }
-}
