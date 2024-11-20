@@ -43,3 +43,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Resource files ###
+resources/Icon.iconset/
+resources/Icon.icns

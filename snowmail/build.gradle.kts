@@ -94,7 +94,13 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Snowmail"
             packageVersion = "1.3.0"
+
+            macOS {
+                iconFile.set(project.file("src/main/resources/Icon.icns"))
+            }
         }
+
+
     }
 }
 
