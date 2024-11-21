@@ -49,6 +49,7 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextDecoration
 import java.awt.Desktop
 import java.net.URI
+import ca.uwaterloo.view.projects.ProjectSection
 
 
 @Composable
