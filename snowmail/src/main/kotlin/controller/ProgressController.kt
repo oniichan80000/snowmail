@@ -1,18 +1,16 @@
 package  ca.uwaterloo.controller
 
+import ca.uwaterloo.persistence.DocumentRepository
 import ca.uwaterloo.persistence.IJobApplicationRepository
 import ca.uwaterloo.persistence.IJobApplicationRepository.JobProgress
 import ca.uwaterloo.persistence.IJobApplicationRepository.Progress
 import integration.OpenAIClient
-import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.storage.Storage
-import persistence.JobApplicationRepository
 import service.email
 import service.searchEmails
 
-class ProgressController(private val jobApplicationRepository: IJobApplicationRepository, private val openAIClient: OpenAIClient) {
+class ProgressController(private val jobApplicationRepository: IJobApplicationRepository, private val openAIClient: OpenAIClient,
+private val documentRepository: DocumentRepository
+) {
 
     // getProgress function for listing all information Progress page needs
     // what is returned in this function?
@@ -59,7 +57,7 @@ class ProgressController(private val jobApplicationRepository: IJobApplicationRe
         val lastRefreshTime = jobApplicationRepository.getRefreshTime(userId).getOrNull()!!
         // TO BE ADDED: REMOVE HARDCODE EMAIL AND GMAIL PASSWORD
         // search emails
-        val emails = searchEmails(linkedEmail, appPassword, lastRefreshTime, recruiterEmails)
+        val emails = searchEmails(linkedEmail, appPassword, lastRefreshTime, recruiterEmails, documentRepository)
         return emails
     }
 

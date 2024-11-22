@@ -60,4 +60,16 @@ class DocumentRepository(private val supabase: SupabaseClient) : IDocumentReposi
         }
     }
 
+    override suspend fun uploadEmailAttachment(fileName: String, inputStream: InputStream): Result<String> {
+        return try {
+            val path = "email_attachments/$fileName"
+            storage.from("user_documents").upload(path, inputStream.readBytes())
+            val url = storage.from("user_documents").createSignedUrl(path, 20.minutes)
+            Result.success(url)
+        } catch (e: Exception) {
+            println(e.message)
+            Result.failure(Exception("Error uploading document: ${e.message}"))
+        }
+    }
+
 }

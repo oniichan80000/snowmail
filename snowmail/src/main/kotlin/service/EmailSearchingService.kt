@@ -1,9 +1,12 @@
 package service
 
-import java.io.InputStream
+import ca.uwaterloo.persistence.DocumentRepository
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.storage.Storage
 import java.util.*
 import javax.mail.*
-
 
 // constants
 val this_host = "imap.gmail.com"
@@ -13,12 +16,12 @@ data class email (
     val senderEmail: String,
     val subject: String,
     val text: String,
-    val attachLink: String
+    val attachLink: List<String>
 )
 
-fun searchEmails(userAccount: String, userPassword: String,
+suspend fun searchEmails(userAccount: String, userPassword: String,
                  last_refresh_time: Date,
-                 recruiterEmails: List<String>): List<email> {
+                 recruiterEmails: List<String>, documentRepository: DocumentRepository): List<email> {
 
     val properties = Properties().apply {
         put("mail.imap.host", this_host)
@@ -52,8 +55,7 @@ fun searchEmails(userAccount: String, userPassword: String,
             if (recruiterEmails.contains(emailAddress!!)) {
                 val content = message.content
                 var text = ""
-                var link = ""
-                val attachments = mutableListOf<InputStream>()
+                val attachmentLinks = mutableListOf<String>()
 
                 if (content is String) {
                     text = content
@@ -63,7 +65,10 @@ fun searchEmails(userAccount: String, userPassword: String,
                         if (bodyPart.isMimeType("text/plain")) {
                             text += bodyPart.content
                         } else if (Part.ATTACHMENT.equals(bodyPart.disposition, ignoreCase = true)) {
-                            attachments.add(bodyPart.inputStream)
+                            val attachmentStream = bodyPart.inputStream ?: continue
+                            val fileName = bodyPart.fileName ?: "unknown"
+                            val url = documentRepository.uploadEmailAttachment(fileName, attachmentStream).getOrNull()!!
+                            attachmentLinks.add(url)
                         }
                     }
                 }
@@ -73,7 +78,7 @@ fun searchEmails(userAccount: String, userPassword: String,
                 } else {
                     subject = message.subject
                 }
-                val item = email(emailAddress, subject, text, link)
+                val item = email(emailAddress, subject, text, attachmentLinks)
                 result.add(item)
             }
         }
@@ -83,6 +88,8 @@ fun searchEmails(userAccount: String, userPassword: String,
     }
     return result
 }
+
+
 
 
 fun createSpecificDateTime(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int): Date {
@@ -97,3 +104,17 @@ fun createSpecificDateTime(year: Int, month: Int, day: Int, hour: Int, minute: I
     return calendar.time
 }
 
+
+suspend fun main() {
+    val supabase = createSupabaseClient(
+        supabaseUrl = "https://gwnlngyvkxdpodenpyyj.supabase.co",
+        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3bmxuZ3l2a3hkcG9kZW5weXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc5MTAxNTEsImV4cCI6MjA0MzQ4NjE1MX0.olncAUMxSOjcr0YjssWXThtXDXC3q4zasdNYdwavt8g"
+    ) {
+        install(Postgrest)
+        install(Auth)
+        install(Storage)
+    }
+    val documentRepository = DocumentRepository(supabase)
+    val result = searchEmails("cs346test@gmail.com", "qirk dyef rvbv bkka", createSpecificDateTime(2021, 9, 1, 0, 0, 0), listOf("irishuang1105@gmail.com"), documentRepository)
+    print(result)
+}

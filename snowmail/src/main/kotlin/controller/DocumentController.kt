@@ -3,11 +3,7 @@ package ca.uwaterloo.controller
 import ca.uwaterloo.persistence.IDocumentRepository
 import integration.SupabaseClient
 import kotlinx.coroutines.runBlocking
-import java.awt.Desktop
 import java.io.File
-import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Paths
 
 class DocumentController(private val documentRepository: IDocumentRepository) {
 
