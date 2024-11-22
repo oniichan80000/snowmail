@@ -12,12 +12,14 @@ import model.email
 import persistence.JobApplicationRepository
 import service.sendEmail
 
+// function send_email returns string SUCCESS if email is sent successfully
+// otherwise, return Error message, please show it to users
+// Error type 1: Missing Gmail Account or Password, please go to profile page and finish linking gmail account
+// Error type 2: Failed to send the email. Please verify that your linked email address and password are correct.
 
 class SendEmailController(private val jobApplicationRepository: IJobApplicationRepository,
                           private val documentRepository: IDocumentRepository) {
     suspend fun send_email(
-        senderEmail: String,
-        password: String,
         recipient: String,
         subject: String,
         text: String,
@@ -30,7 +32,7 @@ class SendEmailController(private val jobApplicationRepository: IJobApplicationR
         jobTitle: String,
         companyName: String
 
-    ) {
+    ): String {
         val fileURLs = mutableListOf<String>()
         for (i in documentsType.indices) {
             val bucket = buckets[i]
@@ -40,8 +42,17 @@ class SendEmailController(private val jobApplicationRepository: IJobApplicationR
             val signedUrl = documentController.viewDocument(bucket, userID, documentType, documentName).getOrNull()!!
             fileURLs.add(signedUrl)
         }
+        val senderEmail = jobApplicationRepository.getGmailAccount(userID).getOrNull()
+        val password = jobApplicationRepository.getGmailPassword(userID).getOrNull()
+        if (senderEmail == null || password == null) {
+            return "Missing Gmail Account or Password, please go to profile page and finish linking gmail account"
+        }
+
         val Email = email(senderEmail, password, recipient, subject, text, fileURLs, documentsName)
-        sendEmail(Email)
+
+        if (!sendEmail(Email)) {
+            return "Failed to send the email. Please verify that your linked email address and password are correct."
+        }
 
         // update last refresh time if necessary
         jobApplicationRepository.updateRefreshTime(userID)
@@ -53,6 +64,7 @@ class SendEmailController(private val jobApplicationRepository: IJobApplicationR
             companyName,
             recipient
         )
+        return "Success"
 
     }
 }
@@ -86,7 +98,14 @@ suspend fun main() {
     }
     val JobApplicationRepository = JobApplicationRepository(supabase)
     val c = SendEmailController(JobApplicationRepository, SupabaseClient().documentRepository)
-    c.send_email(senderEmail, password, recipient, subject, text, listOf(bucket), listOf(documentType), listOf(documentName), userID, jobTitle, companyName)
+    // send email with attachment
+    // print(c.send_email(recipient, subject, text, listOf(bucket), listOf(documentType), listOf(documentName), userID, jobTitle, companyName))
+    // missing account / password
+    // print(c.send_email(recipient, subject, text, listOf(), listOf(), listOf(), "d372e24a-44a3-4cd3-8ce6-25dcfd7e1d92", jobTitle, companyName))
+    // incorrect password
+    // print(c.send_email(recipient, subject, text, listOf(bucket), listOf(documentType), listOf(documentName), userID, jobTitle, companyName))
+    print(c.send_email(recipient, subject, text, listOf(), listOf(), listOf(), "eaa8015c-6af7-441d-9037-3654ab821f84", jobTitle, companyName))
+
 }
 
 
