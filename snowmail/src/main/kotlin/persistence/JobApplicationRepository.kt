@@ -100,14 +100,24 @@ class JobApplicationRepository(private val supabase: SupabaseClient) : IJobAppli
 
     override suspend fun updateJobApplicationStatus(jobApplicationID: String, statusID: Int): Result<Boolean> {
         return try {
-            supabase.from("job_application_detail").update(
-                mapOf("app_status_id" to statusID)
-            ) {
-                filter {
-                    eq("app_id", jobApplicationID)
+            if (statusID == 5) {
+                supabase.from("job_application_detail").delete() {
+                    filter {
+                        eq("app_id", jobApplicationID)
+                    }
                 }
+                Result.success(true)
             }
-            Result.success(true)
+            else {
+                supabase.from("job_application_detail").update(
+                    mapOf("app_status_id" to statusID)
+                ) {
+                    filter {
+                        eq("app_id", jobApplicationID)
+                    }
+                }
+                Result.success(true)
+            }
         } catch (e: Exception) {
             println(e)
             Result.failure(Exception("Failed to update job application status"))
