@@ -72,4 +72,16 @@ class DocumentRepository(private val supabase: SupabaseClient) : IDocumentReposi
         }
     }
 
+    override suspend fun deleteAttachments(files: List<String>): Result<String> {
+        return try {
+            for (file in files) {
+                val path = "email_attachments/$file"
+                storage.from("user_documents").delete(path)
+            }
+            Result.success("Attachments deleted successfully.")
+        } catch (e: Exception) {
+            Result.failure(Exception("Error deleting attachments: ${e.message}"))
+        }
+    }
+
 }

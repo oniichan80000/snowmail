@@ -10,4 +10,5 @@ interface IDocumentRepository {
     suspend fun createSignedUrl(bucket: String, path: String): Result<String>
     suspend fun listDocuments(bucket: String, path: String): Result<List<String>>
     suspend fun uploadEmailAttachment(fileName: String, inputStream: InputStream): Result<String>
+    suspend fun deleteAttachments(files: List<String>): Result<String>
 }
