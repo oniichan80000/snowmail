@@ -57,6 +57,9 @@ import java.awt.Desktop
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.ui.res.painterResource
 
 // A function that is a row in the document page.
 // The row has a type that is passed to it as a parameter like "Resume" or "Cover Letter".
@@ -84,14 +87,39 @@ fun DocDropdownRow(documentType: String, documentController: DocumentController)
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clickable { expanded = !expanded }
+            //.padding(45.dp)
     ) {
-        Text(
-            text = documentType,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .background(Color(0xFFE2E2E2))
+                .fillMaxWidth()
+                .height(55.dp)
+                .padding(horizontal = 35.dp)
+                .clip(RoundedCornerShape(32.dp))
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) { expanded = !expanded }
+        ) {
+            Text(
+                text = documentType,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+            if (expanded) {
+                Image(
+                    painter = painterResource("arrow_up.png"),
+                    contentDescription = null
+                )
+            } else {
+                Image(
+                    painter = painterResource("arrow_down.png"),
+                    contentDescription = null
+                )
+            }
+        }
         if (expanded) {
             documentList.forEach { document ->
                 Text(

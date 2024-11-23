@@ -27,7 +27,9 @@ fun DocumentUploadButton(text: String, documentType: String, documentController:
                 showFileDialog = true
         },
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.height(40.dp),
+        modifier = Modifier
+            .width(129.dp)
+            .height(40.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color(0xFF487896),
             contentColor = Color.White
