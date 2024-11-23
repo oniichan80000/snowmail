@@ -74,6 +74,10 @@ private val documentRepository: DocumentRepository
         jobApplicationRepository.updateJobApplicationStatus(JobApplicationID, newStatus)
     }
 
+    suspend fun deleteAttachments(files: List<String>, documentRepository: DocumentRepository) {
+        documentRepository.deleteAttachments(files)
+    }
+
 }
 
 //suspend fun main() {
