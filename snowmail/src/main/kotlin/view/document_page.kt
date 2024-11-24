@@ -90,7 +90,7 @@ fun DocumentPage(NavigateToEmialGen: () -> Unit, NavigateToProfile: () -> Unit,
                     }
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier= Modifier
                     .fillMaxWidth()
@@ -98,26 +98,29 @@ fun DocumentPage(NavigateToEmialGen: () -> Unit, NavigateToProfile: () -> Unit,
                     .background(Color.Transparent),
                 horizontalArrangement = Arrangement.End,
             ) {
-                DocumentUploadButton("Upload", documentType, documentController)
+                DocumentUploadButton(documentController)
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             Column(
                 modifier = Modifier
-                    //.fillMaxSize()
+                    .fillMaxHeight()
                     .padding(16.dp)
+                    .clip(RoundedCornerShape(15.dp))
                     .background(Color.White),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
+                Spacer(modifier = Modifier.height(25.dp))
                 DocDropdownRow("Resume", documentController)
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 DocDropdownRow("Cover Letter", documentController)
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 DocDropdownRow("Transcript", documentController)
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 DocDropdownRow("Certificates", documentController)
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 DocDropdownRow("Others", documentController)
+                Spacer(modifier = Modifier.height(15.dp))
             }
         }
     }

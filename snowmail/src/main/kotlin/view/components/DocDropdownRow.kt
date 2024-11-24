@@ -87,17 +87,20 @@ fun DocDropdownRow(documentType: String, documentController: DocumentController)
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 35.dp)
+            //.clip(RoundedCornerShape(35.dp))
             //.padding(45.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
+                .clip(RoundedCornerShape(5.dp))
                 .background(Color(0xFFE2E2E2))
                 .fillMaxWidth()
                 .height(55.dp)
                 .padding(horizontal = 35.dp)
-                .clip(RoundedCornerShape(32.dp))
+
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -122,28 +125,49 @@ fun DocDropdownRow(documentType: String, documentController: DocumentController)
         }
         if (expanded) {
             documentList.forEach { document ->
-                Text(
-                    text = document,
+                Row(
                     modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            coroutineScope.launch {
-                                val encodedDocument = URLEncoder.encode(document, StandardCharsets.UTF_8.toString())
-                                val result = documentController.viewDocument("user_documents", UserSession.userId ?: "DefaultUserId", documentType, encodedDocument)
-                                result.onSuccess { url ->
-                                    if (Desktop.isDesktopSupported()) {
-                                        Desktop.getDesktop().browse(URI(url))
-                                    } else {
-                                        println("Desktop is not supported. Please open the URL manually: $url")
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = document,
+                        modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .clickable {
+                                coroutineScope.launch {
+                                    val encodedDocument = URLEncoder.encode(document, StandardCharsets.UTF_8.toString())
+                                    val result = documentController.viewDocument(
+                                        "user_documents",
+                                        UserSession.userId ?: "DefaultUserId",
+                                        documentType,
+                                        encodedDocument
+                                    )
+                                    result.onSuccess { url ->
+                                        if (Desktop.isDesktopSupported()) {
+                                            Desktop.getDesktop().browse(URI(url))
+                                        } else {
+                                            println("Desktop is not supported. Please open the URL manually: $url")
+                                        }
+                                    }.onFailure { error ->
+                                        println("Error creating signed URL: ${error.message}")
                                     }
-                                }.onFailure { error ->
-                                    println("Error creating signed URL: ${error.message}")
                                 }
-                            }
-                        },
-                    color = Color.Blue,
-                    textDecoration = TextDecoration.Underline
-                )
+                            },
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline
+                    )
+                    DocDeleteButton(
+                        document = document,
+                        documentType = documentType,
+                        documentController = documentController,
+                        coroutineScope = coroutineScope
+                    ) {
+                        documentList = documentList.filter { it != document }
+                    }
+                }
             }
         }
     }

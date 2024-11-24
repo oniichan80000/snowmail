@@ -17,54 +17,76 @@ import java.io.File
 import ca.uwaterloo.view.UserSession
 
 @Composable
-fun DocumentUploadButton(text: String, documentType: String, documentController: DocumentController) {
+
+
+fun DocumentUploadButton(documentController: DocumentController) {
     val coroutineScope = rememberCoroutineScope()
     var selectedFile by remember { mutableStateOf<File?>(null) }
     var showFileDialog by remember { mutableStateOf(false) }
+    var showDropdownMenu by remember { mutableStateOf(false) }
+    var selectedDocumentType by remember { mutableStateOf<String?>(null) }
+    val documentTypes = listOf("Resume", "Cover Letter", "Transcript", "Certificates", "Others")
 
-    Button(
-        onClick = {
-                showFileDialog = true
-        },
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier
-            .width(129.dp)
-            .height(40.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0xFF487896),
-            contentColor = Color.White
-        )
-    ) {
-        Text(text = text, color = Color.White, fontSize = 14.sp)
-    }
+    Column {
+        Button(
+            onClick = { showDropdownMenu = true },
+            shape = RoundedCornerShape(5.dp),
+            modifier = Modifier
+                .width(130.dp)
+                .height(40.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFF487896),
+                contentColor = Color.White
+            )
+        ) {
+            Text(text = "Upload", color = Color.White, fontSize = 14.sp)
+        }
 
-    if (showFileDialog) {
-        AwtWindow(
-            create = {
-                FileDialog(Frame(), "Select a file", FileDialog.LOAD).apply {
-                    isVisible = true
-                    selectedFile = file?.let { File(directory, it) }
+        DropdownMenu(
+            expanded = showDropdownMenu,
+            onDismissRequest = { showDropdownMenu = false }
+        ) {
+            documentTypes.forEach { documentType ->
+                DropdownMenuItem(onClick = {
+                    selectedDocumentType = documentType
+                    showDropdownMenu = false
+                    showFileDialog = true
+                }) {
+                    Text(text = documentType)
                 }
-            },
-            dispose = FileDialog::dispose
-        )
-        showFileDialog = false
-    }
+            }
+        }
 
-    LaunchedEffect(selectedFile) {
-        selectedFile?.let { file ->
-            coroutineScope.launch {
-                val result = documentController.uploadDocument(
-                    bucket = "user_documents",
-                    userId = UserSession.userId ?: "DefaultUserId",
-                    documentType = documentType,
-                    documentName = file.name,
-                    file = file
-                )
-                result.onSuccess {
-                    println("Upload successful: $it")
-                }.onFailure { error ->
-                    println("Error uploading document: ${error.message}")
+        if (showFileDialog) {
+            showFileDialog = false
+            AwtWindow(
+                create = {
+                    FileDialog(Frame(), "Select a file", FileDialog.LOAD).apply {
+                        isVisible = true
+                        selectedFile = file?.let { File(directory, it) }
+                    }
+                },
+                dispose = FileDialog::dispose
+            )
+        }
+
+        LaunchedEffect(selectedFile) {
+            selectedFile?.let { file ->
+                selectedDocumentType?.let { documentType ->
+                    coroutineScope.launch {
+                        val result = documentController.uploadDocument(
+                            bucket = "user_documents",
+                            userId = UserSession.userId ?: "DefaultUserId",
+                            documentType = documentType,
+                            documentName = file.name,
+                            file = file
+                        )
+                        result.onSuccess {
+                            println("Upload successful: $it")
+                        }.onFailure { error ->
+                            println("Error uploading document: ${error.message}")
+                        }
+                    }
                 }
             }
         }
