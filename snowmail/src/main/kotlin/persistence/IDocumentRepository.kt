@@ -1,7 +1,6 @@
 package ca.uwaterloo.persistence
 
 import java.io.File
-import java.io.InputStream
 
 interface IDocumentRepository {
     suspend fun uploadDocument(bucket: String, path: String, file: File): Result<String>

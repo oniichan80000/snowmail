@@ -1,12 +1,9 @@
 package service
 
-import ca.uwaterloo.persistence.DocumentRepository
-import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.storage.Storage
+import java.io.InputStream
 import java.util.*
 import javax.mail.*
+
 
 // constants
 val this_host = "imap.gmail.com"
@@ -20,9 +17,9 @@ data class email (
     val attachLink: List<String>
 )
 
-suspend fun searchEmails(userAccount: String, userPassword: String,
+fun searchEmails(userAccount: String, userPassword: String,
                  last_refresh_time: Date,
-                 recruiterEmails: List<String>, documentRepository: DocumentRepository): List<email> {
+                 recruiterEmails: List<String>): List<email> {
 
     val properties = Properties().apply {
         put("mail.imap.host", this_host)
@@ -96,8 +93,6 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
     }
     return result
 }
-
-
 
 
 fun createSpecificDateTime(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int): Date {

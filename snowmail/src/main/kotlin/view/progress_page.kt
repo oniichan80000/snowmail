@@ -1,20 +1,14 @@
 package ca.uwaterloo.view
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,13 +18,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ca.uwaterloo.controller.ProfileController
+import androidx.compose.ui.window.ApplicationScope
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
+
 import ca.uwaterloo.controller.ProgressController
 import ca.uwaterloo.persistence.DocumentRepository
 import ca.uwaterloo.persistence.IJobApplicationRepository
 import ca.uwaterloo.view.theme.AppTheme
 import integration.OpenAIClient
 import integration.SupabaseClient
+import androidx.compose.foundation.lazy.items
+import kotlinx.coroutines.runBlocking
+import model.JobApplication
+import service.email
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import ca.uwaterloo.controller.ProfileController
+import ca.uwaterloo.view.theme.AppTheme
+import integration.OpenAIClient
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.launch
@@ -49,7 +61,7 @@ fun JobProgressPage(
 ) {
     val dbStorage = SupabaseClient()
     val openAIClient = OpenAIClient(HttpClient(CIO))
-    val progressController = ProgressController(dbStorage.jobApplicationRepository, openAIClient, dbStorage.documentRepository)
+    val progressController = ProgressController(dbStorage.jobApplicationRepository, openAIClient)
     val profileController = ProfileController(dbStorage.userProfileRepository)
 
     var selectedTabIndex by remember { mutableStateOf(1) }
