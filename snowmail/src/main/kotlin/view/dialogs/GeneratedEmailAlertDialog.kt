@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import ca.uwaterloo.controller.DocumentController
 import ca.uwaterloo.controller.ProfileController
 import controller.SendEmailController
 import integration.SupabaseClient
@@ -32,6 +33,10 @@ fun GeneratedEmailAlertDialog(
     val profileController = ProfileController(SupabaseClient().userProfileRepository)
     var senderEmail by remember { mutableStateOf("") }
     var senderPassword by remember { mutableStateOf("") }
+    var showAttachDialog by remember { mutableStateOf(false) }
+    val attachedDocuments = remember { mutableStateListOf<Pair<String, String>>() }
+
+
 
     LaunchedEffect(Unit) {
         val emailResult = profileController.getUserLinkedGmailAccount(userId)
@@ -49,6 +54,19 @@ fun GeneratedEmailAlertDialog(
         }
     }
 
+    if (showAttachDialog) {
+        AttachDocumentDialog(
+            userId = userId,
+            onDismissRequest = { showAttachDialog = false },
+            onConfirm = { selectedDocuments ->
+                attachedDocuments.clear()
+                attachedDocuments.addAll(selectedDocuments)
+                showAttachDialog = false
+            },
+            documentController = DocumentController(SupabaseClient().documentRepository)
+        )
+    }
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
         //title = { Text(title) },
@@ -62,7 +80,7 @@ fun GeneratedEmailAlertDialog(
                     modifier = Modifier
                         .clip(RoundedCornerShape(32.dp)) // Rounded corners
                         .background(Color.White) // White background
-                        .padding(32.dp)
+                        //.padding(32.dp)
                         .fillMaxWidth()
                         .background(Color.Transparent),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -72,7 +90,16 @@ fun GeneratedEmailAlertDialog(
                         //unfocusedBorderColor = Color.Transparent
                     )
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = { showAttachDialog = true },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFF487B96),
+                        contentColor = MaterialTheme.colors.onPrimary
+                    )
+                ) {
+                    Text("Attach Document")
+                }
+                //Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = emailSubject,
                     onValueChange = { emailSubject = it },
@@ -90,7 +117,7 @@ fun GeneratedEmailAlertDialog(
                         //unfocusedBorderColor = Color.Transparent
                     )
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                //Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = text,
                     onValueChange = { text = it },
@@ -104,6 +131,8 @@ fun GeneratedEmailAlertDialog(
                         unfocusedBorderColor = Color.Transparent
                     )
                 )
+                //Spacer(modifier = Modifier.height(8.dp))
+
             }
         },
 
@@ -134,9 +163,9 @@ fun GeneratedEmailAlertDialog(
                             subject = emailSubject,
                             text = text,
                             // TO BE MODIFIED
-                            buckets = listOf(),
-                            documentsType = listOf<String>(),
-                            documentsName = listOf<String>(),
+                            buckets = listOf("user_documents"),
+                            documentsType = attachedDocuments.map { it.second },
+                            documentsName = attachedDocuments.map { it.first },
                             // -----------
                             userID = userId,
                             jobTitle = jobTitle,

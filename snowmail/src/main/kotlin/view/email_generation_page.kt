@@ -24,6 +24,7 @@ import ca.uwaterloo.model.WorkExperience
 import ca.uwaterloo.service.ParserService
 import ca.uwaterloo.view.components.DocumentSelectionDropdownButton
 import ca.uwaterloo.view.components.EmailGenInputField
+import ca.uwaterloo.view.components.EmailGenerationButton
 //import ca.uwaterloo.view.components.FetchUserProfileData
 import ca.uwaterloo.view.dialogs.GeneratedEmailAlertDialog
 import ca.uwaterloo.view.theme.AppTheme
@@ -240,35 +241,33 @@ fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, Navigat
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    Button(
-                        onClick = {
-                            runBlocking {
-                                try {
-                                    val generatedEmail: GeneratedEmail? = emailGenerationController.generateEmail(
-                                        informationSource = "profile",
-                                        userInput = userInput,
-                                        userProfile = userProfile,
-                                        education = gotEducation,
-                                        workExperience = gotWorkExperience,
-                                        skills = gotSkills,
-                                        resumeFile = resumeFile
-                                    )
-                                    println("Generated Email: ${generatedEmail?.body}")
-                                    emailContent = generatedEmail?.body ?: "Failed to generate email"
-                                    showDialog = true
-                                } catch (e: Exception) {
-                                    println("Error: ${e.message}")
-                                }
-                            }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFF487B96),
-                            contentColor = MaterialTheme.colors.onPrimary
-                        )
-                    ) {
-                        Text("Generate Email")
-                    }
+                    EmailGenerationButton(
+                        emailGenerationController = emailGenerationController,
+                        userInput = userInput,
+                        userProfile = userProfile,
+                        gotEducation = gotEducation,
+                        gotWorkExperience = gotWorkExperience,
+                        gotSkills = gotSkills,
+                        resumeFile = resumeFile,
+                        onEmailGenerated = { emailContent = it },
+                        onShowDialog = { showDialog = it },
+                        infoSource = "profile",
+                        enabled = true
+                    )
+
+                    EmailGenerationButton(
+                        emailGenerationController = emailGenerationController,
+                        userInput = userInput,
+                        userProfile = userProfile,
+                        gotEducation = gotEducation,
+                        gotWorkExperience = gotWorkExperience,
+                        gotSkills = gotSkills,
+                        resumeFile = resumeFile,
+                        onEmailGenerated = { emailContent = it },
+                        onShowDialog = { showDialog = it },
+                        infoSource = "resume",
+                        enabled = selectedDocument != null
+                    )
 
 
                     if (showDialog) {
