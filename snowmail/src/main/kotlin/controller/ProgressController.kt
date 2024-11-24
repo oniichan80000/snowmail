@@ -4,11 +4,6 @@ import ca.uwaterloo.persistence.IJobApplicationRepository
 import ca.uwaterloo.persistence.IJobApplicationRepository.JobProgress
 import ca.uwaterloo.persistence.IJobApplicationRepository.Progress
 import integration.OpenAIClient
-import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.storage.Storage
-import persistence.JobApplicationRepository
 import service.email
 import service.searchEmails
 
