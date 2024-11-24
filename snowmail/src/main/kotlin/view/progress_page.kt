@@ -2,20 +2,14 @@ package ca.uwaterloo.view
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
@@ -29,10 +23,7 @@ import androidx.compose.runtime.*
 import kotlinx.coroutines.launch
 
 import ca.uwaterloo.controller.ProgressController
-import ca.uwaterloo.persistence.DocumentRepository
 import ca.uwaterloo.persistence.IJobApplicationRepository
-import ca.uwaterloo.view.theme.AppTheme
-import integration.OpenAIClient
 import integration.SupabaseClient
 import androidx.compose.foundation.lazy.items
 import kotlinx.coroutines.runBlocking
@@ -45,11 +36,6 @@ import ca.uwaterloo.view.theme.AppTheme
 import integration.OpenAIClient
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import service.email
-import java.awt.Desktop
-import java.net.URI
 
 
 @Composable
@@ -158,7 +144,6 @@ fun JobProgressPage(
                         onPreviousEmail = {
                             emailIndex = if (emailIndex == 0) emails.size - 1 else emailIndex - 1
                         },
-                        documentRepository = dbStorage.documentRepository,
                         onClose = {
                             showDialog = false
                             emailIndex = 0
@@ -346,7 +331,6 @@ fun EmailDialog(
     emailIndex: Int,
     userId: String,
     progressController: ProgressController,
-    documentRepository: DocumentRepository,
     onNextEmail: () -> Unit,
     onPreviousEmail: () -> Unit,
     onClose: () -> Unit
@@ -355,9 +339,6 @@ fun EmailDialog(
     var selectedStatus by remember { mutableStateOf<Int?>(null) }
     var appliedJobs by remember { mutableStateOf<List<Pair<IJobApplicationRepository.JobProgress, String>>>(emptyList()) }
     val coroutineScope = rememberCoroutineScope()
-    var showDialog by remember { mutableStateOf(false) }
-    var attachLinks by remember { mutableStateOf<List<String>>(emptyList()) }
-
 
     LaunchedEffect(userId) {
         appliedJobs = progressController.getAllAppliedJobs(userId, )
@@ -403,84 +384,13 @@ fun EmailDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                attachLinks = emails[emailIndex].attachLink
-
-                if (attachLinks.isNotEmpty()) {
-                    Button(
-                        onClick = { showDialog = true },
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF487896))
-                    ) {
-                        Text(text = "View Attached Files",
-                            color = Color.White,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold)
-                    }
-                }
-
-                if (showDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showDialog = false },
-                        title = {
-                            Text(
-                                text = "Attached Files",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
-                            )
-                        },
-                        text = {
-                            Column {
-                                if (attachLinks.isNotEmpty()) {
-                                    attachLinks.forEach { link ->
-                                        ClickableText(
-                                            text = AnnotatedString(
-                                                text = link,
-                                                spanStyle = SpanStyle(textDecoration = TextDecoration.Underline) // Underline for hyperlink
-                                            ),
-                                            onClick = {
-                                                // Open the link in the default browser
-                                                if (Desktop.isDesktopSupported()) {
-                                                    try {
-                                                        Desktop.getDesktop().browse(URI(link))
-                                                    } catch (e: Exception) {
-                                                        e.printStackTrace() // Handle invalid URLs or errors
-                                                    }
-                                                }
-                                            },
-                                            modifier = Modifier.padding(vertical = 4.dp)
-                                        )
-                                    }
-                                } else {
-                                    Text(
-                                        text = "No attached files available.",
-                                        modifier = Modifier.padding(vertical = 8.dp),
-                                        style = MaterialTheme.typography.body2
-                                    )
-                                }
-                            }
-                        },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    showDialog = false
-                                }
-                            ) {
-                                Text(text = "Close")
-                            }
-                        }
-                    )
-                }
-
-
                 // Job Status Selection
                 Text("If there has been a change in the status of your job application, please select the appropriate options below:", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    val statuses = listOf("APPLIED", "INTERVIEWING", "OFFER", "OTHER", "REJECTED")
+                    val statuses = listOf("APPLIED", "INTERVIEWING", "OFFER", "OTHER")
                     statuses.forEachIndexed { index, status ->
                         Button(
                             onClick = { selectedStatus = index },
@@ -540,11 +450,6 @@ fun EmailDialog(
                                     onNextEmail()
                                 } else {
                                     onClose()
-                                }
-                                runBlocking {
-                                    println(emails)
-                                    println(emails[emailIndex].fileNames)
-                                    progressController.deleteAttachments(emails[emailIndex].fileNames, documentRepository)
                                 }
                             }
                         }

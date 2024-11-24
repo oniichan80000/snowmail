@@ -76,10 +76,6 @@ class ProgressController(private val jobApplicationRepository: IJobApplicationRe
         jobApplicationRepository.updateJobApplicationStatus(JobApplicationID, newStatus)
     }
 
-    suspend fun deleteAttachments(files: List<String>, documentRepository: DocumentRepository) {
-        documentRepository.deleteAttachments(files)
-    }
-
 }
 
 //suspend fun main() {
