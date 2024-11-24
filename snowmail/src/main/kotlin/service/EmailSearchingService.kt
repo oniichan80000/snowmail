@@ -59,6 +59,7 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
                 val attachmentLinks = mutableListOf<String>()
                 val fileNames = mutableListOf<String>()
 
+
                 if (content is String) {
                     text = content
                 } else if (content is Multipart) {
@@ -68,7 +69,9 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
                             text += bodyPart.content
                         } else if (Part.ATTACHMENT.equals(bodyPart.disposition, ignoreCase = true)) {
                             val attachmentStream = bodyPart.inputStream ?: continue
-                            val fileName = bodyPart.fileName ?: "unknown"
+                            var fileName = bodyPart.fileName ?: "unknown"
+                            fileName = fileName.replace("\\s".toRegex(), "")
+                            println(fileName)
                             val url = documentRepository.uploadEmailAttachment(fileName, attachmentStream).getOrNull()!!
                             attachmentLinks.add(url)
                             fileNames.add(fileName)
@@ -81,8 +84,10 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
                 } else {
                     subject = message.subject
                 }
-                val item = email(emailAddress, subject, text, attachmentLinks, fileNames)
+                val item = email(emailAddress, subject, text, fileNames, attachmentLinks)
+                println(item)
                 result.add(item)
+                print("HERE2")
             }
         }
 
@@ -122,5 +127,5 @@ suspend fun main() {
         install(Storage)
     }
     val documentRepository = DocumentRepository(supabase)
-    // val result = searchEmails("cs346test@gmail.com", "qirk dyef rvbv bkka", createSpecificDateTime(2021, 9, 1, 0, 0, 0), listOf("irishuang1105@gmail.com"), documentRepository)
+    val result = searchEmails("cs346test@gmail.com", "qirk dyef rvbv bkka", createSpecificDateTime(2021, 9, 1, 0, 0, 0), listOf("irishuang1105@gmail.com"), documentRepository)
 }

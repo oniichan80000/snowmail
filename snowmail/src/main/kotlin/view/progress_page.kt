@@ -1,11 +1,13 @@
 package ca.uwaterloo.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,34 +18,26 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ca.uwaterloo.controller.ProfileController
 import ca.uwaterloo.controller.ProgressController
+import ca.uwaterloo.persistence.DocumentRepository
 import ca.uwaterloo.persistence.IJobApplicationRepository
-import integration.SupabaseClient
-import androidx.compose.foundation.lazy.items
-import kotlinx.coroutines.runBlocking
-import model.JobApplication
-import service.email
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import ca.uwaterloo.view.theme.AppTheme
 import integration.OpenAIClient
+import integration.SupabaseClient
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.SpanStyle
+import kotlinx.coroutines.runBlocking
+import service.email
 import java.awt.Desktop
 import java.net.URI
-
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.rememberScrollState
-
 
 
 @Composable
@@ -152,6 +146,7 @@ fun JobProgressPage(
                         onPreviousEmail = {
                             emailIndex = if (emailIndex == 0) emails.size - 1 else emailIndex - 1
                         },
+                        documentRepository = dbStorage.documentRepository,
                         onClose = {
                             showDialog = false
                             emailIndex = 0
@@ -339,6 +334,7 @@ fun EmailDialog(
     emailIndex: Int,
     userId: String,
     progressController: ProgressController,
+    documentRepository: DocumentRepository,
     onNextEmail: () -> Unit,
     onPreviousEmail: () -> Unit,
     onClose: () -> Unit
@@ -453,7 +449,9 @@ fun EmailDialog(
                         },
                         confirmButton = {
                             TextButton(
-                                onClick = { showDialog = false }
+                                onClick = {
+                                    showDialog = false
+                                }
                             ) {
                                 Text(text = "Close")
                             }
@@ -530,6 +528,11 @@ fun EmailDialog(
                                     onNextEmail()
                                 } else {
                                     onClose()
+                                }
+                                runBlocking {
+                                    println(emails)
+                                    println(emails[emailIndex].fileNames)
+                                    progressController.deleteAttachments(emails[emailIndex].fileNames, documentRepository)
                                 }
                             }
                         }
