@@ -397,13 +397,13 @@ fun EmailDialog(
                             } catch (e: Exception) {
                                 "OTHER"
                             }
-                            val normalizedStatus = when (classifiedStatus.trim().uppercase()) {
-                                "OFFER" -> "OFFER"
-                                "REJECTION" -> "REJECTED"
-                                "INTERVIEW" -> "INTERVIEWING"
-                                else -> "APPLIED"
-                            }
-                            selectedStatus = statuses.indexOf(normalizedStatus).takeIf { it >= 0 } ?: 0
+//                            val normalizedStatus = when (classifiedStatus.trim().uppercase()) {
+//                                "OFFER" -> "OFFER"
+//                                "REJECTION" -> "REJECTED"
+//                                "INTERVIEW" -> "INTERVIEWING"
+//                                else -> "APPLIED"
+//                            }
+                            selectedStatus = statuses.indexOf(classifiedStatus).takeIf { it >= 0 } ?: 0
                         }
                     }
 
@@ -412,28 +412,7 @@ fun EmailDialog(
 
                     Spacer(modifier = Modifier.height(5.dp))
 
-                    // Job Status Selection
-                    Text("If there has been a change in the status of your job application, please select the appropriate options below:", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        val statuses = listOf("APPLIED", "INTERVIEWING", "OFFER", "OTHER", "REJECTED")
-                        statuses.forEachIndexed { index, status ->
-                            Button(
-                                onClick = { selectedStatus = index },
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = if (selectedStatus == index) MaterialTheme.colors.primary else Color.LightGray
-                                )
-                            ) {
-                                Text(status, color = if (selectedStatus == index) Color.White else Color.Black)
-                            }
-                        }
-                    }
 
-                    Spacer(modifier = Modifier.height(16.dp))
                     attachLinks = emails[emailIndex].attachLink
 
                     if (attachLinks.isNotEmpty()) {
@@ -501,6 +480,29 @@ fun EmailDialog(
                             }
                         )
                     }
+
+                    // Job Status Selection
+                    Text("Snowmail has analyzed this email and automatically assigned the most likely status to your job application. If this is incorrect, you can manually select the appropriate status from the options below:", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        val statuses = listOf("APPLIED", "INTERVIEWING", "OFFER", "OTHER", "REJECTED")
+                        statuses.forEachIndexed { index, status ->
+                            Button(
+                                onClick = { selectedStatus = index },
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = if (selectedStatus == index) MaterialTheme.colors.primary else Color.LightGray
+                                )
+                            ) {
+                                Text(status, color = if (selectedStatus == index) Color.White else Color.Black)
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
 
                     // Job Title Selection
