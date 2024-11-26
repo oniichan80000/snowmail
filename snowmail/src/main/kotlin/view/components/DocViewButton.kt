@@ -11,37 +11,44 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ca.uwaterloo.controller.DocumentController
 import ca.uwaterloo.view.UserSession
+import java.awt.Desktop
+import java.net.URI
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
-fun DocDeleteButton(
+fun DocViewButton(
     document: String,
     documentType: String,
     documentController: DocumentController,
-    coroutineScope: CoroutineScope,
-    onDeleteSuccess: () -> Unit
+    coroutineScope: CoroutineScope
 ) {
     IconButton(
         onClick = {
             coroutineScope.launch {
-                val result = documentController.deleteDocument(
+                val encodedDocument = URLEncoder.encode(document, StandardCharsets.UTF_8.toString())
+                val result = documentController.viewDocument(
                     "user_documents",
                     UserSession.userId ?: "DefaultUserId",
                     documentType,
-                    document
+                    encodedDocument
                 )
-                result.onSuccess {
-                    onDeleteSuccess()
-                    println("Document deleted successfully")
+                result.onSuccess { url ->
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().browse(URI(url))
+                    } else {
+                        println("Desktop is not supported. Please open the URL manually: $url")
+                    }
                 }.onFailure { error ->
-                    println("Error deleting document: ${error.message}")
+                    println("Error creating signed URL: ${error.message}")
                 }
             }
         },
         modifier = Modifier.size(20.dp)
     ) {
         Icon(
-            painter = painterResource("TrashIcon.svg"),
-            contentDescription = "Delete"
+            painter = painterResource("ViewIcon.svg"),
+            contentDescription = "View"
         )
     }
 }
