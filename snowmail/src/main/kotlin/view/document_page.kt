@@ -59,6 +59,7 @@ import java.awt.Desktop
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import androidx.compose.foundation.lazy.LazyColumn
 
 
 @Composable
@@ -101,26 +102,29 @@ fun DocumentPage(NavigateToEmialGen: () -> Unit, NavigateToProfile: () -> Unit,
                 DocumentUploadButton(documentController)
             }
             Spacer(modifier = Modifier.height(15.dp))
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(16.dp)
                     .clip(RoundedCornerShape(15.dp))
-                    .background(Color.White),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                    .background(Color.White)
+                    .padding(16.dp)
             ) {
-                Spacer(modifier = Modifier.height(25.dp))
-                DocDropdownRow("Resume", documentController)
-                Spacer(modifier = Modifier.height(15.dp))
-                DocDropdownRow("Cover Letter", documentController)
-                Spacer(modifier = Modifier.height(15.dp))
-                DocDropdownRow("Transcript", documentController)
-                Spacer(modifier = Modifier.height(15.dp))
-                DocDropdownRow("Certificates", documentController)
-                Spacer(modifier = Modifier.height(15.dp))
-                DocDropdownRow("Others", documentController)
-                Spacer(modifier = Modifier.height(15.dp))
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    item { Spacer(modifier = Modifier.height(25.dp)) }
+                    item { DocDropdownRow("Resume", documentController) }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
+                    item { DocDropdownRow("Cover Letter", documentController) }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
+                    item { DocDropdownRow("Transcript", documentController) }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
+                    item { DocDropdownRow("Certificates", documentController) }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
+                    item { DocDropdownRow("Others", documentController) }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
+                }
             }
         }
     }
