@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextOverflow
+
 
 @Composable
 fun SkillChip(skill: String, onDelete: () -> Unit) {
@@ -19,22 +21,31 @@ fun SkillChip(skill: String, onDelete: () -> Unit) {
         color = Color(0xFFE0E0E0),
         modifier = Modifier
             .padding(4.dp)
-            .height(32.dp)
+            .wrapContentWidth()
+            .heightIn(min = 40.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
         ) {
-            Text(text = skill, fontSize = 14.sp)
-            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = skill,
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+            )
             IconButton(
                 onClick = onDelete,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(24.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Delete Skill",
-                    tint = Color.Red
+                    tint = Color.Red,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }

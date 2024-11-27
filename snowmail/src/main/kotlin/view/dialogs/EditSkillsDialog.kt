@@ -30,6 +30,7 @@ fun EditSkillsDialog(
     var skillInput by remember { mutableStateOf("") }
     var isDuplicateSkill by remember { mutableStateOf(false) }
     var isInvalidSkill by remember { mutableStateOf(false) }
+    var isTooLongSkill by remember { mutableStateOf(false) }
     var selectedSkills = remember { mutableStateListOf<String>().apply { addAll(initialSkills) } }
     var errorMessage by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -58,13 +59,14 @@ fun EditSkillsDialog(
                 OutlinedTextField(
                     value = skillInput,
                     onValueChange = {
-                        skillInput = it
+                        skillInput = it.take(15)
                         isDuplicateSkill = false
                         isInvalidSkill = false
+                        isTooLongSkill = skillInput.length > 15
                     },
                     label = { Text("Add a new skill") },
                     modifier = Modifier.fillMaxWidth(),
-                    isError = isDuplicateSkill || isInvalidSkill
+                    isError = isDuplicateSkill || isInvalidSkill || isTooLongSkill
                 )
 
                 if (isDuplicateSkill) {
@@ -85,6 +87,15 @@ fun EditSkillsDialog(
                     )
                 }
 
+                if (isTooLongSkill) {
+                    Text(
+                        text = "Skill cannot exceed 15 characters.",
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+
                 Button(
                     onClick = {
                         if (skillInput.isBlank()) {
@@ -96,19 +107,23 @@ fun EditSkillsDialog(
                             skillInput = ""
                             isDuplicateSkill = false
                             isInvalidSkill = false
+                            isTooLongSkill = false
                         }
                     },
                     modifier = Modifier.align(Alignment.End),
-                    enabled = skillInput.isNotBlank()
+                    enabled = skillInput.isNotBlank() && !isTooLongSkill
                 ) {
                     Text("Add")
                 }
 
                 LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 100.dp),
+                    columns = GridCells.Adaptive(minSize = 120.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 200.dp)
+                        .heightIn(max = 300.dp)
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(selectedSkills) { skill ->
                         SkillChip(skill = skill) {
@@ -116,6 +131,7 @@ fun EditSkillsDialog(
                         }
                     }
                 }
+
 
                 if (errorMessage.isNotEmpty()) {
                     Text(
