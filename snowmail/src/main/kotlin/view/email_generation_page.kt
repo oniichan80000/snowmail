@@ -171,7 +171,7 @@ fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, Navigat
                                 onValueChange = { companyInput = it },
                                 label = "Company Name"
                             )
-                            Spacer(modifier = Modifier.width(20.dp))
+                            Spacer(modifier = Modifier.width(30.dp))
                             EmailGenInputField(
                                 value = jobtitleInput,
                                 onValueChange = { jobtitleInput = it },
@@ -190,7 +190,7 @@ fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, Navigat
                                 onValueChange = { recruiterNameInput = it },
                                 label = "Recruiter Name"
                             )
-                            Spacer(modifier = Modifier.width(20.dp))
+                            Spacer(modifier = Modifier.width(30.dp))
                             EmailGenInputField(
                                 value = recruiterEmailInput,
                                 onValueChange = { recruiterEmailInput = it },
@@ -225,7 +225,7 @@ fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, Navigat
                         label = { Text("Job Description") },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(100.dp),
+                            .height(200.dp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedLabelColor = Color.Transparent,
                             //unfocusedLabelColor = Color.Transparent,
@@ -239,7 +239,7 @@ fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, Navigat
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp)
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     EmailGenerationButton(
                         emailGenerationController = emailGenerationController,
@@ -252,8 +252,12 @@ fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, Navigat
                         onEmailGenerated = { emailContent = it },
                         onShowDialog = { showDialog = it },
                         infoSource = "profile",
-                        enabled = true
+                        enabled = true,
+                        userId = userId,
+                        selectedDocument = selectedDocument
                     )
+
+                    Spacer(modifier = Modifier.width(30.dp))
 
                     EmailGenerationButton(
                         emailGenerationController = emailGenerationController,
@@ -266,7 +270,9 @@ fun EmailGenerationPage(userId: String, NavigateToDocuments: () -> Unit, Navigat
                         onEmailGenerated = { emailContent = it },
                         onShowDialog = { showDialog = it },
                         infoSource = "resume",
-                        enabled = selectedDocument != null
+                        enabled = selectedDocument != null,
+                        userId = userId,
+                        selectedDocument = selectedDocument
                     )
 
 

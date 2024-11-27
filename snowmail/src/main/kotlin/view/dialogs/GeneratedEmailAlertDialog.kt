@@ -2,13 +2,16 @@ package ca.uwaterloo.view.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import ca.uwaterloo.controller.DocumentController
 import ca.uwaterloo.controller.ProfileController
 import controller.SendEmailController
@@ -35,8 +38,6 @@ fun GeneratedEmailAlertDialog(
     var senderPassword by remember { mutableStateOf("") }
     var showAttachDialog by remember { mutableStateOf(false) }
     val attachedDocuments = remember { mutableStateListOf<Pair<String, String>>() }
-
-
 
     LaunchedEffect(Unit) {
         val emailResult = profileController.getUserLinkedGmailAccount(userId)
@@ -67,28 +68,38 @@ fun GeneratedEmailAlertDialog(
         )
     }
 
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        //title = { Text(title) },
-        text = {
-            Spacer(modifier = Modifier.height(8.dp))
-            Column {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colors.surface,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                //Text(text = title, style = MaterialTheme.typography.h6)
+                //Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = recipientEmailAddy,
                     onValueChange = { recipientEmailAddy = it },
                     label = { Text("Recipient Email") },
                     modifier = Modifier
-                        .clip(RoundedCornerShape(32.dp)) // Rounded corners
-                        .background(Color.White) // White background
-                        //.padding(32.dp)
-                        .fillMaxWidth()
-                        .background(Color.Transparent),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedLabelColor = Color.Transparent,
-                        //unfocusedLabelColor = Color.Transparent,
-                        //focusedBorderColor = Color.Transparent,
-                        //unfocusedBorderColor = Color.Transparent
-                    )
+                        .clip(RoundedCornerShape(5.dp))
+                        .fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors()
+                )
+                OutlinedTextField(
+                    value = emailSubject,
+                    onValueChange = { emailSubject = it },
+                    label = { Text("Subject") },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(5.dp))
+                        .fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors()
                 )
                 Button(
                     onClick = { showAttachDialog = true },
@@ -99,30 +110,13 @@ fun GeneratedEmailAlertDialog(
                 ) {
                     Text("Attach Document")
                 }
-                //Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = emailSubject,
-                    onValueChange = { emailSubject = it },
-                    label = { Text("Subject") },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(32.dp)) // Rounded corners
-                        .background(Color.White) // White background
-                        .padding(32.dp)
-                        .fillMaxWidth()
-                        .background(Color.Transparent),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedLabelColor = Color.Transparent,
-                        //unfocusedLabelColor = Color.Transparent,
-                        //focusedBorderColor = Color.Transparent,
-                        //unfocusedBorderColor = Color.Transparent
-                    )
-                )
-                //Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = text,
                     onValueChange = { text = it },
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(400.dp)
+                        //.verticalScroll(rememberScrollState())
                         .background(Color.Transparent),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedLabelColor = Color.Transparent,
@@ -131,78 +125,59 @@ fun GeneratedEmailAlertDialog(
                         unfocusedBorderColor = Color.Transparent
                     )
                 )
-                //Spacer(modifier = Modifier.height(8.dp))
-
-            }
-        },
-
-        confirmButton = {
-            Button(onClick = {
-                //onConfirm(text)
-                /*
-                send_email(
-                    senderEmail = "cs346test@gmail.com", //call getEmail to get user's email
-                    senderEmail =
-                    password = "qirk dyef rvbv bkka",
-                    recipient = recipientEmailAddy,
-                    subject = emailSubject,
-                    text = text,
-                    fileURLs = listOf(),
-                    fileNames = listOf()
-                    jobApplicationRepository = JobApplicationRepository(supabase),
-                    userID = UserSession.userId ?: "DefaultUserId",
-                    jobTitle = jobTitle,
-                    companyName = companyName
-                )*/
-
-                runBlocking {
-                    try {
-                        var emailsendingController = SendEmailController(SupabaseClient().jobApplicationRepository, SupabaseClient().documentRepository)
-                        val returnMessage = emailsendingController.send_email(
-                            recipient = recipientEmailAddy,
-                            subject = emailSubject,
-                            text = text,
-                            // TO BE MODIFIED
-                            buckets = listOf("user_documents"),
-                            documentsType = attachedDocuments.map { it.second },
-                            documentsName = attachedDocuments.map { it.first },
-                            // -----------
-                            userID = userId,
-                            jobTitle = jobTitle,
-                            companyName = companyName
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFF487B96),
+                            contentColor = MaterialTheme.colors.onPrimary
                         )
-                        // if success
-                        if (returnMessage == "Success") {
-                            // show success message
-                        } else if (returnMessage == "Missing Gmail Account or Password, please go to profile page and finish linking gmail account") {
-                            // show error message
-                        } else {
-                            // show error message Failed to send the email. Please verify that your linked email address and password are correct.
-                        }
-                    } catch (e: Exception) {
-                        println("Error sending email: ${e.message}")
+                    ) {
+                        Text("Cancel")
                     }
-
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            runBlocking {
+                                try {
+                                    val emailsendingController = SendEmailController(SupabaseClient().jobApplicationRepository, SupabaseClient().documentRepository)
+                                    val returnMessage = emailsendingController.send_email(
+                                        recipient = recipientEmailAddy,
+                                        subject = emailSubject,
+                                        text = text,
+                                        buckets = listOf("user_documents"),
+                                        documentsType = attachedDocuments.map { it.second },
+                                        documentsName = attachedDocuments.map { it.first },
+                                        userID = userId,
+                                        jobTitle = jobTitle,
+                                        companyName = companyName
+                                    )
+                                    if (returnMessage == "Success") {
+                                        // show success message
+                                    } else if (returnMessage == "Missing Gmail Account or Password, please go to profile page and finish linking gmail account") {
+                                        // show error message
+                                    } else {
+                                        // show error message
+                                    }
+                                } catch (e: Exception) {
+                                    println("Error sending email: ${e.message}")
+                                }
+                            }
+                            onConfirm(text)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFF487B96),
+                            contentColor = MaterialTheme.colors.onPrimary
+                        )
+                    ) {
+                        Text("Send")
+                    }
                 }
-
-
-                onConfirm(text)
-            },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF487B96),
-                    contentColor = MaterialTheme.colors.onPrimary
-                )) {
-                Text("Send")
-            }
-        },
-        dismissButton = {
-            Button(onClick = onDismissRequest,
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF487B96),
-                    contentColor = MaterialTheme.colors.onPrimary
-                )) {
-                Text("Cancel")
             }
         }
-    )
+    }
 }

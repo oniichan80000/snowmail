@@ -22,7 +22,9 @@ class ParserService(private val openAIClient: OpenAIClient) {
     }
 
     fun extractTextFromPDF(file: File): String {
+        println("entered extractTextFromPDF")
         PDDocument.load(file).use { document ->
+            println("entered PDDocument.load")
             return PDFTextStripper().getText(document)
         }
     }

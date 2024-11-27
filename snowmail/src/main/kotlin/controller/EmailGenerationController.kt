@@ -34,7 +34,11 @@ class EmailGenerationController(private val emailGenerationService: EmailGenerat
         println("resumeFile: ${resumeFile?.path ?: "No file provided"}") // Console log to check if resumeFile is being passed
 
         return if (resumeFile != null && informationSource == "resume") {
-            emailGenerationService.generateEmailFromResume(userInput, userProfile, resumeFile)
+            // console log to check if this executes
+            println("Generating email from resume; file is: " + resumeFile.exists())
+            val rFile: File = resumeFile as File
+            println("rFile: " + rFile.isFile)
+            emailGenerationService.generateEmailFromResume(userInput, userProfile, rFile)
         } else {
             emailGenerationService.generateEmailFromProfile(userInput, userProfile, education, workExperience, projects, skills)
         }

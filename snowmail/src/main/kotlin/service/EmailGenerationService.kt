@@ -16,12 +16,17 @@ import java.io.File
 class EmailGenerationService(private val openAIClient: OpenAIClient, private val parserService: ParserService) {
 
      suspend fun generateEmailFromResume(userInput: UserInput, userProfile: UserProfile, userResume: File): GeneratedEmail? {
+          println("entered generateEmailFromResume")
           val cleanedInput = cleanInput(userInput)
+          //print out the actual type of userResume
+          println("userResume type: ${userResume::class.simpleName}")
           val resumeText = parserService.extractTextFromPDF(userResume)
-
+          println("extractText successful")
+          println("resumeFile: ${userResume?.path ?: "No file provided"}")
           return try {
                parserService.parseEmailContent(openAIClient.generateEmailFromResume(userInput, userProfile, resumeText))
           } catch (e: Exception) {
+               println("try block failed")
                throw RuntimeException("Failed to generate email: ${e.message}")
           }
      }

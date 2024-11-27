@@ -35,6 +35,11 @@ class DocumentController(private val documentRepository: IDocumentRepository) {
         val path = "$userId/$documentType"
         return documentRepository.listDocuments(bucket, path)
     }
+
+    suspend fun getDocumentAsFile(bucket: String, userId: String, documentType: String, documentName: String): Result<File> {
+        val path = "$userId/$documentType/$documentName"
+        return documentRepository.getDocumentAsFile(bucket, path)
+    }
 }
 
 fun main() = runBlocking<Unit> {
