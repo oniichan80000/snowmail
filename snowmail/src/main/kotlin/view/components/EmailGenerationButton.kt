@@ -1,13 +1,19 @@
 package ca.uwaterloo.view.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import ca.uwaterloo.controller.DocumentController
 import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.WorkExperience
+import ca.uwaterloo.view.UserSession.userId
 import controller.EmailGenerationController
+import integration.SupabaseClient
 import model.GeneratedEmail
 import model.UserInput
 import model.UserProfile
@@ -26,10 +32,13 @@ fun EmailGenerationButton(
     onEmailGenerated: (String) -> Unit,
     onShowDialog: (Boolean) -> Unit,
     infoSource: String,
-    enabled: Boolean
+    enabled: Boolean,
+    userId: String,
+    selectedDocument: String?
 ) {
     var emailContent by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
+    var rFile by remember { mutableStateOf<File?>(null) }
 
     Button(
         onClick = {
@@ -51,6 +60,16 @@ fun EmailGenerationButton(
                         onEmailGenerated(emailContent)
                         onShowDialog(true)
                     } else {
+                        // download resume file using documentController
+                        val documentController = DocumentController(SupabaseClient().documentRepository)
+                        val resumeResult = documentController.getDocumentAsFile("user_documents", userId, "Resume", selectedDocument ?: "")
+                        resumeResult.onSuccess { file ->
+                            rFile = file
+                        }.onFailure { error ->
+                            println("Error downloading resume: ${error.message}")
+                            return@runBlocking
+                        }
+
                         val generatedEmail: GeneratedEmail? = emailGenerationController.generateEmail(
                             informationSource = "resume",
                             userInput = userInput,
@@ -58,7 +77,7 @@ fun EmailGenerationButton(
                             education = gotEducation,
                             workExperience = gotWorkExperience,
                             skills = gotSkills,
-                            resumeFile = resumeFile
+                            resumeFile = rFile
                         )
 
                         println("Generated Email: ${generatedEmail?.body}")
@@ -67,11 +86,14 @@ fun EmailGenerationButton(
                         onShowDialog(true)
                     }
                 } catch (e: Exception) {
-                    println("Error: ${e.message}")
+                    println("Email gen button try failed, Error: ${e.message}")
+                    // console log error message
                 }
             }
         },
-        //modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .height(70.dp)
+            .width(230.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color(0xFF487B96),
             contentColor = MaterialTheme.colors.onPrimary

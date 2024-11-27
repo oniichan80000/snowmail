@@ -27,7 +27,7 @@ fun EmailGenInputField(
         onValueChange = onValueChange,
         label = { Text(label) },
         modifier = modifier
-            //.fillMaxWidth(0.48f)
+            .width(310.dp)
             .clip(RoundedCornerShape(5.dp)) // Rounded corners
             //.width(0.45f)
 

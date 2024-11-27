@@ -60,6 +60,19 @@ class DocumentRepository(private val supabase: SupabaseClient) : IDocumentReposi
         }
     }
 
+    // get document from user_documents bucket and returns it as type File
+    override suspend fun getDocumentAsFile(bucket: String, path: String): Result<File> {
+        return try {
+            val fileContent = storage.from(bucket).downloadAuthenticated(path)
+            val tempFile = File.createTempFile("document", ".tmp")
+            tempFile.writeBytes(fileContent)
+            Result.success(tempFile)
+        } catch (e: Exception) {
+            Result.failure(Exception("Error getting document as file: ${e.message}"))
+        }
+    }
+
+
     override suspend fun uploadEmailAttachment(fileName: String, inputStream: InputStream): Result<String> {
         return try {
             val tempFile = File.createTempFile("attachment", ".tmp")

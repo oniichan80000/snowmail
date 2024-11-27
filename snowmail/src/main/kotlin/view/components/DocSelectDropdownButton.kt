@@ -1,11 +1,11 @@
 package ca.uwaterloo.view.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import ca.uwaterloo.controller.DocumentController
 import ca.uwaterloo.view.UserSession
 import integration.SupabaseClient
@@ -30,13 +30,16 @@ fun DocumentSelectionDropdownButton(
         }
     }
 
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        //modifier = Modifier.fillMaxWidth()
+    ) {
         OutlinedButton(
             onClick = { expanded = true },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width(650.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFF487B96),
-                contentColor = MaterialTheme.colors.onPrimary
+                backgroundColor = if (selectedDocument == null) Color(0xFFD5D7E0) else Color(0xFF487B96),
+                contentColor = if (selectedDocument == null) Color(0xFF8E97A5) else MaterialTheme.colors.onPrimary
             )
         ) {
             Text(selectedDocument ?: "Choose one resume you would like to include for generating your cold email")
