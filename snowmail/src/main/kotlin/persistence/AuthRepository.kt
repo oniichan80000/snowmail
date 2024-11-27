@@ -66,12 +66,13 @@ class AuthRepository(private val supabase: SupabaseClient) : IAuthRepository{
             val user = supabase.auth.currentUserOrNull()
             if (user != null) {
                 Result.success(user.id) // Sign-in successful, return user ID
+
             } else {
                 Result.failure(Exception("Invalid credentials or session not created."))
             }
         } catch (e: Exception) {
             val errorMessage = when {
-                e.message?.contains("Invalid login credentials") == true -> "Sign in in failed. Please use the correct email and password."
+                e.message?.contains("Invalid login credentials") == true -> "Sign in failed. Please use the correct email and password."
                 else -> "Sign-in failed: ${e.message}"
             }
             Result.failure(Exception(errorMessage))
