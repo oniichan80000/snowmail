@@ -11,8 +11,13 @@ import java.nio.file.Paths
 
 class DocumentController(private val documentRepository: IDocumentRepository) {
 
+    private fun sanitizeDocumentName(documentName: String): String {
+        return documentName.replace(Regex("[^a-zA-Z0-9._-]"), "_")
+    }
+
     suspend fun uploadDocument(bucket: String, userId: String, documentType: String, documentName: String, file: File): Result<String> {
-        val path = "$userId/$documentType/$documentName"
+        val sanitizedDocumentName = sanitizeDocumentName(documentName)
+        val path = "$userId/$documentType/$sanitizedDocumentName"
         return documentRepository.uploadDocument(bucket, path, file)
     }
 
