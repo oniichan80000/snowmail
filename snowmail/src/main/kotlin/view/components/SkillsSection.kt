@@ -13,6 +13,10 @@ import ca.uwaterloo.controller.ProfileController
 import ca.uwaterloo.view.SectionTitle
 import ca.uwaterloo.view.dialogs.EditSkillsDialog
 import kotlinx.coroutines.runBlocking
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.Arrangement
 
 @Composable
 fun SkillsSection(
@@ -25,50 +29,60 @@ fun SkillsSection(
     onShowSkillsDialogChange: (Boolean) -> Unit
 ) {
     Column {
+        // Section Title
         SectionTitle("Skills")
 
-        Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-            IconButton(
-                onClick = { onShowSkillsDialogChange(true) },
-                modifier = Modifier.size(24.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Skill",
-                    tint = Color(0xFF487896)
-                )
-            }
+        // Add Skill Button
+        IconButton(
+            onClick = { onShowSkillsDialogChange(true) },
+            modifier = Modifier.size(24.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add Skill",
+                tint = Color(0xFF487896)
+            )
+        }
 
-            if (skills.isEmpty()) {
-                Text("No items added", fontSize = 14.sp, color = Color.Gray)
-            } else {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    skills.forEach { skill ->
-                        SkillChip(skill = skill, onDelete = {
-                            runBlocking {
-                                profileController.deleteSkill(userId, skill)
-                                onSkillsDeleted()
-                            }
-                        })
-                    }
+        if (skills.isEmpty()) {
+            Text(
+                text = "No items added",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        } else {
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 200.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 300.dp)
+                    .padding(vertical = 0.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(skills) { skill ->
+                    SkillChip(skill = skill, onDelete = {
+                        runBlocking {
+                            profileController.deleteSkill(userId, skill)
+                            onSkillsDeleted()
+                        }
+                    })
                 }
             }
+        }
 
-            if (showSkillsDialog) {
-                EditSkillsDialog(
-                    onDismiss = { onShowSkillsDialogChange(false) },
-                    onSave = {
-                        onSkillsAdded()
-                        onShowSkillsDialogChange(false)
-                    },
-                    userId = userId,
-                    profileController = profileController,
-                    initialSkills = skills
-                )
-            }
+        if (showSkillsDialog) {
+            EditSkillsDialog(
+                onDismiss = { onShowSkillsDialogChange(false) },
+                onSave = {
+                    onSkillsAdded()
+                    onShowSkillsDialogChange(false)
+                },
+                userId = userId,
+                profileController = profileController,
+                initialSkills = skills
+            )
         }
     }
 }
