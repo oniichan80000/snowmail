@@ -33,6 +33,7 @@ import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.window.Dialog
 import ca.uwaterloo.view.theme.AppTheme
+import androidx.compose.ui.res.painterResource
 
 import integration.SupabaseClient
 
@@ -104,7 +105,7 @@ fun loginForm(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row { loginWithAccount(NavigateToSignup, NavigateToHome) }
-        Row(Modifier.fillMaxHeight(0.03f)) { Divider() }
+        //Row(Modifier.fillMaxHeight(0.03f)) { Divider() }
         // HorizontalDivider(thickness = 2.dp)
         Row { loginWithGmail() }
     }
@@ -147,11 +148,20 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    TextButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Text(
-                            text = if (passwordVisible) "Hide" else "Show",
-                            color = Color.Gray // Set text color to grey
-                        )
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        if (passwordVisible) {
+                            Icon(
+                                painter = painterResource("VisibilityOff.svg"),
+                                contentDescription = "Hide password",
+                                tint = Color.Gray
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource("Visibility.svg"),
+                                contentDescription = "Show password",
+                                tint = Color.Gray
+                            )
+                        }
                     }
                 }
             )
@@ -161,7 +171,12 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         // potential error message shown
         var errorMessage by remember { mutableStateOf("") }
         if (errorMessage.isNotEmpty()) {
-            Text(text = errorMessage, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(10.dp))
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(10.dp)
+            )
         }
 
         // sign in button
@@ -202,22 +217,28 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
             }
         }
 
+            if (showOtpLoginDialog) {
+                signinWithOtpPage(
+                    onDismiss = { showOtpLoginDialog = false },
+                    NavigateToHome = NavigateToHome
+                )
+            }
 
+            Spacer(modifier = Modifier.height(2.dp))
 
-        if (showOtpLoginDialog) {
-            signinWithOtpPage(
-                onDismiss = { showOtpLoginDialog = false },
-                NavigateToHome = NavigateToHome
-            )
-        }
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Don't have an account?")
-            // navigate to login page
-            TextButton(onClick = { navigateLoginPage(NavigateToSignup) }) {
-                Text("Sign up", color = Color(buttonColor))
+            // Sign-up Section
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Don't have an account?",
+                    style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                TextButton(onClick = { navigateLoginPage(NavigateToSignup) }) {
+                    Text("Sign up", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                }
             }
         }
+
     }
 }
 
