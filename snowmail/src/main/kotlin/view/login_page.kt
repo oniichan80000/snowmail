@@ -210,10 +210,10 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
 
         Spacer(modifier = Modifier.height(24.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Forgot your password?")
-            Spacer(modifier = Modifier.width(8.dp))
+            Text("Forgot your password?",
+                style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
             TextButton(onClick = { showOtpLoginDialog = true }) {
-                Text("Sign in with OTP", color = Color(buttonColor))
+                Text("Sign in with OTP", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
             }
         }
 
@@ -224,7 +224,6 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(2.dp))
 
             // Sign-up Section
             Row(
@@ -240,7 +239,7 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         }
 
     }
-}
+
 
 @Composable
 fun signinWithOtpPage(onDismiss: () -> Unit, NavigateToHome: () -> Unit) {
@@ -264,7 +263,7 @@ fun signinWithOtpPage(onDismiss: () -> Unit, NavigateToHome: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "Sign in with Temporary Password via Email",
+                    "Sign in with Temporary Password",
                     style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold
                 )
