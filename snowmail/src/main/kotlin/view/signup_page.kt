@@ -1,8 +1,5 @@
 package ca.uwaterloo.view
 
-
-// import ca.uwaterloo.persistence.DBStorage
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -203,7 +200,6 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                     )
                 }
 
-                val errorInformation = true
                 var errorMessage by remember { mutableStateOf("") }
 
                 Row(modifier = Modifier.fillMaxHeight(0.07f)) {}
@@ -241,7 +237,6 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
 
                 // potential error message shown
-
                 if (errorMessage.isNotEmpty()) {
                     Text(text = errorMessage, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(10.dp))
                 }
@@ -260,59 +255,16 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                     }
                 }
 
-                //Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
-                //Row { Divider() }
-
-                //Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
-                //Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){ Text(text = "Or register with") }
-
-
-                // gmail register
-                // val iconfile = File("gmail_icon.png")
-                // val iconimage = ImageIO.read(iconfile)
-                // val iconbitmap = iconimage.toComposeImageBitmap()
-
                 Row(modifier = Modifier.fillMaxHeight(0.03f)) { Box{} }
                 Row (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
-//                    Button(onClick = { GmailRegister() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
-//                        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-//                            // Image(iconbitmap, "gmail")
-//
-//                            Text("Register by Gmail", color = Color.White)
-//                        }
-//                    }
                 }
 
             }
             Column(Modifier.fillMaxWidth(0.3f)) { Box {} }
         }
-// }
-
-
-
-
-
-
 
 fun navigateLoginPage(NavigateToLogin: () -> Unit) {
     NavigateToLogin()
-}
-
-fun GmailRegister() { }
-
-
-
-
-
-// ---- ONLY FOR TESTING THIS SINGLE PAGE, TO BE DELETED LATER --------
-@Composable
-fun WebsitePage() {
-    var currentPage by remember { mutableStateOf("signup") }
-
-    when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "login"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
-    }
 }
 
 

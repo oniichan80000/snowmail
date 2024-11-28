@@ -1,10 +1,5 @@
 package ca.uwaterloo.controller
-
-// import ca.uwaterloo.persistence.DBStorage
 import ca.uwaterloo.persistence.IAuthRepository
-import kotlinx.coroutines.runBlocking
-
-import integration.SupabaseClient
 
 class SignInController(private val authRepository: IAuthRepository) {
 
@@ -13,6 +8,7 @@ class SignInController(private val authRepository: IAuthRepository) {
         return authRepository.signInUser(email, password)
     }
 
+    //Sign out the user
     suspend fun logoutUser(): String {
         return authRepository.signOutUser()
     }
@@ -27,15 +23,4 @@ class SignInController(private val authRepository: IAuthRepository) {
         return authRepository.verifyEmailOtp(email, otp)
     }
 
-}
-
-fun main() = runBlocking<Unit> {
-    val dbStorage = SupabaseClient()
-    val signInController = SignInController(dbStorage.authRepository)
-
-    val email = "wrw040613@gmail.com"
-    val password = "s"
-
-    // call loginUser and return results
-    println(signInController.signInUser(email, password))
 }

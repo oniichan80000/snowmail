@@ -81,18 +81,18 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
 
                 while (content is Multipart) {
                     val multipart = content as Multipart
-                    var hasNestedMultipart = false // 标记是否有嵌套 Multipart
+                    var hasNestedMultipart = false
 
                     for (j in 0 until multipart.count) {
                         val bodyPart = multipart.getBodyPart(j)
 
                         if (bodyPart.isMimeType("text/plain")) {
-                            // 处理纯文本部分
+                            // handle text/plain content
                             text += bodyPart.content.toString() + "\n"
                             println("type 1")
                             println(bodyPart.content.toString())
                         } else if (Part.ATTACHMENT.equals(bodyPart.disposition, ignoreCase = true)) {
-                            // 处理附件部分
+                            // handle attachment
                             println("type 3")
                             val attachmentStream = bodyPart.inputStream ?: continue
                             var fileName = bodyPart.fileName ?: "unknown"
@@ -102,7 +102,7 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
                             attachmentLinks.add(url)
                             fileNames.add(fileName)
                         } else if (bodyPart.content is Multipart) {
-                            // 如果内容是嵌套的 Multipart，标记并更新 content
+                            // handle nested Multipart
                             println("type 2")
                             content = bodyPart.content
                             hasNestedMultipart = true
@@ -110,15 +110,9 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
                         println("type 4")
                     }
 
-                    // 如果当前层没有嵌套的 Multipart，结束循环
+                    // break if no nested Multipart
                     if (!hasNestedMultipart) break
                 }
-
-
-
-
-
-
                 var subject: String
                 if (message.subject == null) {
                     subject = ""

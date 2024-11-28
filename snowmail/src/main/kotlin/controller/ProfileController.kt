@@ -13,17 +13,11 @@ import kotlinx.datetime.LocalDate
 
 class ProfileController(private val userProfileRepository: IUserProfileRepository) {
 
-    // get user's profile
-//    suspend fun getUserProfile(userId: String): Result<UserProfile> {
-//        return userProfileRepository.getUserProfile(userId)
-//    }
-
     // verify user's linked email and password
     suspend fun verifyUserLinkedEmailAndPassword(email: String, password: String): Boolean {
         val emailValidating = EmailValidatingService()
         return emailValidating.verifyEmail(email, password)
     }
-
 
 
     /**********************************************************
@@ -77,6 +71,7 @@ class ProfileController(private val userProfileRepository: IUserProfileRepositor
         return userProfileRepository.getUserPhone(userId)
     }
 
+    // update user's city and phone
     suspend fun updateCityPhone(userId: String, cityName: String?, phone: String?): Result<Boolean> {
         return userProfileRepository.updateCityPhone(userId, cityName, phone)
     }
@@ -179,9 +174,12 @@ class ProfileController(private val userProfileRepository: IUserProfileRepositor
         return userProfileRepository.deleteEducation(educationID)
     }
 
+
+
     //
     //working exp
     //
+
     // get work exp by user id
     suspend fun getWorkExperience(userId: String): Result<List<WorkExperience>> {
         return userProfileRepository.getWorkExperience(userId)
@@ -270,285 +268,4 @@ class ProfileController(private val userProfileRepository: IUserProfileRepositor
     suspend fun deleteProject(projectID: String): Result<Boolean> {
         return userProfileRepository.deleteProject(projectID)
     }
-}
-
-fun main() = runBlocking<Unit> {
-    val dbStorage = SupabaseClient()
-    val profileController = ProfileController(dbStorage.userProfileRepository)
-
-    val userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277"
-    //val userId = "a365a4c4-6427-4461-8cb4-2850fab8ac8c"
-
-    //test get user's name
-//    val profileResult = profileController.getUserName(userId)
-//    profileResult.onSuccess { fullName ->
-//        println("User Profile Name: $fullName")
-//    }.onFailure { error ->
-//        println("Error fetching user profile: ${error.message}")
-//    }
-
-    //test get user's email
-//    val profileResult = profileController.getUserEmail(userId)
-//    profileResult.onSuccess { email ->
-//        println("email: $email")
-//    }.onFailure { error ->
-//        println("Error fetching user profile: ${error.message}")
-//    }
-
-//
-//    //test get user's city
-//    val profileResult = profileController.getUserCity(userId)
-//    profileResult.onSuccess { city ->
-//        println("city: $city")
-//    }.onFailure { error ->
-//        println("Error fetching user profile: ${error.message}")
-//    }
-
-    //test get user's phone
-//    val profileResult = profileController.getUserPhone(userId)
-//    profileResult.onSuccess { phone ->
-//        println("phone: $phone")
-//    }.onFailure { error ->
-//        println("Error fetching user profile: ${error.message}")
-//    }
-
-
-    //test editing city and phone
-//    val cityName = "NYC"
-//    val phone = "+1234567890"
-//    val result = profileController.updateCityPhone(userId, cityName, phone)
-//    result.onSuccess {
-//        println("User profile updated successfully.")
-//    }.onFailure { error ->
-//        println("Error updating user profile: ${error.message}")
-//    }
-
-
-    //test get skills
-//    val skillsResult = profileController.getSkills(userId)
-//    skillsResult.onSuccess { skills ->
-//        println("Skills: $skills")
-//    }.onFailure { error ->
-//        println("Error fetching skills: ${error.message}")
-//    }
-
-    //test add skill
-//    val skill = "SQL"
-//    val result = profileController.addSkill(userId, skill)
-//    result.onSuccess {
-//        println("Skill added successfully.")
-//    }.onFailure { error ->
-//        println("Error adding skill: ${error.message}")
-//    }
-
-    //test delete skill
-//    val skill = "SQL"
-//    val result = profileController.deleteSkill(userId, skill)
-//    result.onSuccess {
-//        println("Skill deleted successfully.")
-//    }.onFailure { error ->
-//        println("Error deleting skill: ${error.message}")
-//    }
-
-    //test add edu exp to db
-//    val educationResult = profileController.addEducation(
-//        userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277",
-//        degreeId = "4",
-//        major = "Linguistic",
-//        gpa = 4.0f,
-//        startDate = LocalDate(2023, 9, 1),
-//        endDate = LocalDate(2027, 6, 1),
-//        institutionName = "MIT"
-//    )
-//
-//    educationResult.onSuccess {
-//        println("Education record added successfully.")
-//    }.onFailure { error ->
-//        println("Error adding education record: ${error.message}")
-//    }
-
-
-    // test add work exp to db
-//    val workExperienceResult = profileController.addWorkExperience(
-//        userId = "c9498eec-ac17-4a3f-8d91-61efba3f7277",
-//        companyName = "Microsoft",
-//        currentlyWorking = false,
-//        title = "Software Engineer",
-//        startDate = LocalDate(2024, 1, 1),
-//        endDate = LocalDate(2024, 10, 1),
-//        description = "Worked on frontend."
-//    )
-//
-//    workExperienceResult.onSuccess {
-//        println("Work experience record added successfully.")
-//    }.onFailure { error ->
-//        println("Error adding work experience record: ${error.message}")
-//    }
-
-    // test deleting education record
-//    val educationId = "100"
-//    val result = profileController.deleteEducation(educationId)
-//    result.onSuccess {
-//        println("Education deleted successfully.")
-//    }.onFailure { error ->
-//        println("Error deleting education: ${error.message}")
-//    }
-
-    // test getting edu exp
-//    val educationResult = profileController.getEducation(userId)
-//    educationResult.onSuccess { educationList ->
-//        println("Education records:")
-//        educationList.forEach { education ->
-//            println(education)
-//        }
-//    }.onFailure { error ->
-//        println("Error fetching education records: ${error.message}")
-//    }
-
-    // test getting work exp
-//    val workExperienceResult = profileController.getWorkExperience(userId)
-//    workExperienceResult.onSuccess { workExperienceList ->
-//        println("Work experience records:")
-//        workExperienceList.forEach { workExperience ->
-//            println(workExperience)
-//        }
-//    }.onFailure { error ->
-//        println("Error fetching work experience records: ${error.message}")
-//    }
-
-    // test deleting work exp record
-//    val workExperienceId = "11"
-//    val result = profileController.deleteWorkExperience(workExperienceId)
-//    result.onSuccess {
-//        println("Work experience deleted successfully.")
-//    }.onFailure { error ->
-//        println("Error deleting work experience: ${error.message}")
-//    }
-
-    // test getting linkedin url
-//    val linkedinResult = profileController.getUserLinkedIn(userId)
-//    linkedinResult.onSuccess { linkedinUrl ->
-//        println("Linkedin URL: $linkedinUrl")
-//    }.onFailure { error ->
-//        println("Error fetching linkedin URL: ${error.message}")
-//    }
-
-    // test getting github url
-//    val githubResult = profileController.getUserGithub(userId)
-//    githubResult.onSuccess { githubUrl ->
-//        println("Github URL: $githubUrl")
-//    }.onFailure { error ->
-//        println("Error fetching github URL: ${error.message}")
-//    }
-
-    // test getting personal website url
-//    val personalWebsiteResult = profileController.getUserPersonalWebsite(userId)
-//    personalWebsiteResult.onSuccess { personalWebsiteUrl ->
-//        println("Personal Website URL: $personalWebsiteUrl")
-//    }.onFailure { error ->
-//        println("Error fetching personal website URL: ${error.message}")
-//    }
-
-    // test updating linkedin, github, and personal website urls
-//    val linkedinUrl = "https://www.linkedin.com/in/johndoe"
-//    val githubUrl = "https://uwaterloo.ca/the-centre/quest"
-//    val personalWebsiteUrl = "https://cherry.com"
-//    val result = profileController.updateUserLinks(userId, linkedinUrl, githubUrl, personalWebsiteUrl)
-//    result.onSuccess {
-//        println("User links updated successfully.")
-//    }.onFailure { error ->
-//        println("Error updating user links: ${error.message}")
-//    }
-
-    // test getting degree name by id
-//    val degreeId = 4
-//    val result = profileController.getDegreeNameById(degreeId)
-//    result.onSuccess { degreeName ->
-//        println("Degree name: $degreeName")
-//    }.onFailure { error ->
-//        println("Error fetching degree name: ${error.message}")
-//    }
-
-    // test getting degree id by name
-//    val degreeName = "Master's Degree"
-//    val result = profileController.getDegreeIdByName(degreeName)
-//    result.onSuccess { degreeId ->
-//        println("Degree ID: $degreeId")
-//    }.onFailure { error ->
-//        println("Error fetching degree ID: ${error.message}")
-//    }
-
-    // test getting user's linked gmail account
-//    val result = profileController.getUserLinkedGmailAccount(userId)
-//    result.onSuccess { linkedGmailAccount ->
-//        println("Linked Gmail Account: $linkedGmailAccount")
-//    }.onFailure { error ->
-//        println("Error fetching linked gmail account: ${error.message}")
-//    }
-
-    // test getting user's gmail app password
-//    val result = profileController.getUserGmailAppPassword(userId)
-//    result.onSuccess { gmailAppPassword ->
-//        println("Gmail App Password: $gmailAppPassword")
-//    }.onFailure { error ->
-//        println("Error fetching gmail app password: ${error.message}")
-//    }
-
-    // test editing user's linked gmail account
-//    val linkedGmailAccount = "wrw040613@163.com"
-//    val result = profileController.editUserLinkedGmailAccount(userId, linkedGmailAccount)
-//    result.onSuccess {
-//        println("Linked Gmail Account updated successfully.")
-//    }.onFailure { error ->
-//        println("Error updating linked gmail account: ${error.message}")
-//    }
-
-    // test editing user's gmail app password
-//    val gmailAppPassword = "unwu wnsl agek lxoj"
-//    val result = profileController.editUserGmailAppPassword(userId, gmailAppPassword)
-//    result.onSuccess {
-//        println("Gmail App Password updated successfully.")
-//    }.onFailure { error ->
-//        println("Error updating gmail app password: ${error.message}")
-//    }
-
-    // test getting projects
-//    val result = profileController.getProjects(userId)
-//    result.onSuccess { projects ->
-//        println("Projects: $projects")
-//    }.onFailure { error ->
-//        println("Error fetching projects: ${error.message}")
-//    }
-
-    // test adding project
-//    val projectName = "Project 2"
-//    val description = "This is project 2."
-//    val result = profileController.addProject(userId, projectName, description)
-//    result.onSuccess {
-//        println("Project added successfully.")
-//    }.onFailure { error ->
-//        println("Error adding project: ${error.message}")
-//    }
-
-    // test updating project
-//    val projectID = "1"
-//    val projectName = "Project 1"
-//    val description = "This is project 1."
-//
-//    val result = profileController.updateProject(userId, projectID, projectName, description)
-//    result.onSuccess {
-//        println("Project updated successfully.")
-//    }.onFailure { error ->
-//        println("Error updating project: ${error.message}")
-//    }
-
-    // test deleting project
-//    val projectID = "3"
-//    val result = profileController.deleteProject(projectID)
-//    result.onSuccess {
-//        println("Project deleted successfully.")
-//    }.onFailure { error ->
-//        println("Error deleting project: ${error.message}")
-//    }
-
 }
