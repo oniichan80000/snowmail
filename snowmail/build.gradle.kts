@@ -79,6 +79,7 @@ dependencies {
 
    // implementation ("androidx.compose.ui:ui:1.7.5")
     //implementation("com.github.vanpra.compose-multiplatform-dialogs:core:0.6.0")
+    //implementation ("com.google.accompanist:accompanist-flowlayout:0.24.13-rc")
 
 
 }
