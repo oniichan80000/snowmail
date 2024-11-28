@@ -33,6 +33,7 @@ import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.window.Dialog
 import ca.uwaterloo.view.theme.AppTheme
+import androidx.compose.ui.res.painterResource
 
 import integration.SupabaseClient
 
@@ -104,14 +105,13 @@ fun loginForm(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row { loginWithAccount(NavigateToSignup, NavigateToHome) }
-        Row(Modifier.fillMaxHeight(0.03f)) { Divider() }
+        //Row(Modifier.fillMaxHeight(0.03f)) { Divider() }
         // HorizontalDivider(thickness = 2.dp)
         Row { loginWithGmail() }
     }
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
     val dbStorage = SupabaseClient()
@@ -148,11 +148,20 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    TextButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Text(
-                            text = if (passwordVisible) "Hide" else "Show",
-                            color = Color.Gray // Set text color to grey
-                        )
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        if (passwordVisible) {
+                            Icon(
+                                painter = painterResource("VisibilityOff.svg"),
+                                contentDescription = "Hide password",
+                                tint = Color.Gray
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource("Visibility.svg"),
+                                contentDescription = "Show password",
+                                tint = Color.Gray
+                            )
+                        }
                     }
                 }
             )
@@ -162,7 +171,12 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         // potential error message shown
         var errorMessage by remember { mutableStateOf("") }
         if (errorMessage.isNotEmpty()) {
-            Text(text = errorMessage, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(10.dp))
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(10.dp)
+            )
         }
 
         // sign in button
@@ -194,49 +208,38 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
             }
         }
 
-        // Forgot your password with hover effect
-        Spacer(modifier = Modifier.height(24.dp)) // Increased spacing
-        var isHovered by remember { mutableStateOf(false) }
-        ClickableText(
-            text = AnnotatedString("Forgot Your Password?"),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .pointerMoveFilter(
-                    onEnter = {
-                        isHovered = true
-                        true
-                    },
-                    onExit = {
-                        isHovered = false
-                        true
-                    }
-                ),
-            onClick = { showOtpLoginDialog = true },
-            style = LocalTextStyle.current.copy(
-                fontSize = 16.sp,
-                color = if (isHovered) Color.Gray else Color.Black
-            )
-        )
-
-
-
-        if (showOtpLoginDialog) {
-            signinWithOtpPage(
-                onDismiss = { showOtpLoginDialog = false },
-                NavigateToHome = NavigateToHome
-            )
-        }
-
+        Spacer(modifier = Modifier.height(24.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Don't have an account?")
-            // navigate to login page
-            TextButton(onClick = { navigateLoginPage(NavigateToSignup) }) {
-                Text("Sign up", color = Color(buttonColor))
+            Text("Forgot your password?",
+                style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+            TextButton(onClick = { showOtpLoginDialog = true }) {
+                Text("Sign in with OTP", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
             }
         }
+
+            if (showOtpLoginDialog) {
+                signinWithOtpPage(
+                    onDismiss = { showOtpLoginDialog = false },
+                    NavigateToHome = NavigateToHome
+                )
+            }
+
+
+            // Sign-up Section
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Don't have an account?",
+                    style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                TextButton(onClick = { navigateLoginPage(NavigateToSignup) }) {
+                    Text("Sign up", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                }
+            }
+        }
+
     }
-}
+
 
 @Composable
 fun signinWithOtpPage(onDismiss: () -> Unit, NavigateToHome: () -> Unit) {
@@ -260,7 +263,7 @@ fun signinWithOtpPage(onDismiss: () -> Unit, NavigateToHome: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "Sign in with One Time Password (OTP) via Email",
+                    "Sign in with Temporary Password",
                     style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold
                 )
@@ -282,20 +285,20 @@ fun signinWithOtpPage(onDismiss: () -> Unit, NavigateToHome: () -> Unit) {
                                 otpResult.onSuccess {
                                     isOtpSent = true
                                 }.onFailure { error ->
-                                    errorMessage = error.message ?: "Failed to send OTP."
+                                    errorMessage = error.message ?: "Failed to send Temporary Password."
                                 }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Send OTP")
+                        Text("Send Temporary Password")
                     }
                 } else {
                     // OTP input
                     OutlinedTextField(
                         value = otp,
                         onValueChange = { otp = it },
-                        label = { Text("Enter one time password") },
+                        label = { Text("Enter temporary password") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -309,13 +312,13 @@ fun signinWithOtpPage(onDismiss: () -> Unit, NavigateToHome: () -> Unit) {
                                     NavigateToHome() // Navigate to home page
                                     onDismiss()
                                 }.onFailure { error ->
-                                    errorMessage = error.message ?: "Failed to verify OTP."
+                                    errorMessage = error.message ?: "Failed to verify temporary password."
                                 }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Verify OTP")
+                        Text("Verify Temporary Password")
                     }
                 }
 

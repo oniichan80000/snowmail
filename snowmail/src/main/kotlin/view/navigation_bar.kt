@@ -90,7 +90,7 @@ fun TopNavigationBar(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
-                    Text("Sign Out", fontWeight = FontWeight.Bold)
+                    Text("Sign Out")
                 }
 
                 profileImage?.let {
