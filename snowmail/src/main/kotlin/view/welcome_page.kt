@@ -24,7 +24,18 @@ import javax.imageio.ImageIO
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
+import ca.uwaterloo.service.ParserService
+import ca.uwaterloo.view.components.EmailGenerationButton
 import ca.uwaterloo.view.theme.AppTheme
+import model.GeneratedEmail
+import controller.EmailGenerationController
+import integration.OpenAIClient
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import model.UserInput
+import model.UserProfile
+import service.EmailGenerationService
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun WebsitePageWelcome() {
@@ -128,12 +139,78 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
                             Text("Sign Up")
                         }
                     }
-                    Box (
+                    Column (
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
                         modifier = Modifier
-                            .height(400.dp)
+                            //.height(400.dp)
+                            .fillMaxHeight()
                             .fillMaxWidth()
                     ) {
-                        //
+                        val httpClient = HttpClient(CIO)
+                        val openAIClient = OpenAIClient(httpClient)
+                        val parserService = ParserService(openAIClient)
+                        val emailGenerationService = EmailGenerationService(openAIClient, parserService)
+                        val emailGenerationController = EmailGenerationController(emailGenerationService)
+                        var emailtext by remember { mutableStateOf("Email") }
+
+
+                        var userInput = UserInput(
+                            jobDescription = "",
+                            recruiterEmail = "",
+                            jobTitle = "",
+                            company = "",
+                            recruiterName = "recruiting agent",
+                            fileURLs = listOf(""),
+                        )
+
+                        val userProfile = UserProfile(
+                            userId = "0",
+                            firstName = "",
+                            lastName = "",
+                            //skills = listOf("Java", "Kotlin", "SQL")
+                        )
+
+                        TextField(
+                            value = emailtext,
+                            onValueChange = {   emailtext = it },
+                            label = { Text("Test it out!") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp)
+                                .padding(16.dp),
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            )
+
+                                //.border(BorderStroke(2.dp, Color.LightGray))
+                        )
+
+                        Button (
+                            onClick = {
+                                runBlocking {
+                                    val generatedEmail: GeneratedEmail? = emailGenerationController.generateEmail(
+                                        informationSource = "profile",
+                                        userInput = userInput,
+                                        userProfile = userProfile,
+                                        education = emptyList(),
+                                        workExperience = emptyList(),
+                                        skills = emptyList(),
+                                        resumeFile = null
+                                    )
+                                    emailtext = generatedEmail?.body ?: "Failed to generate email"
+                                }
+
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
+                            Text("Generate Email")
+                        }
                     }
                 }
             }
