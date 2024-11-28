@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

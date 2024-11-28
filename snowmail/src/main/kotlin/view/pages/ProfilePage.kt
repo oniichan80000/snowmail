@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,6 +21,7 @@ import ca.uwaterloo.controller.SignInController
 import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.PersonalProject
 import ca.uwaterloo.model.WorkExperience
+import ca.uwaterloo.view.components.TopNavigationBar
 import ca.uwaterloo.view.components.EducationSection
 import ca.uwaterloo.view.components.ProjectSection
 import ca.uwaterloo.view.components.SkillsSection

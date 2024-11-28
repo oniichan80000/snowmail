@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ca.uwaterloo.controller.ProfileController
-import ca.uwaterloo.view.SectionTitle
+import ca.uwaterloo.view.pages.SectionTitle
 import ca.uwaterloo.view.dialogs.EditSkillsDialog
 import kotlinx.coroutines.runBlocking
 import androidx.compose.foundation.lazy.grid.GridCells

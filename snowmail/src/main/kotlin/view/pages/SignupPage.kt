@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 
 // import ca.uwaterloo.persistence.DBStorage
