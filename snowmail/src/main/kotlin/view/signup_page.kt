@@ -1,33 +1,28 @@
 package ca.uwaterloo.view
 
+
+// import ca.uwaterloo.persistence.DBStorage
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 import ca.uwaterloo.controller.SignUpController
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.ui.res.painterResource
 import ca.uwaterloo.view.theme.AppTheme
-
-
-// import ca.uwaterloo.persistence.DBStorage
-
 import integration.SupabaseClient
-import kotlinx.coroutines.runBlocking
 
 
 val fullPageColor = 0xFFebecf0
@@ -323,10 +318,3 @@ fun WebsitePage() {
 
 
 
-fun main() {
-    application {
-        Window(onCloseRequest = ::exitApplication) {
-            WebsitePage()
-        }
-    }
-}

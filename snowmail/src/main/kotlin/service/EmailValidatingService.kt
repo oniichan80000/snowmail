@@ -35,10 +35,5 @@ class EmailValidatingService {
 }
 
 
-fun main() {
-    val emailValidatingService = EmailValidatingService()
-    val email = "cs346test@gmail.com"
-    val password = "qirk dyef rvbv bkk"
-    print(emailValidatingService.verifyEmail(email, password))
-}
+
 

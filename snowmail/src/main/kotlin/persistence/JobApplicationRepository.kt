@@ -2,12 +2,8 @@ package persistence
 
 import ca.uwaterloo.persistence.IJobApplicationRepository
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.storage.Storage
 import model.JobApplication
 import model.Recruiter
 import java.time.LocalDateTime
@@ -335,50 +331,4 @@ class JobApplicationRepository(private val supabase: SupabaseClient) : IJobAppli
 
 
 }
-
-
-suspend fun main() {
-    val supabase = createSupabaseClient(
-        supabaseUrl = "https://gwnlngyvkxdpodenpyyj.supabase.co",
-        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3bmxuZ3l2a3hkcG9kZW5weXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc5MTAxNTEsImV4cCI6MjA0MzQ4NjE1MX0.olncAUMxSOjcr0YjssWXThtXDXC3q4zasdNYdwavt8g"
-    ) {
-        install(Postgrest)
-        install(Auth)
-        install(Storage)
-    }
-    val JobApplicationRepository = JobApplicationRepository(supabase)
-    // println(JobApplicationRepository.createRecruiter("example2@gmail.com"))
-    // println( JobApplicationRepository.createJobApplication("ed52b6c4-2ae8-4b58-bacd-adc00082a505", "Software Developer", "Google", "recruiter@gmail.com"))
-    // println(JobApplicationRepository.updateRefreshTime("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-    // println(JobApplicationRepository.updateJobApplicationStatus("02f40dd5-d371-4c35-9b34-038bcabeb49c", 2))
-
-    // get job
-    // println(JobApplicationRepository.getJobWithStatus("ed52b6c4-2ae8-4b58-bacd-adc00082a505", 1))
-
-    // get progress
-    // println(JobApplicationRepository.getProgress("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    // get applied jobs and their job ids
-    // println(JobApplicationRepository.getAppliedJobs("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    // get all recruiter emails
-    // println(JobApplicationRepository.getAllRecruiterEmailAddress("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    // get lastly refresh time
-    // println(JobApplicationRepository.getRefreshTime("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    // JobApplicationRepository.initializeRefreshTime("ed52b6c4-2ae8-4b58-bacd-adc00082a505")
-
-    // print(JobApplicationRepository.getGmailPassword("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-    // print(JobApplicationRepository.getGmailPassword("dfe6d74d-24a5-4705-8ee6-13663dbd2f6f"))
-
-    print(JobApplicationRepository.getGmailAccount("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    print(JobApplicationRepository.getRecruiterID("irishuang1105@gmail.com"))
-
-    print(JobApplicationRepository.getCorrespondJobs("ed52b6c4-2ae8-4b58-bacd-adc00082a505", "irishuang1105@gmail.com"))
-}
-
-
-
 
