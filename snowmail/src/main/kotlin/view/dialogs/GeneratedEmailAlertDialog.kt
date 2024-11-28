@@ -146,16 +146,17 @@ fun GeneratedEmailAlertDialog(
                     ) {
                         Text("Attach Document")
                     }
-                    TextField(
+                    OutlinedTextField(
                         value = text,
                         onValueChange = { text = it },
+                        label = { Text("editable email content") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(400.dp)
                             .background(Color.Transparent),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedLabelColor = Color.Transparent,
-                            unfocusedLabelColor = Color.Transparent,
+                            //unfocusedLabelColor = Color.Transparent,
                             focusedBorderColor = Color.Transparent,
                             unfocusedBorderColor = Color.Transparent
                         )
