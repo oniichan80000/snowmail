@@ -13,17 +13,3 @@ class SignUpController(private val authRepository: IAuthRepository) {
         }
     }
 }
-
-// Testing SignUpController
-fun main() {
-    val dbStorage = SupabaseClient()
-    val signUpController = SignUpController(dbStorage.authRepository)
-
-    // Test user registration
-    val email = "wrw040613@gmail.com"
-    val password = "sssssss"
-    val firstname = "Cherry"
-    val lastname = "Wang"
-
-    println (signUpController.signUpUser(email, password, firstname, lastname))
-}

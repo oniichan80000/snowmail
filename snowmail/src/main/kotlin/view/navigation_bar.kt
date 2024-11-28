@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ca.uwaterloo.controller.SignInController
 import integration.SupabaseClient
@@ -84,8 +83,8 @@ fun TopNavigationBar(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF487896), // Blue background
-                        contentColor = Color.White // White text
+                        backgroundColor = Color(0xFF487896),
+                        contentColor = Color.White
                     ),
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)

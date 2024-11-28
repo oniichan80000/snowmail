@@ -2,29 +2,20 @@ package ca.uwaterloo.view.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ca.uwaterloo.controller.DocumentController
-import ca.uwaterloo.controller.ProfileController
 import controller.SendEmailController
 import integration.SupabaseClient
-import kotlinx.coroutines.runBlocking
-//import com.google.accompanist.flowlayout.FlowRow
-//import com.google.accompanist.flowlayout.MainAxisAlignment
 
 
 @Composable
@@ -172,22 +163,6 @@ fun GeneratedEmailAlertDialog(
                             fontSize = 12.sp,
 
                         )
-//                        OutlinedTextField(
-//                            value = text,
-//                            onValueChange = { },
-//                            label = { Text("Attached Files") },
-//                            modifier = Modifier
-//                                .clip(RoundedCornerShape(5.dp))
-//                                .fillMaxWidth(),
-//                            colors = TextFieldDefaults.outlinedTextFieldColors(
-//                                //focusedLabelColor = Color.Transparent,
-//                                //unfocusedLabelColor = Color.Transparent,
-//                                //focusedBorderColor = Color.Transparent,
-//                                //unfocusedBorderColor = Color.Transparent
-//                            ),
-//                            textStyle = LocalTextStyle.current.copy(fontSize = 10.sp)
-//                        )
-
                     }
                     OutlinedTextField(
                         value = text,

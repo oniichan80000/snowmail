@@ -38,7 +38,6 @@ fun ProfilePage(userId: String,
                 NavigateToProgress: () -> Unit,  NavigateToLogin: () -> Unit) {
     val dbStorage = SupabaseClient()
     val profileController = ProfileController(dbStorage.userProfileRepository)
-    val signInController = SignInController(dbStorage.authRepository)
 
 
     var showEducationDialog by remember { mutableStateOf(false) }
@@ -285,24 +284,6 @@ fun ProfilePage(userId: String,
                     NavigateToLogin = NavigateToLogin
                 )
 
-//                Button(
-//                    onClick = {
-//                        NavigateToLogin()
-//                        runBlocking {
-//                            signInController.logoutUser()
-//                        }
-//                    },
-//                    colors = ButtonDefaults.buttonColors(
-//                        backgroundColor = Color.White, // White background
-//                        contentColor = Color(0xFF487896) // Text color
-//                    ),
-//                    modifier = Modifier
-//                        .align(Alignment.End)
-//                        .padding(top = 16.dp, end = 16.dp) // Add spacing from the edges
-//                ) {
-//                    Text("Sign Out", fontWeight = FontWeight.Bold)
-//                }
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
@@ -311,17 +292,6 @@ fun ProfilePage(userId: String,
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-        //            // Profile Picture
-        //            Box(
-        //                modifier = Modifier
-        //                    .size(80.dp)
-        //                    .clip(CircleShape)
-        //                    .background(Color(0xFFE2E2E2)),
-        //            )
-        //
-        //            Spacer(modifier = Modifier.width(16.dp))
-
-
                     // Name
                     if (errorMessage.isNotEmpty()) {
                         Text(

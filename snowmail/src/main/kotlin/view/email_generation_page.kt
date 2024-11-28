@@ -1,11 +1,5 @@
 package ca.uwaterloo.view
 
-
-
-//import androidx.compose.material3.*
-//import kotlinx.serialization.Serializable
-
-//import ca.uwaterloo.view.components.FetchUserProfileData
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState

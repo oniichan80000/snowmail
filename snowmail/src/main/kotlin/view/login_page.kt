@@ -1,6 +1,6 @@
 package ca.uwaterloo.view
 
-// import ca.uwaterloo.persistence.DBStorage
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -90,9 +90,6 @@ fun loginForm(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row { loginWithAccount(NavigateToSignup, NavigateToHome) }
-        //Row(Modifier.fillMaxHeight(0.03f)) { Divider() }
-        // HorizontalDivider(thickness = 2.dp)
-        Row { loginWithGmail() }
     }
 }
 
@@ -165,9 +162,6 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         }
 
         // sign in button
-
-//        val SUCCESS = false
-//        val EMAILDOESNOTEXIST = false
         Spacer(modifier = Modifier.height(16.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Button(
@@ -323,35 +317,6 @@ fun signinWithOtpPage(onDismiss: () -> Unit, NavigateToHome: () -> Unit) {
         }
     }
 }
-
-@Composable
-fun loginWithGmail() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        //Text("Or log in with")
-        // val iconfile = File("gmail_icon.png")
-
-        // val iconimage = ImageIO.read(iconfile)
-        // val iconbitmap = iconimage.toComposeImageBitmap()
-//        Button(onClick = { LoginWithGmail() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(formColor))) {
-//            Row (horizontalArrangement = Arrangement.Center){
-//                // Image(iconbitmap, "gmail")
-//                // Spacer(modifier = Modifier.width(8.dp))
-//                Text("Gmail", color = Color.Black)
-//            }
-//
-//        }
-    }
-}
-
-
-
-fun LoginWithGmail() {
-
-}
-
-
-// --- ONLY FOR TESTING THIS SINGLE PAGE, TO BE DELETED LATER
 
 @Composable
 fun WebsitePage2() {
