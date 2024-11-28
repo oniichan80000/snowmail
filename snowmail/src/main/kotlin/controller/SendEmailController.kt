@@ -57,7 +57,7 @@ class SendEmailController(private val jobApplicationRepository: IJobApplicationR
         }
 
         // update last refresh time if necessary
-        jobApplicationRepository.updateRefreshTime(userID)
+        jobApplicationRepository.initializeRefreshTime(userID)
 
         // save job application
         jobApplicationRepository.createJobApplication(
