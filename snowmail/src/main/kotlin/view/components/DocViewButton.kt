@@ -31,7 +31,7 @@ fun DocViewButton(
                     "user_documents",
                     UserSession.userId ?: "DefaultUserId",
                     documentType,
-                    encodedDocument
+                    document
                 )
                 result.onSuccess { url ->
                     if (Desktop.isDesktopSupported()) {

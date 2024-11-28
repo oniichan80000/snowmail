@@ -11,8 +11,17 @@ import java.nio.file.Paths
 
 class DocumentController(private val documentRepository: IDocumentRepository) {
 
+    private fun sanitizeDocumentName(documentName: String): String {
+        return documentName.replace(Regex("[^a-zA-Z0-9._-]"), "_")
+    }
+
     suspend fun uploadDocument(bucket: String, userId: String, documentType: String, documentName: String, file: File): Result<String> {
-        val path = "$userId/$documentType/$documentName"
+        val sanitizedDocumentName = sanitizeDocumentName(documentName)
+
+        val path = "$userId/$documentType/$sanitizedDocumentName"
+
+        println("Uploading document to $bucket/$path")
+
         return documentRepository.uploadDocument(bucket, path, file)
     }
 
@@ -91,8 +100,18 @@ fun main() = runBlocking<Unit> {
     val bucket = "user_documents"
     val userId = "test"
     val documentType = "other"
-    val documentName = "Q6-2"
+    val documentName = "test resume.pdf"
     val expiresInMinutes = 10
+
+    val file = File(System.getProperty("user.home") + "/Desktop/test resume.pdf")
+
+    // Call uploadDocument and print the result
+    val result = documentController.uploadDocument(bucket, "test", documentType, documentName, file)
+    result.onSuccess {
+        println("Upload successful: $it")
+    }.onFailure { error ->
+        println("Error uploading document: ${error.message}")
+    }
 
 //    val result = documentController.createSignedUrl(bucket, userId, documentType, documentName)
 //    result.onSuccess { url ->
@@ -101,15 +120,15 @@ fun main() = runBlocking<Unit> {
 //        println("Error creating signed URL: ${error.message}")
 //    }
 
-    val result = documentController.listDocuments(bucket, userId, documentType)
-    result.onSuccess { documents ->
-        println("Documents in $bucket/$userId/$documentType:")
-        documents.forEach { document ->
-            println(document)
-        }
-    }.onFailure { error ->
-        println("Error listing documents: ${error.message}")
-    }
+//    val result = documentController.listDocuments(bucket, userId, documentType)
+//    result.onSuccess { documents ->
+//        println("Documents in $bucket/$userId/$documentType:")
+//        documents.forEach { document ->
+//            println(document)
+//        }
+//    }.onFailure { error ->
+//        println("Error listing documents: ${error.message}")
+//    }
 
 //    val result = documentController.viewDocument(bucket, userId, documentType, documentName)
 //    result.onSuccess { url ->

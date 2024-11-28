@@ -12,13 +12,31 @@ class DocumentRepository(private val supabase: SupabaseClient) : IDocumentReposi
 
     override suspend fun uploadDocument(bucket: String, path: String, file: File): Result<String> {
         return try {
+            println("Checking if file exists: ${file.path}")
             if (!file.exists()) {
+                println("File does not exist: ${file.path}")
                 return Result.failure(Exception("File does not exist: ${file.path}"))
             }
-            val fileContent = file.readBytes()
-            storage.from(bucket).upload(path, fileContent)
+            println("File exists: ${file.path}")
+            println("Reading file content")
+            val fileContent = try {
+                file.readBytes()
+            } catch (e: Exception) {
+                println("Error reading file content: ${e.message}")
+                return Result.failure(Exception("Error reading file content: ${e.message}"))
+            }
+            println("File content read successfully")
+            println("Uploading file to storage")
+            try {
+                storage.from(bucket).upload(path, fileContent)
+            } catch (e: Exception) {
+                println("Error uploading file to storage: ${e.message}")
+                return Result.failure(Exception("Error uploading file to storage: ${e.message}"))
+            }
+            println("File uploaded successfully")
             Result.success("Document uploaded successfully.")
         } catch (e: Exception) {
+            println("Error uploading document: ${e.message}")
             Result.failure(Exception("Error uploading document: ${e.message}"))
         }
     }
