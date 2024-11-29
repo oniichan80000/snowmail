@@ -1,49 +1,16 @@
 package ca.uwaterloo.view.dialogs
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import ca.uwaterloo.controller.ProfileController
-import controller.SendEmailController
-import integration.SupabaseClient
-import kotlinx.coroutines.runBlocking
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 import ca.uwaterloo.controller.DocumentController
-import ca.uwaterloo.model.EducationWithDegreeName
-import ca.uwaterloo.model.WorkExperience
-import ca.uwaterloo.service.ParserService
-import ca.uwaterloo.view.UserSession
-import ca.uwaterloo.view.components.DocumentSelectionDropdownButton
-import ca.uwaterloo.view.components.EmailGenInputField
-import ca.uwaterloo.view.components.EmailGenerationButton
+import ca.uwaterloo.view.pages.UserSession
 //import ca.uwaterloo.view.components.FetchUserProfileData
-import ca.uwaterloo.view.dialogs.GeneratedEmailAlertDialog
-import ca.uwaterloo.view.theme.AppTheme
-import controller.EmailGenerationController
-import integration.OpenAIClient
-import io.ktor.client.*
 //import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import model.GeneratedEmail
-import model.UserInput
-import model.UserProfile
-import service.EmailGenerationService
-import java.io.File
 
 
 @Composable

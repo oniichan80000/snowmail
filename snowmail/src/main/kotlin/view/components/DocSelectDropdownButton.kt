@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ca.uwaterloo.controller.DocumentController
-import ca.uwaterloo.view.UserSession
 import integration.SupabaseClient
 
 // for selecting resume document for email generation

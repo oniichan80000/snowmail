@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ca.uwaterloo.controller.SignInController
@@ -24,7 +25,6 @@ fun TopNavigationBar(
     onTabSelected: (Int) -> Unit,
     NavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
-    profileImage: @Composable (() -> Unit)? = null
 ) {
     val coroutineScope = rememberCoroutineScope()
     val signInController = SignInController(SupabaseClient().authRepository)
@@ -38,7 +38,8 @@ fun TopNavigationBar(
             elevation = 4.dp,
             modifier = modifier
                 .fillMaxWidth(0.9f)
-                .clip(RoundedCornerShape(16.dp)) // Add rounded corners
+                .shadow(4.dp, shape = RoundedCornerShape(15.dp))
+                .clip(RoundedCornerShape(15.dp))
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -47,8 +48,9 @@ fun TopNavigationBar(
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
                     backgroundColor = Color.White,
-                    contentColor = Color.Black,
+                    contentColor = MaterialTheme.colors.secondary,
                     indicator = { Box{} },
+                    divider = { Box{} },
                     modifier = Modifier.weight(1f)
                 ) {
                     Tab(
@@ -83,25 +85,13 @@ fun TopNavigationBar(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF487896),
+                        backgroundColor = MaterialTheme.colors.onPrimary,
                         contentColor = Color.White
                     ),
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                 ) {
                     Text("Sign Out")
-                }
-
-                profileImage?.let {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFE2E2E2))
-                            .border(1.dp, Color.LightGray, CircleShape)
-                    ) {
-                        it()
-                    }
                 }
             }
         }

@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -42,27 +42,27 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Row { Spacer(modifier = Modifier.padding(20.dp)) }
+                Spacer(modifier = Modifier.padding(20.dp))
                 Row {
                     Text(
                         text = "Join ",
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = MaterialTheme.colors.secondary,
                         fontFamily = FontFamily.Default
                     )
                     Text(
                         text = "Snowmail!",
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xff2b5dc7),
+                        color = MaterialTheme.colors.onPrimary,
                         fontFamily = FontFamily.Default
                     )
                 }
 
-                Row { Spacer(modifier = Modifier.padding(20.dp)) }
+                Spacer(modifier = Modifier.padding(20.dp))
                 Row(Modifier.fillMaxHeight()) { RegisterForm(NavigateToLogin, NavigateToHome) }
-                Row { Spacer(modifier = Modifier.fillMaxHeight(0.01f)) }
+                Spacer(modifier = Modifier.fillMaxHeight(0.01f))
             }
 
         }
@@ -230,8 +230,11 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
 
                     },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
-                        Text("Register", color = Color.White)
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.onPrimary,
+                            contentColor = Color.White
+                        )) {
+                        Text("Register")
                     }
                 }
 
@@ -251,7 +254,7 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                     Text("Already have an account?",
                         style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
                     TextButton(onClick = { navigateLoginPage(NavigateToLogin) }) {
-                        Text("Sign in", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                        Text("Sign in", color = MaterialTheme.colors.onPrimary, style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
                     }
                 }
 

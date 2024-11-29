@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,6 +20,7 @@ import androidx.compose.ui.window.Dialog
 import ca.uwaterloo.controller.ProfileController
 import ca.uwaterloo.controller.ProgressController
 import ca.uwaterloo.persistence.IJobApplicationRepository
+import ca.uwaterloo.view.components.TopNavigationBar
 import ca.uwaterloo.view.theme.AppTheme
 import integration.OpenAIClient
 import integration.SupabaseClient

@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,31 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 
 @Composable
-fun WebsitePageWelcome2() {
-    var currentPage by remember { mutableStateOf("welcome") }
-
-    when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
-    }
-}
-
-
-fun main() {
-    application {
-        Window(onCloseRequest = ::exitApplication) {
-            WebsitePage2()
-        }
-    }
-}
-
-@Composable
-fun ColdEmailGenerationIntroduction (
+fun SendEmailsDirectlyIntroduction(
     NavigateToSignup: () -> Unit,
     NavigateToLogin: () -> Unit,
-    NavigateToIntroductionPage: () -> Unit,
-    NavigateToJobApplicationProgressIntroduction: () -> Unit
-) {
+    NavigateToIntroductionPage: () -> Unit) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -93,8 +72,6 @@ fun ColdEmailGenerationIntroduction (
             }
         }
 
-
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,9 +93,8 @@ fun ColdEmailGenerationIntroduction (
             Box(
                 modifier = Modifier
                     .fillMaxWidth() // Makes the box take the full width
-                    .padding(16.dp) // Adds padding around the box
-                    .clickable(onClick = NavigateToJobApplicationProgressIntroduction) // Makes the box clickable
                     .clip(RoundedCornerShape(16.dp))
+                    .clickable(onClick = NavigateToIntroductionPage) // Makes the box clickable
                     //.border(BorderStroke(2.dp, Color.LightGray))
                     .background(
                         color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f), // Background color
@@ -127,14 +103,14 @@ fun ColdEmailGenerationIntroduction (
                     //.width(370.dp)
                     .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(16.dp))
                     .padding(16.dp), // Padding inside the box
-                    //.padding(16.dp), // Padding inside the box
+                //.padding(16.dp), // Padding inside the box
                 contentAlignment = Alignment.Center // Centers the text inside the box
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize(),
-                        //.weight(1f)
-                        //.padding(end = 16.dp),
+                    //.weight(1f)
+                    //.padding(end = 16.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -142,17 +118,17 @@ fun ColdEmailGenerationIntroduction (
                         modifier = Modifier
                             .fillMaxWidth(0.3f)
                     ) {
-                        Text(text = "Cold Email Generation",
+                        Text(text = "Send Cold Emails Directly",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.h4,
                             textAlign = TextAlign.Center)
-                        Text("Easily create professional and personalized emails in minutes")
+                        Text("No need for external tools––manage your emails in one place")
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Image(
-                        painter = painterResource("egss.png"),
+                        painter = painterResource("esendss.png"),
                         contentDescription = null,
                         //contentScale = ContentScale.Crop
                     )

@@ -1,8 +1,9 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,8 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +24,7 @@ import ca.uwaterloo.controller.SignInController
 import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.PersonalProject
 import ca.uwaterloo.model.WorkExperience
+import ca.uwaterloo.view.components.TopNavigationBar
 import ca.uwaterloo.view.components.EducationSection
 import ca.uwaterloo.view.components.ProjectSection
 import ca.uwaterloo.view.components.SkillsSection
@@ -309,11 +313,15 @@ fun ProfilePage(userId: String,
                     }
                 }
 
-                Card(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
-                        .padding(10.dp),
-                    elevation = 8.dp
+                        .padding(10.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(15.dp))
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(Color.White)
+                        .padding(8.dp)
+                        .padding(bottom = 16.dp)
                 ) {
 
                     Column(
@@ -452,7 +460,6 @@ fun ProfilePage(userId: String,
                             )
                         }
 
-
                         EducationSection(
                             userId = userId,
                             profileController = profileController,
@@ -509,6 +516,7 @@ fun ProfilePage(userId: String,
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
