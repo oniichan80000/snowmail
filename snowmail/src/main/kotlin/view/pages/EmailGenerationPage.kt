@@ -54,7 +54,7 @@ fun EmailGenerationPage(
     var showDialog by remember { mutableStateOf(false) }
     var showGmailLinkPrompt by remember { mutableStateOf(false) }
     var selectedDocument by remember { mutableStateOf<String?>(null) }
-  //  val coroutineScope = rememberCoroutineScope()
+    //  val coroutineScope = rememberCoroutineScope()
     val httpClient = HttpClient(CIO)
     val openAIClient = OpenAIClient(httpClient)
 
@@ -75,7 +75,7 @@ fun EmailGenerationPage(
         jobTitle = jobtitleInput,
         company = companyInput,
         recruiterName = recruiterNameInput,
-        fileURLs = listOf(selectedDocument?:""),
+        fileURLs = listOf(selectedDocument ?: ""),
     )
 
     val resumeFile = selectedDocument?.let { File(it) }
@@ -294,100 +294,102 @@ fun EmailGenerationPage(
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    
+
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = "Click a source to generate your email",
                             color = MaterialTheme.colors.secondary,
-                            modifier = Modifier.padding(bottom = 5.dp))
-
-                    EmailGenerationButton(
-                        emailGenerationController = emailGenerationController,
-                        userInput = userInput,
-                        userProfile = userProfile,
-                        gotEducation = gotEducation,
-                        gotWorkExperience = gotWorkExperience,
-                        gotSkills = gotSkills,
-                        resumeFile = resumeFile,
-                        onEmailGenerated = { emailContent = it },
-                        onShowDialog = { showDialog = it },
-                        infoSource = "profile",
-                        enabled = true,
-                        userId = userId,
-                        selectedDocument = selectedDocument
-                    )
-
-                    Spacer(modifier = Modifier.width(30.dp))
-
-                    EmailGenerationButton(
-                        emailGenerationController = emailGenerationController,
-                        userInput = userInput,
-                        userProfile = userProfile,
-                        gotEducation = gotEducation,
-                        gotWorkExperience = gotWorkExperience,
-                        gotSkills = gotSkills,
-                        resumeFile = resumeFile,
-                        onEmailGenerated = { emailContent = it },
-                        onShowDialog = { showDialog = it },
-                        infoSource = "resume",
-                        enabled = selectedDocument != null,
-                        userId = userId,
-                        selectedDocument = selectedDocument
-                    )
-
-
-                    if (showDialog) {
-                        GeneratedEmailAlertDialog(
-                            userId = userId,
-                            onDismissRequest = { showDialog = false },
-                            title = "Generated Email",
-                            initialText = emailContent,
-                            reciepientAddress = recruiterEmailInput,
-                            jobTitle = jobtitleInput,
-                            companyName = companyInput,
-                            onConfirm = { newText ->
-                                emailContent = newText
-                                showDialog = true
-                            }
+                            modifier = Modifier.padding(bottom = 5.dp)
                         )
 
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            EmailGenerationButton(
-                                emailGenerationController = emailGenerationController,
-                                userInput = userInput,
-                                userProfile = userProfile,
-                                gotEducation = gotEducation,
-                                gotWorkExperience = gotWorkExperience,
-                                gotSkills = gotSkills,
-                                resumeFile = resumeFile,
-                                onEmailGenerated = { emailContent = it },
-                                onShowDialog = { showDialog = it },
-                                infoSource = "profile",
-                                enabled = true,
+                        EmailGenerationButton(
+                            emailGenerationController = emailGenerationController,
+                            userInput = userInput,
+                            userProfile = userProfile,
+                            gotEducation = gotEducation,
+                            gotWorkExperience = gotWorkExperience,
+                            gotSkills = gotSkills,
+                            resumeFile = resumeFile,
+                            onEmailGenerated = { emailContent = it },
+                            onShowDialog = { showDialog = it },
+                            infoSource = "profile",
+                            enabled = true,
+                            userId = userId,
+                            selectedDocument = selectedDocument
+                        )
+
+                        Spacer(modifier = Modifier.width(30.dp))
+
+                        EmailGenerationButton(
+                            emailGenerationController = emailGenerationController,
+                            userInput = userInput,
+                            userProfile = userProfile,
+                            gotEducation = gotEducation,
+                            gotWorkExperience = gotWorkExperience,
+                            gotSkills = gotSkills,
+                            resumeFile = resumeFile,
+                            onEmailGenerated = { emailContent = it },
+                            onShowDialog = { showDialog = it },
+                            infoSource = "resume",
+                            enabled = selectedDocument != null,
+                            userId = userId,
+                            selectedDocument = selectedDocument
+                        )
+
+
+                        if (showDialog) {
+                            GeneratedEmailAlertDialog(
                                 userId = userId,
-                                selectedDocument = selectedDocument
+                                onDismissRequest = { showDialog = false },
+                                title = "Generated Email",
+                                initialText = emailContent,
+                                reciepientAddress = recruiterEmailInput,
+                                jobTitle = jobtitleInput,
+                                companyName = companyInput,
+                                onConfirm = { newText ->
+                                    emailContent = newText
+                                    showDialog = true
+                                }
                             )
 
-                            Spacer(modifier = Modifier.width(30.dp))
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                EmailGenerationButton(
+                                    emailGenerationController = emailGenerationController,
+                                    userInput = userInput,
+                                    userProfile = userProfile,
+                                    gotEducation = gotEducation,
+                                    gotWorkExperience = gotWorkExperience,
+                                    gotSkills = gotSkills,
+                                    resumeFile = resumeFile,
+                                    onEmailGenerated = { emailContent = it },
+                                    onShowDialog = { showDialog = it },
+                                    infoSource = "profile",
+                                    enabled = true,
+                                    userId = userId,
+                                    selectedDocument = selectedDocument
+                                )
 
-                            EmailGenerationButton(
-                                emailGenerationController = emailGenerationController,
-                                userInput = userInput,
-                                userProfile = userProfile,
-                                gotEducation = gotEducation,
-                                gotWorkExperience = gotWorkExperience,
-                                gotSkills = gotSkills,
-                                resumeFile = resumeFile,
-                                onEmailGenerated = { emailContent = it },
-                                onShowDialog = { showDialog = it },
-                                infoSource = "resume",
-                                enabled = selectedDocument != null,
-                                userId = userId,
-                                selectedDocument = selectedDocument
-                            )
+                                Spacer(modifier = Modifier.width(30.dp))
+
+                                EmailGenerationButton(
+                                    emailGenerationController = emailGenerationController,
+                                    userInput = userInput,
+                                    userProfile = userProfile,
+                                    gotEducation = gotEducation,
+                                    gotWorkExperience = gotWorkExperience,
+                                    gotSkills = gotSkills,
+                                    resumeFile = resumeFile,
+                                    onEmailGenerated = { emailContent = it },
+                                    onShowDialog = { showDialog = it },
+                                    infoSource = "resume",
+                                    enabled = selectedDocument != null,
+                                    userId = userId,
+                                    selectedDocument = selectedDocument
+                                )
+                            }
                         }
                     }
                 }
