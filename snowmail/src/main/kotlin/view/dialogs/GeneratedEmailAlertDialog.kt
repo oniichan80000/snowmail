@@ -188,8 +188,8 @@ fun GeneratedEmailAlertDialog(
                         Button(
                             onClick = { showAttachDialog = true },
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(0xFF487B96),
-                                contentColor = MaterialTheme.colors.onPrimary
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = Color.White
                             )
                         ) {
                             Text("Attach Document")
@@ -237,8 +237,8 @@ fun GeneratedEmailAlertDialog(
                             Button(
                                 onClick = onDismissRequest,
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color(0xFF487B96),
-                                    contentColor = MaterialTheme.colors.onPrimary
+                                    backgroundColor = MaterialTheme.colors.primary,
+                                    contentColor = Color.White
                                 )
                             ) {
                                 Text("Cancel")
@@ -258,8 +258,8 @@ fun GeneratedEmailAlertDialog(
                                     }
                                 },
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color(0xFF487B96),
-                                    contentColor = MaterialTheme.colors.onPrimary
+                                    backgroundColor = MaterialTheme.colors.primary,
+                                    contentColor = Color.White
                                 )
                             ) {
                                 Text("Send")
