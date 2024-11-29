@@ -302,92 +302,61 @@ fun EmailGenerationPage(
                             modifier = Modifier.padding(bottom = 5.dp)
                         )
 
-                        EmailGenerationButton(
-                            emailGenerationController = emailGenerationController,
-                            userInput = userInput,
-                            userProfile = userProfile,
-                            gotEducation = gotEducation,
-                            gotWorkExperience = gotWorkExperience,
-                            gotSkills = gotSkills,
-                            resumeFile = resumeFile,
-                            onEmailGenerated = { emailContent = it },
-                            onShowDialog = { showDialog = it },
-                            infoSource = "profile",
-                            enabled = true,
-                            userId = userId,
-                            selectedDocument = selectedDocument
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
 
-                        Spacer(modifier = Modifier.width(30.dp))
-
-                        EmailGenerationButton(
-                            emailGenerationController = emailGenerationController,
-                            userInput = userInput,
-                            userProfile = userProfile,
-                            gotEducation = gotEducation,
-                            gotWorkExperience = gotWorkExperience,
-                            gotSkills = gotSkills,
-                            resumeFile = resumeFile,
-                            onEmailGenerated = { emailContent = it },
-                            onShowDialog = { showDialog = it },
-                            infoSource = "resume",
-                            enabled = selectedDocument != null,
-                            userId = userId,
-                            selectedDocument = selectedDocument
-                        )
-
-
-                        if (showDialog) {
-                            GeneratedEmailAlertDialog(
+                            EmailGenerationButton(
+                                emailGenerationController = emailGenerationController,
+                                userInput = userInput,
+                                userProfile = userProfile,
+                                gotEducation = gotEducation,
+                                gotWorkExperience = gotWorkExperience,
+                                gotSkills = gotSkills,
+                                resumeFile = resumeFile,
+                                onEmailGenerated = { emailContent = it },
+                                onShowDialog = { showDialog = it },
+                                infoSource = "profile",
+                                enabled = true,
                                 userId = userId,
-                                onDismissRequest = { showDialog = false },
-                                title = "Generated Email",
-                                initialText = emailContent,
-                                reciepientAddress = recruiterEmailInput,
-                                jobTitle = jobtitleInput,
-                                companyName = companyInput,
-                                onConfirm = { newText ->
-                                    emailContent = newText
-                                    showDialog = true
-                                }
+                                selectedDocument = selectedDocument
                             )
 
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                EmailGenerationButton(
-                                    emailGenerationController = emailGenerationController,
-                                    userInput = userInput,
-                                    userProfile = userProfile,
-                                    gotEducation = gotEducation,
-                                    gotWorkExperience = gotWorkExperience,
-                                    gotSkills = gotSkills,
-                                    resumeFile = resumeFile,
-                                    onEmailGenerated = { emailContent = it },
-                                    onShowDialog = { showDialog = it },
-                                    infoSource = "profile",
-                                    enabled = true,
-                                    userId = userId,
-                                    selectedDocument = selectedDocument
-                                )
+                            Spacer(modifier = Modifier.width(30.dp))
 
-                                Spacer(modifier = Modifier.width(30.dp))
+                            EmailGenerationButton(
+                                emailGenerationController = emailGenerationController,
+                                userInput = userInput,
+                                userProfile = userProfile,
+                                gotEducation = gotEducation,
+                                gotWorkExperience = gotWorkExperience,
+                                gotSkills = gotSkills,
+                                resumeFile = resumeFile,
+                                onEmailGenerated = { emailContent = it },
+                                onShowDialog = { showDialog = it },
+                                infoSource = "resume",
+                                enabled = selectedDocument != null,
+                                userId = userId,
+                                selectedDocument = selectedDocument
+                            )
 
-                                EmailGenerationButton(
-                                    emailGenerationController = emailGenerationController,
-                                    userInput = userInput,
-                                    userProfile = userProfile,
-                                    gotEducation = gotEducation,
-                                    gotWorkExperience = gotWorkExperience,
-                                    gotSkills = gotSkills,
-                                    resumeFile = resumeFile,
-                                    onEmailGenerated = { emailContent = it },
-                                    onShowDialog = { showDialog = it },
-                                    infoSource = "resume",
-                                    enabled = selectedDocument != null,
+
+                            if (showDialog) {
+                                GeneratedEmailAlertDialog(
                                     userId = userId,
-                                    selectedDocument = selectedDocument
+                                    onDismissRequest = { showDialog = false },
+                                    title = "Generated Email",
+                                    initialText = emailContent,
+                                    reciepientAddress = recruiterEmailInput,
+                                    jobTitle = jobtitleInput,
+                                    companyName = companyInput,
+                                    onConfirm = { newText ->
+                                        emailContent = newText
+                                        showDialog = true
+                                    }
                                 )
                             }
                         }
