@@ -112,7 +112,7 @@ fun WelcomePage(
                             onClick = NavigateToLogin,
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color.White,
-                                contentColor = MaterialTheme.colors.primary,
+                                contentColor = MaterialTheme.colors.onPrimary,
                             )
                         ) {
                             Text("Log in")
@@ -121,7 +121,7 @@ fun WelcomePage(
                         Button(
                             onClick = NavigateToSignup,
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.primary,
+                                backgroundColor = MaterialTheme.colors.onPrimary,
                                 contentColor = Color.White
                             )
                         ) {
@@ -133,7 +133,6 @@ fun WelcomePage(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
                         modifier = Modifier
-                            //.height(400.dp)
                             .fillMaxHeight()
                             .fillMaxWidth()
                     ) {

@@ -45,7 +45,7 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Row { Spacer(modifier = Modifier.padding(20.dp)) }
+                Spacer(modifier = Modifier.padding(20.dp))
                 Row {
                     Text(
                         text = "Join ",
@@ -63,9 +63,9 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                     )
                 }
 
-                Row { Spacer(modifier = Modifier.padding(20.dp)) }
+                Spacer(modifier = Modifier.padding(20.dp))
                 Row(Modifier.fillMaxHeight()) { RegisterForm(NavigateToLogin, NavigateToHome) }
-                Row { Spacer(modifier = Modifier.fillMaxHeight(0.01f)) }
+                Spacer(modifier = Modifier.fillMaxHeight(0.01f))
             }
 
         }
@@ -234,8 +234,11 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
 
                     },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))) {
-                        Text("Register", color = Color.White)
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.onPrimary,
+                            contentColor = Color.White
+                        )) {
+                        Text("Register")
                     }
                 }
 
@@ -256,7 +259,7 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                     Text("Already have an account?",
                         style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
                     TextButton(onClick = { navigateLoginPage(NavigateToLogin) }) {
-                        Text("Sign in", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                        Text("Sign in", color = MaterialTheme.colors.onPrimary, style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
                     }
                 }
 

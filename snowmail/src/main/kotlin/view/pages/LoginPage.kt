@@ -185,11 +185,11 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White,
-                    contentColor = MaterialTheme.colors.onPrimary,
+                    backgroundColor = MaterialTheme.colors.onPrimary,
+                    contentColor = Color.White,
                 )
             ) {
-                Text("Sign In", color = Color.White)
+                Text("Sign In")
             }
         }
 
