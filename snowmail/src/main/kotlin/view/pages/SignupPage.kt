@@ -51,14 +51,14 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                         text = "Join ",
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = MaterialTheme.colors.secondary,
                         fontFamily = FontFamily.Default
                     )
                     Text(
                         text = "Snowmail!",
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xff2b5dc7),
+                        color = MaterialTheme.colors.onPrimary,
                         fontFamily = FontFamily.Default
                     )
                 }

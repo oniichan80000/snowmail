@@ -27,7 +27,10 @@ object UserSession {
 }
 
 @Composable
-fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
+fun loginPage(
+    NavigateToSignup: () -> Unit,
+    NavigateToHome: () -> Unit)
+{
     AppTheme {
         Box (
             modifier = Modifier
@@ -46,7 +49,7 @@ fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = MaterialTheme.colors.secondary,
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
                     Text(
@@ -54,7 +57,7 @@ fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xff2b5dc7),
+                        color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
                 }
@@ -64,14 +67,14 @@ fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = MaterialTheme.colors.secondary,
                     )
                     Text(
                         "Alone!",
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xff2b5dc7)
+                        color = MaterialTheme.colors.onPrimary,
                     )
                 }
 

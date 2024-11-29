@@ -49,6 +49,7 @@ fun TopNavigationBar(
                     backgroundColor = Color.White,
                     contentColor = Color.Black,
                     indicator = { Box{} },
+                    divider = { Box{} },
                     modifier = Modifier.weight(1f)
                 ) {
                     Tab(
@@ -97,7 +98,7 @@ fun TopNavigationBar(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFFE2E2E2))
+                            .background(MaterialTheme.colors.onPrimary)
                             .border(1.dp, Color.LightGray, CircleShape)
                     ) {
                         it()

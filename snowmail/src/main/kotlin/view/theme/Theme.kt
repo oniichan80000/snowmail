@@ -10,8 +10,9 @@ import androidx.compose.ui.graphics.Color
 private val LightColorPalette = lightColors(
     primary = Color(0xFF487896),
     primaryVariant = Color(0xFF005B9F),
-    secondary = Color(0xFF12A1C0),
-    background = Color(0xFFF8FAFC)
+    secondary = Color(0xA61E1E1E), // Dark Grey Text
+    background = Color(0xFFF8FAFC),
+    onPrimary = Color(0xFFA1D4EA), // Light Blue Buttons
 )
 
 @Composable

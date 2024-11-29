@@ -12,6 +12,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ca.uwaterloo.controller.DocumentController
@@ -68,6 +69,7 @@ fun DocumentPage(NavigateToEmailGen: () -> Unit, NavigateToProfile: () -> Unit,
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(16.dp)
+                    .shadow(8.dp, shape = RoundedCornerShape(15.dp))
                     .clip(RoundedCornerShape(15.dp))
                     .background(Color.White)
                     .padding(16.dp)

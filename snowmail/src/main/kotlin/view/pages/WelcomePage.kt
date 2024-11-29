@@ -2,11 +2,14 @@ package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +47,11 @@ fun main() {
 }
 
 @Composable
-fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, NavigateToWelcomePage1: () -> Unit) {
+fun WelcomePage(
+    NavigateToSignup: () -> Unit,
+    NavigateToLogin: () -> Unit,
+    NavigateToWelcomePage1: () -> Unit
+) {
     AppTheme {
             Row(
                 modifier = Modifier
@@ -56,43 +63,38 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
                 Column (
                     modifier = Modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(0.5f),
+                    .fillMaxWidth(0.50f),
                     //.border(BorderStroke(2.dp, Color.Gray)), // Add border here
                     horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Top
                 ) {
+                    Spacer(modifier = Modifier.height(250.dp))
                     Text(
-                        text = "Find your dream job",
+                        text = "Find your dream job with our help",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 50.sp,
-                        color = Color(30 / 255f, 30 / 255f, 30 / 255f, 0.65f)
+                        fontSize = 55.sp,
+                        color = MaterialTheme.colors.secondary,
+                        style = TextStyle(lineHeight = 70.sp)
                     )
-                    Spacer(modifier = Modifier.height(3.dp))
-                    Text(
-                        text = "with our help",
-                        fontWeight = FontWeight.Bold,
-                        //style = MaterialTheme.typography.h4,
-                        //textAlign = TextAlign.Center,
-                        fontSize = 50.sp,
-                        color = Color(30 / 255f, 30 / 255f, 30 / 255f, 0.65f)
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = "No longer spend hours writing emails to recruiters, instead spend that time on your personal development",
-                        style = MaterialTheme.typography.body1,
-                        color = Color(30 / 255f, 30 / 255f, 30 / 255f, 0.65f)
+                        style = MaterialTheme.typography.body1.copy(fontSize = 20.sp),
+                        color = MaterialTheme.colors.secondary
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
                     Button(
                         onClick = NavigateToWelcomePage1,
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(161 / 255f, 212 / 255f, 234 / 255f, 1f),
+                            backgroundColor = MaterialTheme.colors.onPrimary,
                             contentColor = Color.White
                         )
                     ) {
                         Text("Learn More")
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
+
                 Column (
                     modifier = Modifier
                     .fillMaxHeight()
@@ -110,7 +112,7 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
                             onClick = NavigateToLogin,
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color.White,
-                                contentColor = Color(0xFF12A1C0)
+                                contentColor = MaterialTheme.colors.primary,
                             )
                         ) {
                             Text("Log in")
@@ -119,13 +121,14 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
                         Button(
                             onClick = NavigateToSignup,
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(0xFF487896),
+                                backgroundColor = MaterialTheme.colors.primary,
                                 contentColor = Color.White
                             )
                         ) {
                             Text("Sign Up")
                         }
                     }
+
                     Column (
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
@@ -161,19 +164,25 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
                         TextField(
                             value = emailtext,
                             onValueChange = {   emailtext = it },
-                            label = { Text("Test it out!") },
+                            label = {
+                                Text(
+                                    "Test it out!",
+                                    style = TextStyle(fontSize = 20.sp),
+                                    modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+                                ) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(300.dp)
-                                .padding(16.dp),
+                                .height(500.dp)
+                                .padding(16.dp)
+                                .padding(top = 32.dp)
+                                .padding(top = 32.dp)
+                                .shadow(8.dp, shape = RoundedCornerShape(8.dp)),
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = Color.White,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent
                             )
-
-                                //.border(BorderStroke(2.dp, Color.LightGray))
                         )
 
                         Button (
@@ -193,76 +202,21 @@ fun WelcomePage(NavigateToSignup: () -> Unit, NavigateToLogin: () -> Unit, Navig
 
                             },
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
+                                .width(200.dp)
+                                .height(75.dp)
+                                .padding(16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.onPrimary,
+                                contentColor = Color.White
+                            )
                         ) {
-                            Text("Generate Email")
+                            Text(
+                                "Generate Email",
+                                fontSize = 16.sp
+                            )
                         }
                     }
                 }
             }
-        //}
     }
 }
-
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .background(Color(176 / 255f, 212 / 255f, 213 / 255f, 0.2f))
-//                    //.height(0.7f)
-//                    .align(Alignment.Center),
-//                horizontalArrangement = Arrangement.Center,
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxHeight()
-//                        .weight(1f)
-//                        .padding(end = 16.dp),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    verticalArrangement = Arrangement.Center
-//                ) {
-//
-//                    Spacer(modifier = Modifier.height(40.dp))
-//
-//                    Row(
-//
-//                    ) {
-//
-//
-//                        Spacer(modifier = Modifier.width(8.dp))
-//
-//                        Button(
-//                            onClick = { },
-//                            modifier = Modifier
-//                                .alpha(0.5f),
-//                            colors = ButtonDefaults.buttonColors(
-//                                backgroundColor = Color(0xFF487896),
-//                                contentColor = Color.White
-//                            )
-//                        ) {
-//                            Text("Learn more")
-//                        }
-//                    }
-//                }
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxHeight()
-//                        .weight(1f)
-//                        .padding(end = 16.dp),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    verticalArrangement = Arrangement.Center
-//                ) {
-////                val imagefile = File("gmail_icon.png")
-////                val image = ImageIO.read(imagefile)
-////                val imagebitmap = image.toComposeImageBitmap()
-////                Image(
-////                    bitmap = imagebitmap,
-////                    contentDescription = "Welcome Image",
-////                    modifier = Modifier.size(150.dp) // Set the size of the image
-////                )
-//                }
-//            }
-//        }
-//    }
-//}

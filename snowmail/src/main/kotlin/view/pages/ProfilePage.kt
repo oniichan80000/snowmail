@@ -3,6 +3,7 @@ package ca.uwaterloo.view.pages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,8 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -286,24 +289,6 @@ fun ProfilePage(userId: String,
                     NavigateToLogin = NavigateToLogin
                 )
 
-//                Button(
-//                    onClick = {
-//                        NavigateToLogin()
-//                        runBlocking {
-//                            signInController.logoutUser()
-//                        }
-//                    },
-//                    colors = ButtonDefaults.buttonColors(
-//                        backgroundColor = Color.White, // White background
-//                        contentColor = Color(0xFF487896) // Text color
-//                    ),
-//                    modifier = Modifier
-//                        .align(Alignment.End)
-//                        .padding(top = 16.dp, end = 16.dp) // Add spacing from the edges
-//                ) {
-//                    Text("Sign Out", fontWeight = FontWeight.Bold)
-//                }
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
@@ -312,16 +297,6 @@ fun ProfilePage(userId: String,
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-        //            // Profile Picture
-        //            Box(
-        //                modifier = Modifier
-        //                    .size(80.dp)
-        //                    .clip(CircleShape)
-        //                    .background(Color(0xFFE2E2E2)),
-        //            )
-        //
-        //            Spacer(modifier = Modifier.width(16.dp))
-
 
                     // Name
                     if (errorMessage.isNotEmpty()) {
@@ -340,11 +315,15 @@ fun ProfilePage(userId: String,
                     }
                 }
 
-                Card(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
-                        .padding(10.dp),
-                    elevation = 8.dp
+                        .padding(10.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(15.dp))
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(Color.White)
+                        .padding(8.dp)
+                        .padding(bottom = 16.dp)
                 ) {
 
                     Column(
@@ -483,7 +462,6 @@ fun ProfilePage(userId: String,
                             )
                         }
 
-
                         EducationSection(
                             userId = userId,
                             profileController = profileController,
@@ -540,6 +518,7 @@ fun ProfilePage(userId: String,
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
