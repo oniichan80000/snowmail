@@ -7,7 +7,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import ca.uwaterloo.service.ParserService
-import ca.uwaterloo.view.*
+import ca.uwaterloo.view.pages.*
 import ca.uwaterloo.view.theme.AppTheme
 import integration.OpenAIClient
 import io.ktor.client.*

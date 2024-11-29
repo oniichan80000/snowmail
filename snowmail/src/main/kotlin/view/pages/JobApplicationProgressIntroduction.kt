@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,25 +19,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-
-@Composable
-fun WebsitePageWelcome3() {
-    var currentPage by remember { mutableStateOf("welcome") }
-
-    when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
-    }
-}
-
-
-fun main() {
-    application {
-        Window(onCloseRequest = ::exitApplication) {
-            WebsitePage2()
-        }
-    }
-}
 
 @Composable
 fun JobApplicationProgressIntroduction(

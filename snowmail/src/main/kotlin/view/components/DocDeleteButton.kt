@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ca.uwaterloo.controller.DocumentController
-import ca.uwaterloo.view.UserSession
+import ca.uwaterloo.view.pages.UserSession
 
 @Composable
 fun DocDeleteButton(

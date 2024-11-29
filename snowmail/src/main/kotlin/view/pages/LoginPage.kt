@@ -1,6 +1,4 @@
-package ca.uwaterloo.view
-
-
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -46,7 +44,7 @@ fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = MaterialTheme.colors.secondary,
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
                     Text(
@@ -54,7 +52,7 @@ fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xff2b5dc7),
+                        color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
                 }
@@ -64,14 +62,14 @@ fun loginPage(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = MaterialTheme.colors.secondary,
                     )
                     Text(
                         "Alone!",
                         textAlign = TextAlign.Center,
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xff2b5dc7)
+                        color = MaterialTheme.colors.onPrimary,
                     )
                 }
 
@@ -104,7 +102,7 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 400.dp).padding(vertical = 15.dp)
     ) {
 
-        // Email Adress
+        // Email Address
         Row { Text("Email Address", fontSize = 16.sp) }
         Spacer(modifier = Modifier.height(8.dp)) // Increased spacing
         var email by remember { mutableStateOf("") }
@@ -161,8 +159,9 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
             )
         }
 
-        // sign in button
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Sign In Button
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Button(
                 onClick = {
@@ -181,9 +180,12 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                         }
                     }
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(buttonColor))
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.onPrimary,
+                    contentColor = Color.White,
+                )
             ) {
-                Text("Sign In", color = Color.White)
+                Text("Sign In")
             }
         }
 
@@ -192,7 +194,7 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
             Text("Forgot your password?",
                 style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
             TextButton(onClick = { showOtpLoginDialog = true }) {
-                Text("Sign in with OTP", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                Text("Sign in with OTP", color = MaterialTheme.colors.onPrimary, style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
             }
         }
 
@@ -212,7 +214,7 @@ fun loginWithAccount(NavigateToSignup: () -> Unit, NavigateToHome: () -> Unit) {
                 Text("Don't have an account?",
                     style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
                 TextButton(onClick = { navigateLoginPage(NavigateToSignup) }) {
-                    Text("Sign up", color = Color(buttonColor), style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                    Text("Sign up", color = MaterialTheme.colors.onPrimary, style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
                 }
             }
         }

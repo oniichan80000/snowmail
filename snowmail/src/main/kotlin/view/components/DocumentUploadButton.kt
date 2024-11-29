@@ -10,12 +10,10 @@ import kotlinx.coroutines.launch
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import ca.uwaterloo.controller.DocumentController
-import androidx.compose.ui.window.AwtWindow
-import androidx.compose.ui.window.Dialog
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
-import ca.uwaterloo.view.UserSession
+import ca.uwaterloo.view.pages.UserSession
 
 @Composable
 fun DocumentUploadButton(documentController: DocumentController) {
@@ -34,7 +32,7 @@ fun DocumentUploadButton(documentController: DocumentController) {
                 .width(130.dp)
                 .height(40.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFF487896),
+                backgroundColor = MaterialTheme.colors.primary,
                 contentColor = Color.White
             )
         ) {

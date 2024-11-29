@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,32 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 
 @Composable
-fun WebsitePageWelcome1() {
-    var currentPage by remember { mutableStateOf("welcome") }
-
-    when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
-    }
-}
-
-
-fun main() {
-    application {
-        Window(onCloseRequest = ::exitApplication) {
-            WebsitePage2()
-        }
-    }
-}
-
-@Composable
 fun IntroductionPage(
     NavigateToSignup: () -> Unit,
     NavigateToLogin: () -> Unit,
     NavigateToWelcomePage: () -> Unit,
     NavigateToWelcomePage2: () -> Unit,
     NavigateToWelcomePage3: () -> Unit,
-    NavigateToWelcomePage4: () -> Unit) {
+    NavigateToWelcomePage4: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -177,8 +159,6 @@ fun IntroductionPage(
             }
            Column(
                modifier = Modifier
-                   //.fillMaxWidth() // Makes the box take the full width
-                   //.padding(16.dp) // Adds padding around the box
                    .clickable(onClick = NavigateToWelcomePage4) // Makes the box clickable
                    .clip(RoundedCornerShape(16.dp))
                    .background(
@@ -187,7 +167,6 @@ fun IntroductionPage(
                    .height(220.dp)
                    .width(370.dp)
                    .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(16.dp)),
-                   //.padding(16.dp), // Padding inside the box
                horizontalAlignment = Alignment.CenterHorizontally, // Centers the text inside the box
            ) {
                Image(

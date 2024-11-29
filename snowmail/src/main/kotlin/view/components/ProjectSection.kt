@@ -6,14 +6,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import ca.uwaterloo.controller.ProfileController
 import ca.uwaterloo.model.PersonalProject
-import ca.uwaterloo.view.SectionTitle
+import ca.uwaterloo.view.pages.SectionTitle
 import ca.uwaterloo.view.dialogs.AddProjectDialog
 import ca.uwaterloo.view.dialogs.EditProjectDialog
 

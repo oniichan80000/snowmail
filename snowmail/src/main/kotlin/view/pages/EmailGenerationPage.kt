@@ -1,4 +1,4 @@
-package ca.uwaterloo.view
+package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +22,7 @@ import ca.uwaterloo.controller.ProfileController
 import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.WorkExperience
 import ca.uwaterloo.service.ParserService
+import ca.uwaterloo.view.components.TopNavigationBar
 import ca.uwaterloo.view.components.DocumentSelectionDropdownButton
 import ca.uwaterloo.view.components.EmailGenInputField
 import ca.uwaterloo.view.components.EmailGenerationButton
