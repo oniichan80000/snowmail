@@ -130,8 +130,12 @@ fun AddEducationDialog(
                 OutlinedTextField(
                     value = gpa,
                     onValueChange = {
-                        gpa = it
-                        gpaError = it.toFloatOrNull() == null && it.isNotEmpty()
+                        if (it.toFloatOrNull() != null || it.isEmpty()) {
+                            gpa = it
+                            gpaError = false
+                        } else {
+                            gpaError = true
+                        }
                     },
                     label = { Text("GPA") },
                     isError = gpaError,

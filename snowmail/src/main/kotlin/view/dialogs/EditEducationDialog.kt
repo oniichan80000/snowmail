@@ -170,8 +170,12 @@ fun EditEducationDialog(
                 OutlinedTextField(
                     value = gpa,
                     onValueChange = {
-                        gpa = it
-                        gpaError = it.isEmpty()
+                        if (it.toFloatOrNull() != null || it.isEmpty()) {
+                            gpa = it
+                            gpaError = false
+                        } else {
+                            gpaError = true
+                        }
                     },
                     label = { Text("GPA") },
                     isError = gpaError,
