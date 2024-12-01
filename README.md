@@ -30,6 +30,9 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/User-documentation-
 ### Design diagrams:
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-diagrams
 
+### Project reflections:
+https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Project-reflections
+
 ### Releases:
 **Version 1.1.0 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-0.10-Release
 
