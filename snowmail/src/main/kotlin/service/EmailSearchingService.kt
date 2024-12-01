@@ -56,29 +56,6 @@ suspend fun searchEmails(userAccount: String, userPassword: String,
                 val attachmentLinks = mutableListOf<String>()
                 val fileNames = mutableListOf<String>()
 
-
-//                if (content is String) {
-//                    text = content
-//                } else if (content is Multipart) {
-//                    for (j in 0 until content.count) {
-//                        val bodyPart = content.getBodyPart(j)
-//                        if (bodyPart.isMimeType("text/plain")) {
-//                            text += bodyPart.content
-//                        } else if (Part.ATTACHMENT.equals(bodyPart.disposition, ignoreCase = true)) {
-//                            val attachmentStream = bodyPart.inputStream ?: continue
-//                            var fileName = bodyPart.fileName ?: "unknown"
-//                            fileName = fileName.replace("\\s".toRegex(), "")
-//                            println(fileName)
-//                            val url = documentRepository.uploadEmailAttachment(fileName, attachmentStream).getOrNull()!!
-//                            attachmentLinks.add(url)
-//                            fileNames.add(fileName)
-//
-//                        } else {
-//                            text += bodyPart.content
-//                        }
-//                    }
-//                }
-
                 while (content is Multipart) {
                     val multipart = content as Multipart
                     var hasNestedMultipart = false

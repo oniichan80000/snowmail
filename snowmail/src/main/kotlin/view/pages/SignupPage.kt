@@ -21,13 +21,6 @@ import ca.uwaterloo.controller.SignUpController
 import ca.uwaterloo.view.theme.AppTheme
 import integration.SupabaseClient
 
-
-val fullPageColor = 0xFFebecf0
-// val formColor = 0xFFFFFFFF
-val formColor = fullPageColor
-val buttonColor = 0xFF487896
-
-
 @Composable
 fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 

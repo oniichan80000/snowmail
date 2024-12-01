@@ -28,25 +28,6 @@ import service.EmailGenerationService
 import kotlinx.coroutines.runBlocking
 
 @Composable
-fun WebsitePageWelcome() {
-    var currentPage by remember { mutableStateOf("welcome") }
-
-    when (currentPage) {
-        "login" -> loginPage ({ currentPage = "signup" }, {currentPage = "profilePage"})
-        "signup" -> SignUpPage ({ currentPage = "login"}, { currentPage = "login"})
-    }
-}
-
-
-fun main() {
-    application {
-        Window(onCloseRequest = ::exitApplication) {
-            WebsitePage2()
-        }
-    }
-}
-
-@Composable
 fun WelcomePage(
     NavigateToSignup: () -> Unit,
     NavigateToLogin: () -> Unit,
