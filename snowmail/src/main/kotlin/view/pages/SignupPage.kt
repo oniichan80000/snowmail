@@ -22,7 +22,7 @@ import ca.uwaterloo.view.theme.AppTheme
 import integration.SupabaseClient
 
 @Composable
-fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
+fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToWelcomePage: () -> Unit, NavigateToHome: () -> Unit) {
 
     AppTheme {
         Box(
@@ -31,11 +31,33 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                 .background(MaterialTheme.colors.background)
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.background)
+                    .padding(50.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                ) {
+                    Button(
+                        onClick = NavigateToWelcomePage,
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.White,
+                            contentColor = MaterialTheme.colors.primary
+                        )
+                    ) {
+                        Text("Back")
+                    }
+                }
+
                 Spacer(modifier = Modifier.padding(20.dp))
+
+                // Caption
                 Row {
                     Text(
                         text = "Join ",
@@ -54,15 +76,14 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                 }
 
                 Spacer(modifier = Modifier.padding(20.dp))
+
                 Row(Modifier.fillMaxHeight()) { RegisterForm(NavigateToLogin, NavigateToHome) }
-                Spacer(modifier = Modifier.fillMaxHeight(0.01f))
             }
 
         }
     }
 
 }
-
 
 
 @Composable
@@ -79,9 +100,9 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 400.dp)
             ) {
 
-                Row(modifier = Modifier.fillMaxWidth(0.95f).fillMaxHeight(0.06f)) {
-                    Column(Modifier.fillMaxWidth(0.53f)) { Text("First Name", textAlign = TextAlign.Start) }
-                    Column { Text(text = "Last Name", textAlign = TextAlign.End) }
+                Row(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.06f)) {
+                    Column(Modifier.fillMaxWidth(0.53f)) { Text("First Name", textAlign = TextAlign.Start, color = MaterialTheme.colors.primary) }
+                    Column { Text(text = "Last Name", textAlign = TextAlign.End, color = MaterialTheme.colors.primary) }
                 }
 
                 var firstName by remember { mutableStateOf("") }
@@ -96,38 +117,50 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                         OutlinedTextField(
                             value = firstName,
                             onValueChange = { firstName = it },
-                            singleLine = true
+                            singleLine = true,
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                textColor = MaterialTheme.colors.secondary,
+                            )
                         )
                     }
-                    Column(Modifier.fillMaxWidth(0.04f)) { Box{} }
-                    // Spacer(modifier = Modifier.fillMaxWidth(0.04f))
+
+                    Column(Modifier.fillMaxWidth(0.12f)) { Box{} }
+
                     // last name input
                     Column(Modifier.fillMaxWidth()) {
                         OutlinedTextField(
                             value = lastName,
                             onValueChange = { lastName = it },
-                            singleLine = true
+                            singleLine = true,
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                textColor = MaterialTheme.colors.secondary,
+                            )
                         )
                     }
                 }
 
+                Spacer(modifier = Modifier.height(24.dp))
+
                 // Email Address
-                Row(modifier = Modifier.fillMaxHeight(0.07f)) { Box{} }
-                Row { Text("Email Address") }
-                Row(modifier = Modifier.fillMaxHeight(0.03f)) { Box{} }
+                Row { Text("Email Address", fontSize = 16.sp, color = MaterialTheme.colors.primary) }
+                Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                        singleLine = true,
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            textColor = MaterialTheme.colors.secondary,
+                        )
                     )
                 }
 
+                Spacer(modifier = Modifier.height(24.dp))
+
                 // Password
-                Row(modifier = Modifier.fillMaxHeight(0.07f)) { Box{} }
-                Row { Text("Password") }
-                Row(modifier = Modifier.fillMaxHeight(0.03f)) { Box{} }
+                Row { Text("Password", fontSize = 16.sp, color = MaterialTheme.colors.primary) }
+                Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     OutlinedTextField(
                         value = password,
@@ -135,19 +168,22 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            textColor = MaterialTheme.colors.secondary,
+                        ),
                         trailingIcon = {
                             TextButton(onClick = { passwordVisible = !passwordVisible }) {
                                 if (passwordVisible) {
                                     Icon(
                                         painter = painterResource("VisibilityOff.svg"),
                                         contentDescription = "Hide password",
-                                        tint = Color.Gray
+                                        tint = MaterialTheme.colors.secondary
                                     )
                                 } else {
                                     Icon(
                                         painter = painterResource("Visibility.svg"),
                                         contentDescription = "Show password",
-                                        tint = Color.Gray
+                                        tint = MaterialTheme.colors.secondary
                                     )
                                 }
                             }
@@ -155,10 +191,10 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                     )
                 }
 
-                // Confirm Password
-                Row(modifier = Modifier.fillMaxHeight(0.07f)) { Box{} }
-                Row { Text("Confirm Password") }
-                Row(modifier = Modifier.fillMaxHeight(0.03f)) { Box{} }
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Row { Text("Confirm Password", fontSize = 16.sp, color = MaterialTheme.colors.primary) }
+                Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     OutlinedTextField(
                         value = passwordConfirm,
@@ -166,6 +202,9 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            textColor = MaterialTheme.colors.secondary,
+                        ),
                         trailingIcon = {
                             if (password == passwordConfirm && password.isNotEmpty()) {
                                 Icon(
@@ -195,7 +234,8 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
                 var errorMessage by remember { mutableStateOf("") }
 
-                Row(modifier = Modifier.fillMaxHeight(0.07f)) {}
+                Spacer(modifier = Modifier.height(24.dp))
+
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     // register button
                     Button(onClick = {
@@ -239,13 +279,12 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Row(modifier = Modifier.fillMaxHeight(0.03f)) {}
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("Already have an account?",
-                        style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
+                        style = MaterialTheme.typography.body1.copy(fontSize = 14.sp, color = MaterialTheme.colors.onSecondary))
                     TextButton(onClick = { navigateLoginPage(NavigateToLogin) }) {
                         Text("Sign in", color = MaterialTheme.colors.primary, style = MaterialTheme.typography.body1.copy(fontSize = 14.sp))
                     }
@@ -259,6 +298,8 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
             Column(Modifier.fillMaxWidth(0.3f)) { Box {} }
         }
 
+
+// Navigate between Login and Signup pages
 fun navigateLoginPage(NavigateToLogin: () -> Unit) {
     NavigateToLogin()
 }

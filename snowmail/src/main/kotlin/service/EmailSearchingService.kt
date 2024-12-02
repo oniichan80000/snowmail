@@ -17,10 +17,13 @@ data class email (
     val attachLink: List<String>
 )
 
-suspend fun searchEmails(userAccount: String, userPassword: String,
-                 last_refresh_time: Date,
-                 recruiterEmails: List<String>, documentRepository: DocumentRepository): List<email> {
-
+suspend fun searchEmails(
+    userAccount: String,
+    userPassword: String,
+    last_refresh_time: Date,
+    recruiterEmails: List<String>,
+    documentRepository: DocumentRepository
+): List<email> {
     val properties = Properties().apply {
         put("mail.imap.host", this_host)
         put("mail.imap.port", this_port)
