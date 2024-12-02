@@ -46,7 +46,7 @@ fun IntroductionPage(
                 onClick = NavigateToWelcomePage,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White,
-                    contentColor = Color(0xFF12A1C0)
+                    contentColor = MaterialTheme.colors.primary
                 )
             ) {
                 Text("Back")
@@ -57,7 +57,7 @@ fun IntroductionPage(
                     onClick = NavigateToLogin,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.White,
-                        contentColor = Color(0xFF12A1C0)
+                        contentColor = MaterialTheme.colors.primary
                     )
                 ) {
                     Text("Log in")
@@ -68,7 +68,7 @@ fun IntroductionPage(
                 Button(
                     onClick = NavigateToSignup,
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF487896),
+                        backgroundColor = MaterialTheme.colors.primary,
                         contentColor = Color.White
                     )
                 ) {
@@ -77,14 +77,11 @@ fun IntroductionPage(
             }
         }
 
+        Spacer(modifier = Modifier.padding(25.dp))
 
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
-                //.background(Color(176 / 255f, 212 / 255f, 213 / 255f, 0.2f))
-                //.height(maxHeight * 0.7f)
-                //.align(Alignment.Center)
-            //.border(BorderStroke(2.dp, Color.Gray)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -92,9 +89,9 @@ fun IntroductionPage(
                 text = "Why Choose Snowmail?",
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h4,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.secondary
             )
-            Spacer(modifier = Modifier.height(15.dp))
             Row (
                 modifier = Modifier
                     .fillMaxHeight()
@@ -110,13 +107,10 @@ fun IntroductionPage(
                         .background(
                             color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f), // Background color
                         )
-                        .height(220.dp)
+                        .height(250.dp)
                         .width(370.dp)
-                        .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(16.dp)),
-                        //.padding(16.dp), // Padding inside the box
+                        .border(BorderStroke(2.dp, MaterialTheme.colors.primary), RoundedCornerShape(16.dp)),
                     horizontalAlignment = Alignment.CenterHorizontally,
-//                    horizontalArrangement = Arrangement.Center,
-//                    contentAlignment = Alignment.Center // Centers the text inside the box
                 ) {
                     Image(
                         painter = painterResource("egss.png"),
@@ -124,26 +118,22 @@ fun IntroductionPage(
                         modifier = Modifier
                             .size(170.dp)
                     )
-                        Text("Cold Email Generation", fontSize = 14.sp)
-                        Text("Easily create professional and personalized emails in minutes", fontSize = 7.sp)
-                    }
+                        Text("Cold Email Generation", fontSize = 16.sp, color = MaterialTheme.colors.secondary)
+                        Text("Easily create professional and personalized emails in minutes", fontSize = 10.sp)
+                }
 
-                    Spacer(modifier = Modifier.width(50.dp))
+                Spacer(modifier = Modifier.width(75.dp))
 
                 Column(
                     modifier = Modifier
-                        //.fillMaxWidth() // Makes the box take the full width
-                        //.padding(16.dp) // Adds padding around the box
-                        .clickable(onClick = NavigateToWelcomePage3) // Makes the box clickable
+                        .clickable(onClick = NavigateToWelcomePage3)
                         .clip(RoundedCornerShape(16.dp))
-                        //.border(BorderStroke(2.dp, Color.LightGray))
                         .background(
                             color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f), // Background color
                         )
-                        .height(220.dp)
+                        .height(250.dp)
                         .width(370.dp)
-                        .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(16.dp)),
-                        //.padding(16.dp), // Padding inside the box
+                        .border(BorderStroke(2.dp, MaterialTheme.colors.primary), RoundedCornerShape(16.dp)),
                     horizontalAlignment = Alignment.CenterHorizontally,// Centers the text inside the box
                 ) {
                     Image(
@@ -152,8 +142,8 @@ fun IntroductionPage(
                         modifier = Modifier
                             .size(170.dp)
                     )
-                    Text("Job Application Progress", fontSize = 14.sp)
-                    Text("Track your job applications, follow-up emails, and responses", fontSize = 7.sp)
+                    Text("Job Application Progress", fontSize = 16.sp, color = MaterialTheme.colors.secondary)
+                    Text("Track your job applications, follow-up emails, and responses", fontSize = 10.sp)
                 }
 
             }
@@ -164,9 +154,9 @@ fun IntroductionPage(
                    .background(
                        color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f), // Background color
                    )
-                   .height(220.dp)
+                   .height(250.dp)
                    .width(370.dp)
-                   .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(16.dp)),
+                   .border(BorderStroke(2.dp, MaterialTheme.colors.primary), RoundedCornerShape(16.dp)),
                horizontalAlignment = Alignment.CenterHorizontally, // Centers the text inside the box
            ) {
                Image(
@@ -175,8 +165,8 @@ fun IntroductionPage(
                    modifier = Modifier
                        .size(170.dp)
                )
-               Text("Send Cold Emails Directly", fontSize = 14.sp)
-               Text("No need for external tools— manage your emails in one place.", fontSize = 7.sp)
+               Text("Send Cold Emails Directly", fontSize = 16.sp, color = MaterialTheme.colors.secondary)
+               Text("No need for external tools, manage your emails in one place.", fontSize = 10.sp)
            }
 
         }

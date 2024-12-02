@@ -43,7 +43,7 @@ fun ColdEmailGenerationIntroduction (
                 onClick = NavigateToIntroductionPage,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White,
-                    contentColor = Color(0xFF12A1C0)
+                    contentColor = MaterialTheme.colors.primary
                 )
             ) {
                 Text("Back")
@@ -54,7 +54,7 @@ fun ColdEmailGenerationIntroduction (
                     onClick = NavigateToLogin,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.White,
-                        contentColor = Color(0xFF12A1C0)
+                        contentColor = MaterialTheme.colors.primary
                     )
                 ) {
                     Text("Log in")
@@ -65,7 +65,7 @@ fun ColdEmailGenerationIntroduction (
                 Button(
                     onClick = NavigateToSignup,
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF487896),
+                        backgroundColor = MaterialTheme.colors.primary,
                         contentColor = Color.White
                     )
                 ) {
@@ -73,8 +73,6 @@ fun ColdEmailGenerationIntroduction (
                 }
             }
         }
-
-
 
         Column(
             modifier = Modifier
@@ -88,27 +86,21 @@ fun ColdEmailGenerationIntroduction (
                 text = "Why Choose Snowmail?",
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h4,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.secondary
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth() // Makes the box take the full width
-                    .padding(16.dp) // Adds padding around the box
-                    .clickable(onClick = NavigateToJobApplicationProgressIntroduction) // Makes the box clickable
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
-                    //.border(BorderStroke(2.dp, Color.LightGray))
-                    .background(
-                        color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f), // Background color
-                    )
-                    //.height(220.dp)
-                    //.width(370.dp)
-                    .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(16.dp))
-                    .padding(16.dp), // Padding inside the box
-                    //.padding(16.dp), // Padding inside the box
-                contentAlignment = Alignment.Center // Centers the text inside the box
+                    .clickable(onClick = NavigateToJobApplicationProgressIntroduction)
+                    .background(color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f))
+                    .border(BorderStroke(2.dp, MaterialTheme.colors.primary), RoundedCornerShape(16.dp))
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Row(
                     modifier = Modifier
@@ -123,7 +115,9 @@ fun ColdEmailGenerationIntroduction (
                         Text(text = "Cold Email Generation",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.h4,
-                            textAlign = TextAlign.Center)
+                            color = MaterialTheme.colors.secondary
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text("Easily create professional and personalized emails in minutes")
                     }
 
@@ -133,10 +127,8 @@ fun ColdEmailGenerationIntroduction (
                         painter = painterResource("egss.png"),
                         contentDescription = null,
                     )
-
                 }
             }
-
         }
     }
 }

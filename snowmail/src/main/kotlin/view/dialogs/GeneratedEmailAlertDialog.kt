@@ -113,20 +113,26 @@ fun GeneratedEmailAlertDialog(
                             painter = painterResource("sendCheck.svg"),
                             modifier = Modifier.size(32.dp),
                             contentDescription = "Email Sent Successfully",
-                            tint = Color.Gray
+                            tint = MaterialTheme.colors.primary
                         )
 
                         Text(
                             text = "Email Sent Successfully!",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp,
-                            color = Color.Black,
+                            color = MaterialTheme.colors.secondary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
-                        Button(onClick = {
-                            showSuccessDialog = false
-                            onDismissRequest()
-                        }) {
+                        Button(
+                            onClick = {
+                                showSuccessDialog = false
+                                onDismissRequest()
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = Color.White
+                            )
+                        ) {
                             Text("Close")
                         }
                     }
@@ -176,6 +182,7 @@ fun GeneratedEmailAlertDialog(
                                 .fillMaxWidth(),
                             colors = TextFieldDefaults.outlinedTextFieldColors()
                         )
+                        Spacer(modifier = Modifier.height(4.dp))
                         OutlinedTextField(
                             value = emailSubject,
                             onValueChange = { emailSubject = it },
@@ -185,11 +192,12 @@ fun GeneratedEmailAlertDialog(
                                 .fillMaxWidth(),
                             colors = TextFieldDefaults.outlinedTextFieldColors()
                         )
+                        Spacer(modifier = Modifier.height(4.dp))
                         Button(
                             onClick = { showAttachDialog = true },
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(0xFF487B96),
-                                contentColor = MaterialTheme.colors.onPrimary
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = Color.White
                             )
                         ) {
                             Text("Attach Document")
@@ -207,13 +215,12 @@ fun GeneratedEmailAlertDialog(
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
                                 text = text,
-                                color = Color.DarkGray,
+                                color = MaterialTheme.colors.secondary,
                                 fontWeight = FontWeight.Bold,
-                                //fontStyle = FontStyle.Italic,
-                                fontSize = 12.sp,
-
-                                )
+                                fontSize = 16.sp
+                            )
                         }
+                        Spacer(modifier = Modifier.height(10.dp))
                         OutlinedTextField(
                             value = text,
                             onValueChange = { text = it },
@@ -234,12 +241,8 @@ fun GeneratedEmailAlertDialog(
                             horizontalArrangement = Arrangement.End,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Button(
+                            TextButton(
                                 onClick = onDismissRequest,
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color(0xFF487B96),
-                                    contentColor = MaterialTheme.colors.onPrimary
-                                )
                             ) {
                                 Text("Cancel")
                             }
@@ -258,13 +261,12 @@ fun GeneratedEmailAlertDialog(
                                     }
                                 },
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color(0xFF487B96),
-                                    contentColor = MaterialTheme.colors.onPrimary
+                                    backgroundColor = MaterialTheme.colors.primary,
+                                    contentColor = Color.White
                                 )
                             ) {
                                 Text("Send")
                             }
-
                         }
                     }
             }
