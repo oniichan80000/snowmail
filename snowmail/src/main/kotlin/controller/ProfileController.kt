@@ -19,6 +19,15 @@ class ProfileController(private val userProfileRepository: IUserProfileRepositor
         return emailValidating.verifyEmail(email, password)
     }
 
+    /**********************************************************
+     *                                                        *
+     *   The following 4 functions are for linking Gmail      *
+     *   account and sending Gmail frontend                   *
+     *   Call getters when sending emails                     *
+     *   Call setters when linking Gmail account              *
+     *                                                        *
+     **********************************************************/
+
     // get user's linked gmail account
     suspend fun getUserLinkedGmailAccount(userId: String): Result<String> {
         return userProfileRepository.getUserLinkedGmailAccount(userId)
