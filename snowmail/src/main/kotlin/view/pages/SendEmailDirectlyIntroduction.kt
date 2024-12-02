@@ -41,7 +41,7 @@ fun SendEmailsDirectlyIntroduction(
                 onClick = NavigateToIntroductionPage,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.White,
-                    contentColor = Color(0xFF12A1C0)
+                    contentColor = MaterialTheme.colors.primary
                 )
             ) {
                 Text("Back")
@@ -52,7 +52,7 @@ fun SendEmailsDirectlyIntroduction(
                     onClick = NavigateToLogin,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.White,
-                        contentColor = Color(0xFF12A1C0)
+                        contentColor = MaterialTheme.colors.primary
                     )
                 ) {
                     Text("Log in")
@@ -63,7 +63,7 @@ fun SendEmailsDirectlyIntroduction(
                 Button(
                     onClick = NavigateToSignup,
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF487896),
+                        backgroundColor = MaterialTheme.colors.primary,
                         contentColor = Color.White
                     )
                 ) {
@@ -75,7 +75,6 @@ fun SendEmailsDirectlyIntroduction(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                //.background(Color(176 / 255f, 212 / 255f, 213 / 255f, 0.2f))
                 .height(maxHeight * 0.7f)
                 .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,32 +84,25 @@ fun SendEmailsDirectlyIntroduction(
                 text = "Why Choose Snowmail?",
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h4,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.secondary
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth() // Makes the box take the full width
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
-                    .clickable(onClick = NavigateToIntroductionPage) // Makes the box clickable
-                    //.border(BorderStroke(2.dp, Color.LightGray))
-                    .background(
-                        color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f), // Background color
-                    )
-                    //.height(220.dp)
-                    //.width(370.dp)
-                    .border(BorderStroke(2.dp, Color.LightGray), RoundedCornerShape(16.dp))
-                    .padding(16.dp), // Padding inside the box
-                //.padding(16.dp), // Padding inside the box
-                contentAlignment = Alignment.Center // Centers the text inside the box
+                    .clickable(onClick = NavigateToIntroductionPage)
+                    .background(color = Color(240 / 255f, 232 / 255f, 232 / 255f, 0.2f))
+                    .border(BorderStroke(2.dp, MaterialTheme.colors.primary), RoundedCornerShape(16.dp))
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize(),
-                    //.weight(1f)
-                    //.padding(end = 16.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -121,8 +113,10 @@ fun SendEmailsDirectlyIntroduction(
                         Text(text = "Send Cold Emails Directly",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.h4,
-                            textAlign = TextAlign.Center)
-                        Text("No need for external tools––manage your emails in one place")
+                            color = MaterialTheme.colors.secondary
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("No need for external tools, manage your emails in one place!")
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -130,12 +124,9 @@ fun SendEmailsDirectlyIntroduction(
                     Image(
                         painter = painterResource("esendss.png"),
                         contentDescription = null,
-                        //contentScale = ContentScale.Crop
                     )
-
                 }
             }
-
         }
     }
 }

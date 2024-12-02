@@ -114,12 +114,11 @@ fun GmailLinkingDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp),
-                        contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "Gmail Linking",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
+                            fontSize = 20.sp,
                             color = Color.Black
                         )
                     }
@@ -137,7 +136,7 @@ fun GmailLinkingDialog(
                             tag = "URL",
                             annotation = "https://myaccount.google.com/apppasswords?continue=https://myaccount.google.com/security?utm_source%3Dchrome-settings&pli=1&rapt=AEjHL4O7uSuEpGMELA6bQTszK_VubA2-GRY3rBunsnzdDciaH3BN__4TE6hCe1MGty9OrzcIv9Xn6Znzj1vOj63EGq8fi46UtvBZw6BQ32N0WHermYS-x9Q"
                         )
-                        withStyle(style = SpanStyle(color = Color.Blue, textDecoration = TextDecoration.Underline)) {
+                        withStyle(style = SpanStyle(color = MaterialTheme.colors.primary, textDecoration = TextDecoration.Underline)) {
                             append("App passwords")
                         }
                         append(" in the topmost search bar and hit Enter\n")
@@ -146,12 +145,12 @@ fun GmailLinkingDialog(
                         append("   - Type \"Snowmail\" in the App name input box.\n")
                         append("   - Click Create to create an app password.\n")
                         append("   - Copy the app password provided by Google (e.g., abcd-efgh-ijkl-mnop).\n\n")
-                        append("Enter your Gmail account and the app password below to securely connect your Gmail account.")
+                        append("Enter your Gmail username and the app password below to securely connect your account.")
                     }
 
                     ClickableText(
                         text = annotatedString,
-                        style = TextStyle(fontSize = 14.sp, color = Color.Gray),
+                        style = TextStyle(fontSize = 14.sp, color = MaterialTheme.colors.secondary),
                         onClick = { offset ->
                             annotatedString.getStringAnnotations(tag = "URL", start = offset, end = offset)
                                 .firstOrNull()?.let { annotation ->
@@ -163,7 +162,7 @@ fun GmailLinkingDialog(
                         }
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     Row(
                         modifier = Modifier
@@ -231,7 +230,7 @@ fun GmailLinkingDialog(
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(0xFF487896),
+                                backgroundColor = MaterialTheme.colors.primary,
                                 contentColor = Color.White
                             ),
                             modifier = Modifier.align(Alignment.Center)
@@ -242,7 +241,7 @@ fun GmailLinkingDialog(
                         Button(
                             onClick = onDismissRequest,
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(0xFF487896),
+                                backgroundColor = MaterialTheme.colors.primary,
                                 contentColor = Color.White
                             ),
                             modifier = Modifier.align(Alignment.BottomEnd)

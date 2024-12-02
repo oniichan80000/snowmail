@@ -6,6 +6,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import ca.uwaterloo.controller.DocumentController
 import ca.uwaterloo.view.pages.UserSession
 //import ca.uwaterloo.view.components.FetchUserProfileData
@@ -47,7 +49,7 @@ fun AttachDocumentDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Attach Documents") },
+        title = { Text("Attach Documents", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black) },
         text = {
             if (isLoading) {
                 Box(
@@ -71,10 +73,17 @@ fun AttachDocumentDialog(
                                     } else {
                                         selectedDocuments.remove(document)
                                     }
-                                }
+                                },
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = MaterialTheme.colors.primary,
+                                    uncheckedColor = MaterialTheme.colors.primary,
+                                    checkmarkColor = Color.White
+                                )
                             )
-                            Text(document.first)
-                            Text(" type: " + document.second)
+                            Column {
+                                Text(document.first, fontWeight = FontWeight.Bold)
+                                Text("Type: " + document.second)
+                            }
                         }
                     }
                 }
@@ -87,20 +96,16 @@ fun AttachDocumentDialog(
                     onDismissRequest()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF487B96),
-                    contentColor = MaterialTheme.colors.onPrimary
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = Color.White
                 )
             ) {
                 Text("Attach")
             }
         },
         dismissButton = {
-            Button(
-                onClick = onDismissRequest,
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF487B96),
-                    contentColor = MaterialTheme.colors.onPrimary
-                )
+            TextButton(
+                onClick = onDismissRequest
             ) {
                 Text("Cancel")
             }
