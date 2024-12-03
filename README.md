@@ -3,7 +3,11 @@
 ### Project Description
 Snowmail is a smart desktop application for cold email generation and job progress management, designed to streamline the job application process for professionals, particularly university students. The app leverages AI to generate personalized cold emails by integrating user profiles, resumes, and job descriptions, while also providing tools for document management and job application tracking.
 
-### Team members:
+**Here’s a demonstration of the app:**
+
+![](snowmail.mov)
+
+### Team Members:
 
 Cherry Wang: c39wang@uwaterloo.ca 
 
@@ -27,13 +31,13 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-Proposal
 ### Team Meeting Record:
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Team-Meeting-Record
 
-### User documentation:
+### User Documentation:
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/User-documentation-
 
-### Design diagrams:
+### Design Diagrams:
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Design-diagrams
 
-### Project reflections:
+### Project Reflections:
 https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Project-reflections
 
 ### Releases:
