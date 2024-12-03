@@ -2,12 +2,8 @@ package persistence
 
 import ca.uwaterloo.persistence.IJobApplicationRepository
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.storage.Storage
 import model.JobApplication
 import model.Recruiter
 import java.time.LocalDateTime
@@ -35,9 +31,6 @@ class JobApplicationRepository(private val supabase: SupabaseClient) : IJobAppli
             Result.failure(Exception("Failed to create job application"))
         }
     }
-
-
-
 
     override suspend fun createRecruiter(recruiterEmail: String): Int? {
         try {
@@ -100,14 +93,24 @@ class JobApplicationRepository(private val supabase: SupabaseClient) : IJobAppli
 
     override suspend fun updateJobApplicationStatus(jobApplicationID: String, statusID: Int): Result<Boolean> {
         return try {
-            supabase.from("job_application_detail").update(
-                mapOf("app_status_id" to statusID)
-            ) {
-                filter {
-                    eq("app_id", jobApplicationID)
+            if (statusID == 5) {
+                supabase.from("job_application_detail").delete() {
+                    filter {
+                        eq("app_id", jobApplicationID)
+                    }
                 }
+                Result.success(true)
             }
-            Result.success(true)
+            else {
+                supabase.from("job_application_detail").update(
+                    mapOf("app_status_id" to statusID)
+                ) {
+                    filter {
+                        eq("app_id", jobApplicationID)
+                    }
+                }
+                Result.success(true)
+            }
         } catch (e: Exception) {
             println(e)
             Result.failure(Exception("Failed to update job application status"))
@@ -141,6 +144,24 @@ class JobApplicationRepository(private val supabase: SupabaseClient) : IJobAppli
         } catch (e: Exception) {
             println(e)
             Result.failure(Exception("Failed to get recruiter email"))
+        }
+    }
+
+    override suspend fun getRecruiterID(recruiterEmail: String): Result<Int> {
+        return try {
+            var idList = supabase.from("recruiter").select {
+                filter {
+                    eq("email", recruiterEmail)
+                }
+            }.decodeList<Recruiter>()
+            if (idList.isNotEmpty()) {
+                Result.success(idList[0].recruiterID!!)
+            } else {
+                Result.failure(Exception("Recruiter not found"))
+            }
+        } catch (e: Exception) {
+            println(e)
+            Result.failure(Exception("Failed to get recruiter ID"))
         }
     }
 
@@ -212,6 +233,28 @@ class JobApplicationRepository(private val supabase: SupabaseClient) : IJobAppli
     }
 
 
+
+
+
+    override suspend fun getCorrespondJobs(
+        userId: String,
+        email: String
+    ): Result<List<Pair<IJobApplicationRepository.JobProgress, String>>> {
+        val AllJobs = supabase.from("job_application_detail").select() {
+            filter {
+                eq("user_id", userId)
+                eq("recruiter_email_id", getRecruiterID(email).getOrNull()!!)
+            }
+        }.decodeList<JobApplication>()
+        var result = mutableListOf<Pair<IJobApplicationRepository.JobProgress, String>>()
+        for (job in AllJobs) {
+            val item = IJobApplicationRepository.JobProgress(job.jobTitle, job.companyName, getRecruiterEmail(job.recruiterEmailID).getOrNull()!!)
+            result.add(Pair(item, job.appID!!))
+        }
+        return Result.success(result)
+    }
+
+
     override suspend fun getAllRecruiterEmailAddress(userId: String): List<String> {
         // find all jobs
         val jobs = supabase.from("job_application_detail").select() {
@@ -252,44 +295,32 @@ class JobApplicationRepository(private val supabase: SupabaseClient) : IJobAppli
         }
     }
 
-
-
-}
-
-
-suspend fun main() {
-    val supabase = createSupabaseClient(
-        supabaseUrl = "https://gwnlngyvkxdpodenpyyj.supabase.co",
-        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3bmxuZ3l2a3hkcG9kZW5weXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc5MTAxNTEsImV4cCI6MjA0MzQ4NjE1MX0.olncAUMxSOjcr0YjssWXThtXDXC3q4zasdNYdwavt8g"
-    ) {
-        install(Postgrest)
-        install(Auth)
-        install(Storage)
+    override suspend fun getGmailPassword(userId: String): Result<String?> {
+        return try {
+            var password = supabase.from("user_profile").select(Columns.list("gmail_app_password")) {
+                filter {
+                    eq("user_id", userId)
+                }
+            }.decodeSingle<Map<String, String?>>().get("gmail_app_password")
+            Result.success(password)
+        } catch (e: Exception) {
+            println(e)
+            Result.failure(Exception("Failed to get gmail password"))
+        }
     }
-    val JobApplicationRepository = JobApplicationRepository(supabase)
-    // println(JobApplicationRepository.createRecruiter("example2@gmail.com"))
-    // println( JobApplicationRepository.createJobApplication("ed52b6c4-2ae8-4b58-bacd-adc00082a505", "Software Developer", "Google", "recruiter@gmail.com"))
-    // println(JobApplicationRepository.updateRefreshTime("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-    // println(JobApplicationRepository.updateJobApplicationStatus("02f40dd5-d371-4c35-9b34-038bcabeb49c", 2))
 
-    // get job
-    // println(JobApplicationRepository.getJobWithStatus("ed52b6c4-2ae8-4b58-bacd-adc00082a505", 1))
-
-    // get progress
-    // println(JobApplicationRepository.getProgress("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    // get applied jobs and their job ids
-    // println(JobApplicationRepository.getAppliedJobs("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    // get all recruiter emails
-    // println(JobApplicationRepository.getAllRecruiterEmailAddress("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    // get lastly refresh time
-    // println(JobApplicationRepository.getRefreshTime("ed52b6c4-2ae8-4b58-bacd-adc00082a505"))
-
-    JobApplicationRepository.initializeRefreshTime("ed52b6c4-2ae8-4b58-bacd-adc00082a505")
+    override suspend fun getGmailAccount(userId: String): Result<String?> {
+        return try {
+            var account = supabase.from("user_profile").select(Columns.list("linked_gmail_account")) {
+                filter {
+                    eq("user_id", userId)
+                }
+            }.decodeSingle<Map<String, String?>>().get("linked_gmail_account")
+            Result.success(account)
+        } catch (e: Exception) {
+            println(e)
+            Result.failure(Exception("Failed to get gmail account"))
+        }
+    }
 }
-
-
-
 

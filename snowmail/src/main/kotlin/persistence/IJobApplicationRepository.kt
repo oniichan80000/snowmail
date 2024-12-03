@@ -72,5 +72,24 @@ interface IJobApplicationRepository {
         userId: String
     ): Result<Boolean>
 
+    suspend fun getGmailPassword(
+        userId: String
+    ): Result<String?>
+
+    suspend fun getGmailAccount(
+        userId: String
+    ): Result<String?>
+
+    suspend fun getCorrespondJobs(
+        userId: String,
+        email: String
+    ): Result<List<Pair<JobProgress, String>>> // JobProgress, JobApplicationID
+
+    suspend fun getRecruiterID(
+        recruiterEmail: String
+    ): Result<Int>
+
+
+
 }
 

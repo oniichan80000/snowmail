@@ -10,6 +10,7 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
@@ -17,22 +18,6 @@ import kotlinx.serialization.Contextual
 import java.util.*
 
 class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfileRepository{
-
-    override suspend fun getUserProfile(userId: String): Result<UserProfile> {
-        return try {
-            // fetch user's profile from db based on userid
-            val userProfile = supabase.from("user_profile")
-                .select {
-                    filter {
-                        eq("user_id", userId)
-                    }
-                }
-                .decodeSingle<UserProfile>()
-            Result.success(userProfile)
-        } catch (e: Exception) {
-            Result.failure(Exception("Failed to fetch profile: ${e.message}"))
-        }
-    }
 
     // get user's linked gmail account
     override suspend fun getUserLinkedGmailAccount(userId: String): Result<String> {
@@ -349,7 +334,7 @@ class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfile
         }
     }
 
-
+    //get education experiences order by time
     override suspend fun getEducation(userId: String): Result<List<EducationWithDegreeName>> {
         return try {
             // fetch education records from db based on userid
@@ -358,6 +343,7 @@ class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfile
                     filter {
                         eq("user_id", userId)
                     }
+                    order("start_date", Order.DESCENDING)
                 }
                 .decodeList<Education>()
 
@@ -497,6 +483,7 @@ class UserProfileRepository(private val supabase: SupabaseClient) : IUserProfile
                     filter {
                         eq("user_id", userId)
                     }
+                    order("start_date", Order.DESCENDING)
                 }
                 .decodeList<WorkExperience>()
             Result.success(workExperience)

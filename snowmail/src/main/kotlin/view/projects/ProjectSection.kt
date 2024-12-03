@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import ca.uwaterloo.controller.ProfileController
 import ca.uwaterloo.model.PersonalProject
-import ca.uwaterloo.view.SectionTitle
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -32,7 +31,6 @@ fun ProjectSection(
     onSelectedProjectChange: (PersonalProject?) -> Unit
 ) {
     Column {
-        SectionTitle("Projects")
         Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
             if (projectList.isEmpty()) {
                 Text(

@@ -42,7 +42,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_20">
-    <output url="file://$MODULE_DIR$/../../snowmail/build/classes/java/main" />
+    <output url="file://$MODULE_DIR$/../../snowmail/build/classes/kotlin/main" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../snowmail/build/generated/compose/resourceGenerator/kotlin/commonResClass">
       <sourceFolder url="file://$MODULE_DIR$/../../snowmail/build/generated/compose/resourceGenerator/kotlin/commonResClass" isTestSource="false" />

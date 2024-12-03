@@ -1,6 +1,6 @@
 package service
 
-import java.io.InputStream
+import ca.uwaterloo.persistence.DocumentRepository
 import java.util.*
 import javax.mail.*
 
@@ -12,13 +12,18 @@ val this_port = 993
 data class email (
     val senderEmail: String,
     val subject: String,
-    val text: String
+    val text: String,
+    val fileNames: List<String>,
+    val attachLink: List<String>
 )
 
-fun searchEmails(userAccount: String, userPassword: String,
-                 last_refresh_time: Date,
-                 recruiterEmails: List<String>): List<email> {
-
+suspend fun searchEmails(
+    userAccount: String,
+    userPassword: String,
+    last_refresh_time: Date,
+    recruiterEmails: List<String>,
+    documentRepository: DocumentRepository
+): List<email> {
     val properties = Properties().apply {
         put("mail.imap.host", this_host)
         put("mail.imap.port", this_port)
@@ -49,21 +54,44 @@ fun searchEmails(userAccount: String, userPassword: String,
             // only return those recruiters' emails
             val emailAddress = Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}").find(message.from[0].toString())?.value
             if (recruiterEmails.contains(emailAddress!!)) {
-                val content = message.content
+                var content = message.content
                 var text = ""
-                val attachments = mutableListOf<InputStream>()
+                val attachmentLinks = mutableListOf<String>()
+                val fileNames = mutableListOf<String>()
 
-                if (content is String) {
-                    text = content
-                } else if (content is Multipart) {
-                    for (j in 0 until content.count) {
-                        val bodyPart = content.getBodyPart(j)
+                while (content is Multipart) {
+                    val multipart = content as Multipart
+                    var hasNestedMultipart = false
+
+                    for (j in 0 until multipart.count) {
+                        val bodyPart = multipart.getBodyPart(j)
+
                         if (bodyPart.isMimeType("text/plain")) {
-                            text += bodyPart.content
+                            // handle text/plain content
+                            text += bodyPart.content.toString() + "\n"
+                            println("type 1")
+                            println(bodyPart.content.toString())
                         } else if (Part.ATTACHMENT.equals(bodyPart.disposition, ignoreCase = true)) {
-                            attachments.add(bodyPart.inputStream)
+                            // handle attachment
+                            println("type 3")
+                            val attachmentStream = bodyPart.inputStream ?: continue
+                            var fileName = bodyPart.fileName ?: "unknown"
+                            fileName = fileName.replace("\\s".toRegex(), "")
+                            println(fileName)
+                            val url = documentRepository.uploadEmailAttachment(fileName, attachmentStream).getOrNull()!!
+                            attachmentLinks.add(url)
+                            fileNames.add(fileName)
+                        } else if (bodyPart.content is Multipart) {
+                            // handle nested Multipart
+                            println("type 2")
+                            content = bodyPart.content
+                            hasNestedMultipart = true
                         }
+                        println("type 4")
                     }
+
+                    // break if no nested Multipart
+                    if (!hasNestedMultipart) break
                 }
                 var subject: String
                 if (message.subject == null) {
@@ -71,7 +99,8 @@ fun searchEmails(userAccount: String, userPassword: String,
                 } else {
                     subject = message.subject
                 }
-                val item = email(emailAddress, subject, text)
+                val item = email(emailAddress, subject, text, fileNames, attachmentLinks)
+                println(item)
                 result.add(item)
             }
         }

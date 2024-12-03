@@ -1,26 +1,17 @@
 package controller
 
-import ca.uwaterloo.model.Education
 import ca.uwaterloo.model.EducationWithDegreeName
 import ca.uwaterloo.model.PersonalProject
 import ca.uwaterloo.model.WorkExperience
-import ca.uwaterloo.service.ParserService
-import integration.OpenAIClient
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import model.GeneratedEmail
-
 import service.EmailGenerationService
 import model.UserInput
 import model.UserProfile
 import java.io.File
 
-
 class EmailGenerationController(private val emailGenerationService: EmailGenerationService) {
 
+    // Generate an email from either a user's profile or a specified resume file
     suspend fun generateEmail(
         informationSource: String,
         userInput: UserInput,
@@ -31,10 +22,11 @@ class EmailGenerationController(private val emailGenerationService: EmailGenerat
         skills: List<String> = emptyList(),
         resumeFile: File? = null
     ): GeneratedEmail? {
-        println("resumeFile: ${resumeFile?.path ?: "No file provided"}") // Console log to check if resumeFile is being passed
+        println("resumeFile: ${resumeFile?.path ?: "No file provided"}")
 
         return if (resumeFile != null && informationSource == "resume") {
-            emailGenerationService.generateEmailFromResume(userInput, userProfile, resumeFile)
+            val rFile: File = resumeFile as File
+            emailGenerationService.generateEmailFromResume(userInput, userProfile, rFile)
         } else {
             emailGenerationService.generateEmailFromProfile(userInput, userProfile, education, workExperience, projects, skills)
         }
