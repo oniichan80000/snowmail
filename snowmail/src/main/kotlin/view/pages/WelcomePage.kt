@@ -148,7 +148,7 @@ fun WelcomePage(
                                 ) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(550.dp)
+                                .height(530.dp)
                                 .padding(16.dp)
                                 .padding(top = 32.dp)
                                 .shadow(8.dp, shape = RoundedCornerShape(8.dp)),
