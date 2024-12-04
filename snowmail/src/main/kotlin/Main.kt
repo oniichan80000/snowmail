@@ -8,10 +8,23 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import ca.uwaterloo.view.pages.*
 import ca.uwaterloo.view.theme.AppTheme
+import androidx.compose.ui.window.*
+import androidx.compose.ui.Alignment
+
 fun main() {
     application {
         AppTheme {
-            Window(onCloseRequest = ::exitApplication, title = "Snowmail", state = WindowState(size = DpSize(1200.dp, 800.dp))) {
+            Window(
+                onCloseRequest = ::exitApplication,
+                title = "Snowmail",
+                state = WindowState(
+                    size = DpSize(1200.dp, 800.dp),
+                    placement = WindowPlacement.Floating,
+                    position = WindowPosition(Alignment.Center)
+                ),
+                resizable = true
+            ) {
+                window.minimumSize = java.awt.Dimension(1200, 800) // Set minimum size
                 websitePage()
             }
         }
