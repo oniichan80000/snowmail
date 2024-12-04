@@ -73,7 +73,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Snowmail"
-            packageVersion = "1.3.0"
+            packageVersion = "1.4.0"
 
             macOS {
                 iconFile.set(project.file("src/main/resources/Icon.icns"))
