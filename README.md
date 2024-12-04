@@ -54,7 +54,7 @@ https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Project-reflections
 
 **Version 1.4.0 Release:** https://git.uwaterloo.ca/s22huang/team-101-11/-/wikis/Version-1.4.0-Release
 
-**Installer Image:**
+**Installer Image:** https://git.uwaterloo.ca/s22huang/team-101-11/-/blob/main/release1.4.0/Snowmail.app.zip?ref_type=heads
 
 
 
