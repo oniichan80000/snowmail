@@ -2,6 +2,8 @@ package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -23,7 +25,7 @@ import integration.SupabaseClient
 
 @Composable
 fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToWelcomePage: () -> Unit, NavigateToHome: () -> Unit) {
-
+    val scrollState = rememberScrollState()
     AppTheme {
         Box(
             modifier = Modifier
@@ -34,7 +36,8 @@ fun SignUpPage(NavigateToLogin: () -> Unit, NavigateToWelcomePage: () -> Unit, N
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colors.background)
-                    .padding(50.dp),
+                    .padding(50.dp)
+                    .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -97,7 +100,9 @@ fun RegisterForm(NavigateToLogin: () -> Unit, NavigateToHome: () -> Unit) {
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 400.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 400.dp)
             ) {
 
                 Row(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.06f)) {

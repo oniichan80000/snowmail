@@ -23,7 +23,7 @@ fun DocumentSelectionDropdownButton(
     LaunchedEffect(Unit) {
         val result = documentController.listDocuments("user_documents", userId, "Resume")
         result.onSuccess { documents ->
-            documentList = documents
+            documentList = documents.filter { it.endsWith(".pdf", ignoreCase = true) }
         }.onFailure { error ->
             println("Error listing documents: ${error.message}")
         }
@@ -40,7 +40,7 @@ fun DocumentSelectionDropdownButton(
                 contentColor = if (selectedDocument == null) Color(0xFF8E97A5) else Color.White
             )
         ) {
-            Text(selectedDocument ?: "Your Resume's")
+            Text(selectedDocument ?: "Your Resume's (.pdf)")
         }
         DropdownMenu(
             expanded = expanded,

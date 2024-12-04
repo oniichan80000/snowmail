@@ -2,6 +2,8 @@ package ca.uwaterloo.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +28,7 @@ object UserSession {
 
 @Composable
 fun loginPage(NavigateToSignup: () -> Unit, NavigateToWelcomePage: () -> Unit, NavigateToHome: () -> Unit) {
+    val scrollState = rememberScrollState()
     AppTheme {
         Box (
             modifier = Modifier
@@ -36,7 +39,8 @@ fun loginPage(NavigateToSignup: () -> Unit, NavigateToWelcomePage: () -> Unit, N
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colors.background)
-                    .padding(50.dp),
+                    .padding(50.dp)
+                    .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
